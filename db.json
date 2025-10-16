@@ -1,0 +1,11 @@
+{
+  "users": [
+    {
+      "id": "a9d1",
+      "fullName": "Trần Hoàng Duy",
+      "email": "duyhoangtran2006@gmail.com",
+      "password": "duy1tran!?",
+      "confirmPassword": "duy1tran!?"
+    }
+  ]
+}
