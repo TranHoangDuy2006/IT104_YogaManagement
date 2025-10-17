@@ -27,7 +27,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <hr className="border-t border-gray-500 opacity-40 w-[85%] mx-auto mt-[80px] mb-[16px]" />
+      <hr className="border-t border-gray-500 opacity-40 w-[88%] mx-auto mt-[80px] mb-[16px]" />
 
       <div className="text-center text-white/70 pb-4 mt-[35px] text-[18.6px] font-[400]">
         © 2024 Gym Management. All rights reserved.

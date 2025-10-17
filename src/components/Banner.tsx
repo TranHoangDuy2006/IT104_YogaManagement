@@ -2,7 +2,7 @@ import hero from "../assets/Yoga_1.png";
 
 export default function Banner() {
   return (
-    <section className="relative overflow-hidden rounded-b-md" style={ {width: 1425, maxWidth: 1425} }>
+    <section className="relative overflow-hidden rounded-b-md w-full max-w-[1425px]">
       <div className="relative h-[380px] md:h-[420px] xl:h-[745.9px]">
         <img
           src={hero}
@@ -10,12 +10,15 @@ export default function Banner() {
           className="absolute inset-0 w-full h-full object-cover"
           style={{ maxWidth: "1425px" }}
         />
-        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white" style={ {width: 1425} }>
-          <h1 className="text-2xl md:text-4xl font-bold" style={ {fontSize: 50, fontWeight: "700"}}>Welcome to Our Gym</h1>
-          <p className="mt-2 opacity-90" style={ {fontSize: 29.4, fontWeight: "400"}}>
+        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white w-full">
+          <h1 className="text-white text-center font-bold text-[50px] md:text-[50px] leading-tight drop-shadow-lg">
+            Welcome to Our Gym
+          </h1>
+          <p className="mt-2 opacity-90 text-[29.4px] font-normal">
             Transform Your Body, Transform Your Life
           </p>
-          <button className="mt-4 bg-[#2b71ff] hover:bg-[#205ae0] text-white text-xs md:text-sm font-medium px-4 py-2 rounded" style={ {fontSize: 19.8, fontWeight: 600, width: 194, height: 44, borderRadius: 8} }>
+          <button
+            className="mt-4 bg-[#2b71ff] hover:bg-[#205ae0] text-white text-[19.8px] font-semibold w-[194px] h-[44px] rounded-lg transition-all duration-200 ease-in-out shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 hover:scale-105 hover:shadow-xl">
             Bắt đầu ngay
           </button>
         </div>

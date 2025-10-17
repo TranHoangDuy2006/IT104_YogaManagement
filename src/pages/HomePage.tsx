@@ -5,7 +5,7 @@ import Footer from "../components/commons/Footer"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen w-full font-[Inter]">
+    <div className="min-h-screen w-full font-[inter]">
 
       <div className="page">
         <Navbar />
