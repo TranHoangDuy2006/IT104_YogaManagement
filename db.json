@@ -5,7 +5,39 @@
       "fullName": "Trần Hoàng Duy",
       "email": "duyhoangtran2006@gmail.com",
       "password": "duy1tran!?",
-      "confirmPassword": "duy1tran!?"
+      "confirmPassword": "duy1tran!?",
+      "role": "admin"
+    },
+    {
+      "id": "5172",
+      "fullName": "TrucDan",
+      "email": "trucdan1904@gmail.com",
+      "password": "trucdancute!?",
+      "confirmPassword": "trucdancute!?",
+      "role": "admin"
+    },
+    {
+      "id": "ad8c",
+      "fullName": "test",
+      "email": "test@gmail.com",
+      "password": "duy1tran!?",
+      "confirmPassword": "duy1tran!?",
+      "role": "user"
+    }
+  ],
+  "courses": [
+    {
+      "id": "24c3"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "77c7"
+    }
+  ],
+  "services": [
+    {
+      "id": "3e11"
     }
   ]
 }

@@ -1,24 +1,29 @@
+
 # Yoga Management Project
 
-## Tiến độ dự án (16/10/2025)
+## Tiến độ dự án (18/10/2025)
 
 ### Đã hoàn thành
 
 - Thiết lập project React + TypeScript + Vite
 - Cấu hình ESLint, TailwindCSS
 - Tạo các component chính: Navbar, Banner, ClassList, Footer
-- Tạo trang HomePage hiển thị các component
+- Trang HomePage hiển thị các component chính, responsive tốt trên desktop/mobile
 - Tạo form đăng ký tài khoản với validate bằng Yup + React Hook Form
 - Kết nối API đăng ký với json-server (cổng 1904)
 - Xử lý chuyển hướng về HomePage sau khi đăng ký thành công
-- Setup routing cho HomePage và RegisterForm
-- Responsive cơ bản cho các component chính
+- Setup routing cho HomePage, RegisterForm, LoginForm, BookingPage, AdminPage
+- Đã hoàn thiện modal thêm/xoá dịch vụ, hiệu ứng hover đẹp cho nút và modal
+- Đã dùng Redux Toolkit (createAsyncThunk) cho đăng nhập, lưu user/role vào Redux + localStorage
+- Đã refactor navigation dùng button + useNavigate (delay chuyển trang)
+- Đã fix layout sticky footer: Footer luôn nằm dưới, không đè lên ClassList khi responsive
 
 ### Đang phát triển
 
-- Bổ sung tính năng đăng nhập, quản lý lịch tập
-- Hoàn thiện giao diện responsive cho mobile/tablet
-- Tối ưu UX/UI
+- Quản lý lịch tập, trang BookingPage (đặt lịch, modal đặt lịch)
+- Trang quản lý dịch vụ (AdminPage): thêm/sửa/xoá dịch vụ, xác nhận xoá
+- Tối ưu UX/UI, hoàn thiện responsive cho mọi màn hình
+- Bổ sung unit test cho các slice và component chính
 
 ### Hướng dẫn chạy dự án
 
@@ -43,7 +48,10 @@
 4. Truy cập:
    - Trang chủ: <http://localhost:5174/>
    - Đăng ký: <http://localhost:5174/register>
+   - Đăng nhập: <http://localhost:5174/login>
+   - Đặt lịch: <http://localhost:5174/booking>
+   - Quản lý dịch vụ: <http://localhost:5174/admin>
    - API: <http://localhost:1904/users>
 
 ---
-Các vấn đề/báo lỗi vui lòng liên hệ cho Trần Hoàng Duy - Admin Page.
+Mọi vấn đề/báo lỗi vui lòng liên hệ Trần Hoàng Duy (Admin Page).

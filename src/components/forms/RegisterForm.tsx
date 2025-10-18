@@ -40,20 +40,23 @@ export default function RegisterForm() {
   };
 
   const {
-    register, handleSubmit, formState: { errors, isSubmitting}
+    register, handleSubmit, formState: { errors, isSubmitting }
   } = useForm<RegisterFormData>({
     resolver: yupResolver(schema)
   })
 
   const onSubmit = async (data: RegisterFormData) => {
-    const rs = await dispatch(registerUser(data))
+    const userWithRole = { ...data, role: 'user'}
+    const rs = await dispatch(registerUser(userWithRole))
     if (registerUser.fulfilled.match(rs)) {
-      navigate("/") 
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     }
   }
     
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 font-[inter]">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 font-[inter] user-select-none">
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md h-auto">
         <h2 className="text-center mb-6 text-[28px] font-[700]">
           Đăng ký tài khoản

@@ -1,9 +1,46 @@
-import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import type { AppDispatch, RootState } from "../../stores/userStore"; 
+import { loginUser } from "../../slices/userSlice";
+import { useState } from "react";
 
-export default function RegisterForm() {  
+interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+const schema = yup.object({
+  email: yup.string().required("Email không được để trống!").email("Email không hợp lệ!"),
+  password: yup.string().required("Mật khẩu không được để trống!").min(6, "Mật khẩu tối thiểu 6 ký tự!"),
+});
+
+export default function LoginForm() {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const { loading, error } = useSelector((state: RootState) => state.user);
   const [isDelay, setIsDelay] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({ resolver: yupResolver(schema) });
+
+  const onSubmit = async (data: LoginFormData) => {
+    const result = await dispatch(loginUser(data));
+    if (loginUser.fulfilled.match(result)) {
+      const user = result.payload;
+      if (user.role === "admin") setTimeout(() => {
+        navigate("/");
+      }, 1000);
+      else setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    }
+  };
 
   const handleRegisterClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -16,50 +53,56 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 font-[inter]">
-      <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md h-auto">
-        <h2 className="text-center mb-6 text-[28px] font-[700]">
-          Đăng Nhập
-        </h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 font-[inter] user-select-none">
+      <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
+        <h2 className="text-center mb-6 text-[28px] font-[700]">Đăng Nhập</h2>
 
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-gray-700 text-[15.6px] font-[500] mb-1">
-              Email
-            </label>
+            <label className="block text-gray-700 text-sm font-medium mb-1">Email</label>
             <input
               type="email"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none h-[42px]"
-              autoComplete="new-email"
+              {...register("email")}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              autoComplete="email"
             />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
           </div>
 
           <div>
-            <label className="block text-gray-700 text-[15.6px] font-[500] mb-1">
-              Mật khẩu
-            </label>
+            <label className="block text-gray-700 text-sm font-medium mb-1">Mật khẩu</label>
             <input
               type="password"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none h-[42px]"
-              autoComplete="new-password"
+              {...register("password")}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              autoComplete="current-password"
             />
+            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
           </div>
+
+          {error && <p className="text-red-600 text-sm text-center mt-2">{error}</p>}
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-semibold rounded-md transition-all duration-200 h-[40px] mt-4 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 hover:scale-105 hover:shadow-lg hover:cursor-pointer"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition-all duration-200 h-[40px] mt-4 disabled:bg-gray-400"
           >
-            Đăng nhập
+            {loading ? "Đang đăng nhập..." : "Đăng nhập"}
           </button>
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-4">
           Chưa có tài khoản?{" "}
-          <Link to="/register" className="text-blue-600 hover:underline font-medium" onClick={handleRegisterClick} style={isDelay ? { pointerEvents: "none", opacity: 0.6 } : {}}>
+          <Link
+            to="/register"
+            className="text-blue-600 hover:underline font-medium"
+            onClick={handleRegisterClick}
+            style={isDelay ? { pointerEvents: "none", opacity: 0.6 } : {}}
+          >
             Đăng ký ngay
           </Link>
         </p>
       </div>
     </div>
-  )
+  );
 }

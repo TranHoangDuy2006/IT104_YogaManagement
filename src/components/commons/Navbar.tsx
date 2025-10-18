@@ -1,43 +1,53 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
+import type { RootState } from "../../stores/userStore"
 
-export default function Navbar() {
+export default function Navbar({ showUser, showPracticeSchedule }: { showUser?: boolean; showPracticeSchedule?: boolean }) {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
-  const userName = "Tran Hoang Duy"
+  const userName = useSelector((state: RootState) => state.user.data?.fullName)
+  const userRole = useSelector((state: RootState) => state.user.data?.role)
 
-  const handleLogout = () => {
+  const handleNavigate = (path: string) => {
     setTimeout(() => {
-      navigate("/login")
+      navigate(path)
     }, 1000)
   }
 
   return (
-    <header className="flex items-center justify-between bg-[#1f2630] text-white h-14 w-[1425px]">
-      <div className="tracking-wide text-[24px] font-[700] py-2 ml-0 lg:ml-[88.5px]">
+    <header className="flex items-center justify-between bg-[#1f2630] text-white h-14 w-full select-none">
+      <button
+        className="tracking-wide text-[24px] font-[700] py-2 ml-0 lg:ml-[88.5px] hover:text-blue-400 transition-colors duration-200 cursor-pointer bg-transparent border-none"
+        onClick={() => handleNavigate("/")}
+      >
         GYM MANAGEMENT
-      </div>
+      </button>
 
       <nav className="hidden sm:flex text-[18.6px] font-[400] space-x-5 mr-0 lg:mr-[88.5px] items-center">
-        <a href="#" className="navbar-link">
-          Trang chủ
-        </a>
-        <a href="#" className="navbar-link">
-          Lịch tập
-        </a>
-        <a href="#" className="navbar-link">
-          Quản lý
-        </a>
 
-        <span className="ml-4 text-sm text-gray-200 group">
-          <span>Xin chào, </span>
-          <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">
-            {userName}
+        <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/")}>Trang chủ</button>
+
+        {showPracticeSchedule && (
+          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/booking")}>Lịch tập</button>
+        )}
+
+        {userRole === 'admin' && (
+          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/admin")}>Quản lí</button>
+        )}
+
+        {showUser && (
+          <span className="ml-4 mt-0.5 text-gray-200 group">
+            <span>Xin chào, </span>
+            <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">
+              {userName}
+            </span>
           </span>
-        </span>
+        )}
+
         <button
-          className="navbar-link ml-4 bg-transparent border-none cursor-pointer"
-          onClick={handleLogout}
+          className="navbar-link ml-4 bg-transparent border-none hover:cursor-pointer"
+          onClick={() => handleNavigate("/login")}
         >
           Đăng xuất
         </button>
@@ -80,23 +90,27 @@ export default function Navbar() {
           >
             Lịch tập
           </a>
-          <a
-            href="#"
-            className="navbar-link"
-            onClick={() => setOpen(false)}
-          >
-            Quản lý
-          </a>
+          {userRole === 'admin' && (
+            <a
+              href="#"
+              className="navbar-link"
+              onClick={() => setOpen(false)}
+            >
+              Quản lý
+            </a>
+          )}
 
-          <span className="mt-2 text-sm text-gray-200 group">
-            <span>Xin chào, </span>
-            <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">
-              {userName}
+          {showUser && (
+            <span className="mt-2 text-sm text-gray-200 group">
+              <span>Xin chào, </span>
+              <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">
+                {userName}
+              </span>
             </span>
-          </span>
+          )}
           <button
             className="navbar-link mt-2 bg-transparent border-none cursor-pointer"
-            onClick={handleLogout}
+            onClick={() => handleNavigate("/login")}
           >
             Đăng xuất
           </button>
