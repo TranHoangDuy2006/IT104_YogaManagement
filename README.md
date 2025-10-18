@@ -13,10 +13,9 @@
 - Kết nối API đăng ký với json-server (cổng 1904)
 - Xử lý chuyển hướng về HomePage sau khi đăng ký thành công
 - Setup routing cho HomePage, RegisterForm, LoginForm, BookingPage, AdminPage
-- Đã hoàn thiện modal thêm/xoá dịch vụ, hiệu ứng hover đẹp cho nút và modal
-- Đã dùng Redux Toolkit (createAsyncThunk) cho đăng nhập, lưu user/role vào Redux + localStorage
-- Đã refactor navigation dùng button + useNavigate (delay chuyển trang)
-- Đã fix layout sticky footer: Footer luôn nằm dưới, không đè lên ClassList khi responsive
+- Hoàn thiện modal thêm/xoá dịch vụ, hiệu ứng hover đẹp cho nút và modal
+- Dùng Redux Toolkit (createAsyncThunk) cho đăng nhập, lưu user/role vào Redux + localStorage
+- Refactor navigation dùng button + useNavigate (delay chuyển trang)
 
 ### Đang phát triển
 
@@ -45,7 +44,13 @@
    npm run dev
    ```
 
-4. Truy cập:
+4. Chạy toàn bô bộ ứng dụng (server + client):
+
+   ```powershell
+   npm run dev-all
+   ```
+
+5. Truy cập:
    - Trang chủ: <http://localhost:5174/>
    - Đăng ký: <http://localhost:5174/register>
    - Đăng nhập: <http://localhost:5174/login>
@@ -54,4 +59,4 @@
    - API: <http://localhost:1904/users>
 
 ---
-Mọi vấn đề/báo lỗi vui lòng liên hệ Trần Hoàng Duy (Admin Page).
+Mọi vấn đề/báo lỗi vui lòng liên hệ Trần Hoàng Duy - N24DTCN021 (Admin Page).
