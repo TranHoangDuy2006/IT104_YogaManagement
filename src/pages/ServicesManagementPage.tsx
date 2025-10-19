@@ -1,7 +1,6 @@
 import { useState } from "react";
 import AddServiceModal from "../components/forms/AddServiceModal";
 import ConfirmDeleteModal from "../components/forms/ConfirmDeleteModal";
-import Sidebar from "../components/commons/Sidebar";
 
 export default function ServicesManagementPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,7 +39,6 @@ export default function ServicesManagementPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
-      <Sidebar />
       <main className="flex-1 p-6 font-[inter]">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-[28px] font-bold">Quản lý Dịch vụ</h1>

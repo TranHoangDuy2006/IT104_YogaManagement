@@ -3,17 +3,25 @@ import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import type { RootState } from "../../stores/userStore"
 
-export default function Navbar({ showUser, showPracticeSchedule }: { showUser?: boolean; showPracticeSchedule?: boolean }) {
+export default function Navbar({ showUser, showPracticeSchedule, showHomePage }: { showUser?: boolean; showPracticeSchedule?: boolean; showHomePage?: boolean }) {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
-  const userName = useSelector((state: RootState) => state.user.data?.fullName)
-  const userRole = useSelector((state: RootState) => state.user.data?.role)
+  const userName = useSelector((state: RootState) => state.user.data?.fullName) || JSON.parse(localStorage.getItem("currentUser") || "{}").fullName
+  const userRole = useSelector((state: RootState) => state.user.data?.role) || JSON.parse(localStorage.getItem("currentUser") || "{}").role
 
   const handleNavigate = (path: string) => {
     setTimeout(() => {
       navigate(path)
     }, 1000)
   }
+
+  const handleLogout = () => {
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("role");
+    setTimeout(() => {
+      navigate("/login");
+    }, 1000);
+  };
 
   return (
     <header className="flex items-center justify-between bg-[#1f2630] text-white h-14 w-full select-none">
@@ -26,7 +34,9 @@ export default function Navbar({ showUser, showPracticeSchedule }: { showUser?: 
 
       <nav className="hidden sm:flex text-[18.6px] font-[400] space-x-5 mr-0 lg:mr-[88.5px] items-center">
 
-        <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/")}>Trang chủ</button>
+        {showHomePage && (
+          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/")}>Trang chủ</button>
+        )}
 
         {showPracticeSchedule && (
           <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/booking")}>Lịch tập</button>
@@ -47,7 +57,7 @@ export default function Navbar({ showUser, showPracticeSchedule }: { showUser?: 
 
         <button
           className="navbar-link ml-4 bg-transparent border-none hover:cursor-pointer"
-          onClick={() => handleNavigate("/login")}
+          onClick={handleLogout}
         >
           Đăng xuất
         </button>
@@ -110,7 +120,7 @@ export default function Navbar({ showUser, showPracticeSchedule }: { showUser?: 
           )}
           <button
             className="navbar-link mt-2 bg-transparent border-none cursor-pointer"
-            onClick={() => handleNavigate("/login")}
+            onClick={handleLogout}
           >
             Đăng xuất
           </button>

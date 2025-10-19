@@ -11,7 +11,7 @@ export default function BookingPage() {
 
   return (
   <div className="min-h-screen bg-gray-50 font-[inter] select-none">
-    <Navbar showUser={false} showPracticeSchedule={false} />
+    <Navbar showUser={false} showPracticeSchedule={false} showHomePage={true}/>
       <div className="w-full bg-white rounded-xl shadow-md max-w-[1280px] mx-auto mt-8 p-8 h-auto">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-[30.6px] font-bold">Quản lý lịch tập</h1>
