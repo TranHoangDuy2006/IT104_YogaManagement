@@ -1,7 +1,6 @@
-
 # Yoga Management Project
 
-## Tiến độ dự án (18/10/2025)
+## Tiến độ dự án (22/10/2025)
 
 ### Đã hoàn thành
 
@@ -16,13 +15,17 @@
 - Hoàn thiện modal thêm/xoá dịch vụ, hiệu ứng hover đẹp cho nút và modal
 - Dùng Redux Toolkit (createAsyncThunk) cho đăng nhập, lưu user/role vào Redux + localStorage
 - Refactor navigation dùng button + useNavigate (delay chuyển trang)
+- Quản lý CRUD người dùng (AdminPage): thêm, sửa, xoá user (trừ admin hiện tại), xác nhận xoá bằng modal, đồng bộ dữ liệu với db.json
+- Modal thêm/sửa user UI đẹp, xác thực dữ liệu cơ bản, cập nhật realtime danh sách
+- Modal xác nhận xoá user, tối ưu trải nghiệm người dùng
+- Tối ưu UI/UX, responsive cho mọi màn hình, sử dụng FontAwesome cho icon
 
 ### Đang phát triển
 
-- Quản lý lịch tập, trang BookingPage (đặt lịch, modal đặt lịch)
+- Quản lý lịch tập, trang BookingPage (đặt lịch, modal đặt lịch, CRUD booking)
 - Trang quản lý dịch vụ (AdminPage): thêm/sửa/xoá dịch vụ, xác nhận xoá
-- Tối ưu UX/UI, hoàn thiện responsive cho mọi màn hình
 - Bổ sung unit test cho các slice và component chính
+- Tối ưu hiệu năng, kiểm thử toàn bộ flow
 
 ### Hướng dẫn chạy dự án
 
@@ -44,7 +47,7 @@
    npm run dev
    ```
 
-4. Chạy toàn bô bộ ứng dụng (server + client):
+4. Chạy toàn bộ ứng dụng (server + client):
 
    ```powershell
    npm run dev-all
@@ -55,7 +58,7 @@
    - Đăng ký: <http://localhost:5174/register>
    - Đăng nhập: <http://localhost:5174/login>
    - Đặt lịch: <http://localhost:5174/booking>
-   - Quản lý dịch vụ: <http://localhost:5174/admin>
+   - Quản lý người dùng: <http://localhost:5174/admin>
    - API: <http://localhost:1904/users>
 
 ---

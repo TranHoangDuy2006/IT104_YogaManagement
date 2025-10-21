@@ -1,40 +1,60 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import axios from "axios";
 import AddServiceModal from "../components/forms/AddServiceModal";
 import ConfirmDeleteModal from "../components/forms/ConfirmDeleteModal";
 
 export default function ServicesManagementPage() {
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get("http://localhost:1904/services");
+        setServices(response.data);
+      } catch {
+        alert("Không thể tải danh sách dịch vụ!");
+      }
+    };
+    fetchServices();
+  }, []);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  type Service = {
+    id: number;
+    name: string;
+    description: string;
+    image: string;
+  };
+
+  const [editService, setEditService] = useState<Service | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [serviceToDelete, setServiceToDelete] = useState<number | null>(null);
-  const [services, setServices] = useState([
-    {
-      id: 1,
-      name: "Gym",
-      description: "Tập luyện với các thiết bị hiện đại",
-      image: "https://titansport.com.vn/wp-content/uploads/2017/08/thiet-bi-phong-gym.jpg"
-    },
-    {
-      id: 2,
-      name: "Yoga",
-      description: "Thư giãn và cân bằng tâm trí",
-      image: "https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2025/10/14/tap-gym-dung-cach-giup-co-the-san-chac-tang-suc-ben-va-cai-thien-suc-khoe-tim-mach-17604114360302556601.jpg"
-    },
-    {
-      id: 3,
-      name: "Zumba",
-      description: "Đốt cháy calories với những điệu nhảy sôi động",
-      image: "https://fitstudio.vn/wp-content/uploads/2023/05/bai-nhay-dance-kpop-into-the-new-world.jpg"
-    }
-  ]);
+  const [services, setServices] = useState<{ id: number; name: string; description: string; image: string }[]>([]);
 
-  const handleAddService = (service: { name: string; description: string; image: string }) => {
-    setServices(prev => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        ...service
+  const handleAddService = async (service: { name: string; description: string; image: string }) => {
+    if (editService) {
+      try {
+        const response = await axios.patch(`http://localhost:1904/services/${editService.id}`, service);
+        const updatedService = response.data;
+        setServices(prev => prev.map(s =>
+          s.id === editService.id ? updatedService : s
+        ));
+        setEditService(null);
+        setIsModalOpen(false);
+      } catch {
+        alert("Cập nhật dịch vụ thất bại!");
       }
-    ]);
+    } else {
+      try {
+        const response = await axios.post("http://localhost:1904/services", service);
+        const newService = response.data;
+        setServices(prev => [
+          ...prev,
+          newService
+        ]);
+        setIsModalOpen(false);
+      } catch {
+        alert("Thêm dịch vụ thất bại!");
+      }
+    }
   };
 
   return (
@@ -43,9 +63,10 @@ export default function ServicesManagementPage() {
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-[28px] font-bold">Quản lý Dịch vụ</h1>
           <button
-            className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-5 py-2 shadow transition-all w-[185px] h-[40px] text-[17px] font-medium transform hover:scale-105 hover:shadow-lg hover:-translate-y-1 duration-200 hover:cursor-pointer"
+            className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-5 py-2 shadow transition-all w-[210px] h-[40px] text-[17px] font-medium transform hover:scale-105 hover:shadow-lg hover:-translate-y-1 duration-200 hover:cursor-pointer"
             onClick={() => setIsModalOpen(true)}
           >
+            <i className="fa fa-plus mr-2"></i>
             Thêm dịch vụ mới
           </button>
         </div>
@@ -70,8 +91,13 @@ export default function ServicesManagementPage() {
                   <td className="px-6 py-4 flex gap-2">
                     <button
                       className="px-4 py-2 mt-2.5 mr-1.5 rounded-lg bg-blue-100 text-blue-700 font-semibold shadow-sm transition-all duration-200 hover:bg-blue-500 hover:cursor-pointer hover:text-white hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      onClick={() => {
+                        setEditService(service);
+                        setIsModalOpen(true);
+                      }}
                     >
-                      Sửa
+                      <i className="fa-solid fa-pen-to-square fa-lg"></i>
+                      {" "} Sửa
                     </button>
                     <button
                       className="px-4 py-2 mt-2.5 rounded-lg bg-red-100 text-red-600 font-semibold shadow-sm transition-all duration-200 hover:bg-red-500 hover:text-white hover:scale-105 hover:cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-300"
@@ -80,7 +106,8 @@ export default function ServicesManagementPage() {
                           setIsDeleteModalOpen(true);
                         }}
                     >
-                      Xóa
+                      <i className="fa-solid fa-trash-can fa-lg"></i>
+                      {" "} Xóa  
                     </button>
                   </td>
                 </tr>
@@ -103,8 +130,12 @@ export default function ServicesManagementPage() {
 
         <AddServiceModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditService(null);
+          }}
           onSave={handleAddService}
+          service={editService}
         />
       </main>
     </div>

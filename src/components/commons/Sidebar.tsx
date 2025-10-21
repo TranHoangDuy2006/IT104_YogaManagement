@@ -42,9 +42,23 @@ export default function Sidebar() {
           Trang chủ
         </button>
         <button
-          className="text-[#f87171] font-semibold px-3 py-2 rounded-lg hover:bg-[#2d3748] hover:cursor-pointer transition w-full text-left"
+          className="text-[#f87171] font-semibold px-3 py-2 rounded-lg w-full text-left transition-all duration-200 hover:bg-red-500 hover:text-white hover:shadow-lg hover:scale-105 hover:animate-shake hover:cursor-pointer"
+          style={{ position: 'relative', overflow: 'hidden' }}
           onClick={handleLogout}
         >
+          <style>{`
+            @keyframes shake {
+              0% { transform: translateX(0); }
+              20% { transform: translateX(-4px); }
+              40% { transform: translateX(4px); }
+              60% { transform: translateX(-4px); }
+              80% { transform: translateX(4px); }
+              100% { transform: translateX(0); }
+            }
+            .hover:animate-shake:hover {
+              animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both;
+            }
+          `}</style>
           Đăng xuất
         </button>
       </nav>

@@ -26,7 +26,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
   return (
     <header className="flex items-center justify-between bg-[#1f2630] text-white h-14 w-full select-none">
       <button
-        className="tracking-wide text-[24px] font-[700] py-2 ml-0 lg:ml-[88.5px] hover:text-blue-400 transition-colors duration-200 cursor-pointer bg-transparent border-none"
+        className="tracking-wide text-[24px] font-[700] py-2 ml-0 lg:ml-[88.5px] hover:cursor-pointer cursor-pointer bg-transparent border-none"
         onClick={() => handleNavigate("/")}
       >
         GYM MANAGEMENT

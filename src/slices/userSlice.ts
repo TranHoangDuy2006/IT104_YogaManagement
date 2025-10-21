@@ -1,3 +1,29 @@
+// Thêm user
+export const addUser = createAsyncThunk<User, User>(
+  "user/addUser",
+  async (user) => {
+    const response = await axios.post<User>("http://localhost:1904/users", user);
+    return response.data;
+  }
+);
+
+// Sửa user
+export const updateUser = createAsyncThunk<User, { id: string; user: Partial<User> }>(
+  "user/updateUser",
+  async ({ id, user }) => {
+    const response = await axios.patch<User>(`http://localhost:1904/users/${id}`, user);
+    return response.data;
+  }
+);
+
+// Xóa user
+export const deleteUser = createAsyncThunk<string, string>(
+  "user/deleteUser",
+  async (id) => {
+    await axios.delete(`http://localhost:1904/users/${id}`);
+    return id;
+  }
+);
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -90,6 +116,48 @@ const userSlice = createSlice({
         state.loading = false;
         state.error =
           (action.payload as string) || action.error.message || "Đăng nhập thất bại";
+      })
+
+      // Thêm user
+      .addCase(addUser.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addUser.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(addUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Thêm người dùng thất bại";
+      })
+
+      // Sửa user
+      .addCase(updateUser.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Sửa người dùng thất bại";
+      })
+
+      // Xóa user
+      .addCase(deleteUser.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteUser.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Xóa người dùng thất bại";
       });
   },
 });

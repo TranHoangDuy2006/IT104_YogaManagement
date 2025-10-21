@@ -9,35 +9,81 @@
       "role": "admin"
     },
     {
-      "id": "5172",
-      "fullName": "TrucDan",
-      "email": "trucdan1904@gmail.com",
-      "password": "trucdancute!?",
-      "confirmPassword": "trucdancute!?",
+      "id": "1761066434315",
+      "fullName": "Phạm Hoàng Trúc Đan",
+      "email": "LilianaNuThanF1@gmail.com",
+      "password": "TrucDan1904",
+      "confirmPassword": "TrucDan1904",
       "role": "admin"
-    },
-    {
-      "id": "ad8c",
-      "fullName": "test",
-      "email": "test@gmail.com",
-      "password": "duy1tran!?",
-      "confirmPassword": "duy1tran!?",
-      "role": "user"
     }
   ],
   "courses": [
     {
-      "id": "24c3"
+      "id": "4f42",
+      "name": "Mediatation",
+      "description": "Rèn luyện tâm trí và giảm căng thẳng",
+      "image": "https://www.verywellmind.com/thmb/MQWhY7u5mTDfaO4vgDHRvnHYcaA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-938890492-becc3fc4757849bea672f148454943f9.jpg"
+    },
+    {
+      "id": "0fbf",
+      "name": "Aerobic",
+      "description": "Bài tập nhịp điệu giúp cải thiện sức khỏe tim mạch và đốt cháy mỡ thừa",
+      "image": "https://bizweb.dktcdn.net/100/413/756/files/thiet-ke-chua-co-ten-9.jpg?v=1692672056939"
+    },
+    {
+      "id": "ce86",
+      "name": "HIIT",
+      "description": "Bài tập cường độ cao ngắt quãng, đốt mỡ nhanh trong thời gian ngắn",
+      "image": "https://file.hstatic.net/200001007715/file/hiit-1_d0d436c82753416fa19db1a69e1e296c_grande.jpg"
+    },
+    {
+      "id": "d18f",
+      "name": "Boxing",
+      "description": "Rèn luyện thể lực và kỹ năng tự vệ",
+      "image": "https://cdn.britannica.com/76/187976-050-D8DA2DA7/Floyd-Mayweather-Jr-ducks-Philippines-Manny-Pacquiao-May-2-2015.jpg"
+    },
+    {
+      "id": "b748",
+      "name": "Sauna",
+      "description": "Thư giãn, thải độc tố và phục hồi cơ bắp",
+      "image": "https://minchico.vn/wp-content/uploads/2022/02/sauna-nghia-la-gi-01.jpg"
+    },
+    {
+      "id": "9cae",
+      "name": "CrossFit",
+      "description": "Bài tập cường độ cao đa dạng và thử thách",
+      "image": "https://www.wheystore.vn/upload/news_optimize/wst_1603445576_crossfit_la_gi__8_dieu_ban_can_biet_truoc_khi_tap_crossfit_image_1603445576_1.jpg"
     }
   ],
   "bookings": [
     {
-      "id": "77c7"
+      "id": "9bc2",
+      "userId": "a9d1",
+      "class": "Mediatation",
+      "date": "2006-04-19",
+      "time": "6:00 - 7:00",
+      "name": "Trần Hoàng Duy",
+      "email": "duyhoangtran2006@gmail.com"
     }
   ],
   "services": [
     {
-      "id": "3e11"
+      "id": "8a5a",
+      "name": "Gym",
+      "description": "Rèn luyện tâm trí và giảm cáng thẳng",
+      "image": "https://www.verywellmind.com/thmb/MQWhY7u5mTDfaO4vgDHRvnHYcaA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-938890492-becc3fc4757849bea672f148454943f9.jpg"
+    },
+    {
+      "id": "1b2c",
+      "name": "Personal Training",
+      "description": "Huấn luyện viên cá nhân giúp tối ưu hóa hiệu quả tập luyện",
+      "image": "https://vitalityweightlossinstitute.com/wp-content/uploads/2025/04/What_makes_a_great_personal_trainer_-Blog-1200x800px_8338a95e-5fa3-42d8-901a-7893cea29330.jpg"
+    },
+    {
+      "id": "2d3e",
+      "name": "Nutrition Counseling",
+      "description": "Tư vấn dinh dưỡng để hỗ trợ mục tiêu sức khỏe và thể hình",
+      "image": "https://wp04-media.cdn.ihealthspot.com/wp-content/uploads/sites/66/2021/04/iStock-1258586742-300x200.jpg"
     }
   ]
 }

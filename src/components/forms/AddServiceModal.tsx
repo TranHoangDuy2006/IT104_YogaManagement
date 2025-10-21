@@ -4,12 +4,26 @@ interface AddServiceModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (service: { name: string; description: string; image: string }) => void;
+  service?: { name: string; description: string; image: string } | null;
 }
 
-const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSave }) => {
+const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSave, service }) => {
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [image, setImage] = React.useState("");
+  const isEdit = !!service;
+
+  React.useEffect(() => {
+    if (service) {
+      setName(service.name || "");
+      setDescription(service.description || "");
+      setImage(service.image || "");
+    } else {
+      setName("");
+      setDescription("");
+      setImage("");
+    }
+  }, [service, isOpen]);
 
   if (!isOpen) return null;
 
@@ -22,10 +36,10 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSa
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center font-[inter] select-none">
-      <div className="absolute inset-0 bg-[#7c7d7d] bg-opacity-10 backdrop-blur-sm transition-opacity pointer-events-none"></div>
-      <div className="relative bg-white rounded-xl shadow-xl p-8 w-[600px] max-w-full animate-fade-in pointer-events-auto">
-        <h2 className="text-2xl font-bold mb-6">Thêm dịch vụ mới</h2>
+      <div className="fixed inset-0 z-50 flex items-center justify-center font-[inter] select-none">
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] transition-all duration-300 opacity-100 pointer-events-none animate-fade-in"></div>
+        <div className="relative bg-white rounded-xl shadow-xl p-8 w-[600px] max-w-full pointer-events-auto transform transition-all duration-300 animate-fade-in-modal">
+  <h2 className="text-2xl font-bold mb-6">{isEdit ? "Sửa dịch vụ" : "Thêm dịch vụ mới"}</h2>
         <div className="mb-4">
           <label className="block font-semibold mb-2 text-gray-700">Tên dịch vụ</label>
           <input
@@ -57,13 +71,13 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSa
             className="px-6 py-2 rounded-lg bg-gray-400 text-white font-semibold hover:bg-gray-500 hover:cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-gray-300"
             onClick={onClose}
           >
-            Hủy
+            <i className="fas fa-times"></i>{" "}Hủy
           </button>
           <button
             className="px-6 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600 hover:cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-blue-300"
             onClick={handleSave}
           >
-            Lưu
+            <i className="fas fa-save"></i>{" "}{isEdit ? "Cập nhật" : "Lưu"}
           </button>
         </div>
       </div>
