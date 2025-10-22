@@ -8,19 +8,26 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
   const navigate = useNavigate()
   const userName = useSelector((state: RootState) => state.user.data?.fullName) || JSON.parse(localStorage.getItem("currentUser") || "{}").fullName
   const userRole = useSelector((state: RootState) => state.user.data?.role) || JSON.parse(localStorage.getItem("currentUser") || "{}").role
+  const isLoggedIn = Boolean(userName);
 
   const handleNavigate = (path: string) => {
     setTimeout(() => {
       navigate(path)
-    }, 1000)
+    }, 1500)
   }
 
   const handleLogout = () => {
+    if (!isLoggedIn) {
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+      return;
+    }
     localStorage.removeItem("currentUser");
     localStorage.removeItem("role");
     setTimeout(() => {
       navigate("/login");
-    }, 1000);
+    }, 1500);
   };
 
   return (
@@ -35,18 +42,18 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
       <nav className="hidden sm:flex text-[18.6px] font-[400] space-x-5 mr-0 lg:mr-[88.5px] items-center">
 
         {showHomePage && (
-          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/")}>Trang chủ</button>
+          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/")}><i className="fa-solid fa-house mr-2.5"></i>Trang chủ</button>
         )}
 
-        {showPracticeSchedule && (
-          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/booking")}>Lịch tập</button>
+        {showPracticeSchedule && isLoggedIn && (
+          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/bookings")}><i className="fa-solid fa-calendar-days mr-2.5"></i>Lịch tập</button>
         )}
 
         {userRole === 'admin' && (
-          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/admin")}>Quản lí</button>
+          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/admin")}><i className="fa-solid fa-user-shield mr-2.5"></i>Quản lí</button>
         )}
 
-        {showUser && (
+        {showUser && isLoggedIn && (
           <span className="ml-4 mt-0.5 text-gray-200 group">
             <span>Xin chào, </span>
             <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">
@@ -59,7 +66,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
           className="navbar-link ml-4 bg-transparent border-none hover:cursor-pointer"
           onClick={handleLogout}
         >
-          Đăng xuất
+          <i className="fa-solid fa-right-from-bracket mr-2.5"></i>{isLoggedIn ? "Đăng xuất" : "Đăng nhập"}
         </button>
       </nav>
 
@@ -110,7 +117,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
             </a>
           )}
 
-          {showUser && (
+          {showUser && isLoggedIn && (
             <span className="mt-2 text-sm text-gray-200 group">
               <span>Xin chào, </span>
               <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">
@@ -122,7 +129,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
             className="navbar-link mt-2 bg-transparent border-none cursor-pointer"
             onClick={handleLogout}
           >
-            Đăng xuất
+            {isLoggedIn ? "Đăng xuất" : "Đăng nhập"}
           </button>
         </nav>
       )}

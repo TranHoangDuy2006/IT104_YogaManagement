@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+// Kiểm tra user đăng nhập qua localStorage ("currentUser")
 
 export default function ClassList() {
   const navigate = useNavigate();
@@ -19,8 +20,15 @@ export default function ClassList() {
   }, []);
 
   const handleNavigateWithDelay = (id: number) => {
+    const currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) {
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500); 
+      return;
+    }
     setTimeout(() => {
-      navigate(`/booking#${id}`);
+      navigate(`/bookings#${id}`);
     }, 1000);
   };
 

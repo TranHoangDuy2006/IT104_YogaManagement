@@ -1,13 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-interface Booking {
-  id?: number;
-  userId: number;
-  class: string;
-  date: string;
-  time: string;
-}
+import type { Booking } from "../../slices/bookingSlice";
 
 interface BookingModalProps {
   booking?: Booking;
@@ -88,6 +81,8 @@ export default function BookingModal({
       class: classType,
       date,
       time,
+      name: booking?.name ?? "",
+      email: booking?.email ?? "",
     });
   };
 
@@ -179,14 +174,14 @@ export default function BookingModal({
             className="bg-gray-400 hover:bg-gray-500 hover:cursor-pointer text-white font-semibold rounded-lg px-6 py-2 transition-all duration-200"
             onClick={handleCancel}
           >
-            <i className="fa-solid fa-xmark text-xl"></i>{" "} Hủy
+            <i className="fa-solid fa-xmark text-xl mr-1"></i>{" "} Hủy
           </button>
           <button
             type="button"
             className="bg-blue-500 hover:bg-blue-700 hover:cursor-pointer text-white font-semibold rounded-lg px-6 py-2 transition-all duration-200"
             onClick={handleSave}
           >
-            <i className="fa-solid fa-floppy-disk"></i>{" "}Lưu
+            <i className="fa-solid fa-floppy-disk mr-1"></i>{" "}Lưu
           </button>
         </div>
       </form>

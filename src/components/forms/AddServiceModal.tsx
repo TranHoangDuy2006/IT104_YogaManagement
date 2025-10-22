@@ -71,13 +71,13 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSa
             className="px-6 py-2 rounded-lg bg-gray-400 text-white font-semibold hover:bg-gray-500 hover:cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-gray-300"
             onClick={onClose}
           >
-            <i className="fas fa-times"></i>{" "}Hủy
+            <i className="fas fa-times mr-1"></i>{" "}Hủy
           </button>
           <button
             className="px-6 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600 hover:cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-blue-300"
             onClick={handleSave}
           >
-            <i className="fas fa-save"></i>{" "}{isEdit ? "Cập nhật" : "Lưu"}
+            <i className="fas fa-save mr-1"></i>{" "}{isEdit ? "Cập nhật" : "Lưu"}
           </button>
         </div>
       </div>

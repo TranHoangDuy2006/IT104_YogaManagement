@@ -7,21 +7,23 @@ import AdminPage from "./pages/AdminPage";
 import BookingPage from "./pages/BookingPage";
 import ServicesManagementPage from "./pages/ServicesManagementPage";
 import SchedulesManagementPage from "./pages/SchedulesManagementPage";
+import UsersManagementPage from "./pages/UsersManagementPage";
 import ProtectedRoute from "./ProtectedRoute";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/home" element={<HomePage />} />
       <Route path="/register" element={<RegisterForm />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>}>
         <Route path="schedules-management" element={<SchedulesManagementPage />} />
         <Route path="services-management" element={<ServicesManagementPage />} />
-        {/* Add more admin child routes here if needed */}
+        <Route path="users-management" element={<UsersManagementPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />
-      <Route path="/booking" element={<BookingPage />} />
+      <Route path="/bookings" element={<BookingPage />} />
     </Routes>
   );
-}
+} 

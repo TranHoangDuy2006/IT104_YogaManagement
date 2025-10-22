@@ -16,13 +16,20 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   }
 
   const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [showNoAccess, setShowNoAccess] = useState(false);
 
   useEffect(() => {
     if (!currentUser || (window.location.pathname.startsWith('/admin') && currentUser.role !== 'admin')) {
-      const timer = setTimeout(() => {
+      const notifyTimer = setTimeout(() => {
+        setShowNoAccess(true);
+      }, 5000);
+      const redirectTimer = setTimeout(() => {
         setShouldRedirect(true);
-      }, 3000);
-      return () => clearTimeout(timer);
+      }, 8000);
+      return () => {
+        clearTimeout(notifyTimer);
+        clearTimeout(redirectTimer);
+      };
     }
   }, [currentUser]);
 
@@ -32,7 +39,12 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
 
   if (!currentUser || (window.location.pathname.startsWith('/admin') && currentUser.role !== 'admin')) {
     return (
-      <div className="w-full h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100">
+      <div className="w-full h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100 relative">
+        {showNoAccess && (
+          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 bg-red-500 text-white rounded-lg shadow font-semibold text-lg animate-fade-in">
+            <i className="fa-solid fa-circle-exclamation mr-2"></i>Bạn không có quyền truy cập
+          </div>
+        )}
         <div className="flex flex-col items-center gap-4 px-8 py-10 rounded-2xl border border-blue-200 shadow-2xl bg-white/80 animate-fade-in">
           <span className="inline-block animate-spin-slow text-blue-500">
             <svg xmlns='http://www.w3.org/2000/svg' className='h-10 w-10' fill='none' viewBox='0 0 24 24' stroke='currentColor'>

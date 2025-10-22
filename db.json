@@ -14,7 +14,23 @@
       "email": "LilianaNuThanF1@gmail.com",
       "password": "TrucDan1904",
       "confirmPassword": "TrucDan1904",
-      "role": "admin"
+      "role": "user"
+    },
+    {
+      "id": "1761103316978",
+      "fullName": "Lê Nguyễn Quang Huy",
+      "email": "huygunpow1609@gmail.com",
+      "password": "huy123456",
+      "confirmPassword": "huy123456",
+      "role": "user"
+    },
+    {
+      "id": "363c",
+      "fullName": "Trần Minh Đức",
+      "email": "ductranminh2006@gmail.com",
+      "password": "minhduc2006",
+      "confirmPassword": "minhduc2006",
+      "role": "user"
     }
   ],
   "courses": [
@@ -62,6 +78,87 @@
       "class": "Mediatation",
       "date": "2006-04-19",
       "time": "6:00 - 7:00",
+      "name": "Trần Hoàng Duy",
+      "email": "duyhoangtran2006@gmail.com"
+    },
+    {
+      "id": "d7a9",
+      "userId": "a9d1",
+      "class": "HIIT",
+      "date": "2006-12-22",
+      "time": "18:00 - 19:00",
+      "name": "Trần Hoàng Duy",
+      "email": "duyhoangtran2006@gmail.com"
+    },
+    {
+      "id": "00fe",
+      "userId": "a9d1",
+      "class": "HIIT",
+      "date": "2006-10-22",
+      "time": "8:00 - 9:00",
+      "name": "Trần Hoàng Duy",
+      "email": "duyhoangtran2006@gmail.com"
+    },
+    {
+      "id": "58fb",
+      "userId": "1761103316978",
+      "class": "Boxing",
+      "date": "2006-08-16",
+      "time": "8:00 - 9:00",
+      "name": "Lê Nguyễn Quang Huy",
+      "email": "huygunpow1609@gmail.com"
+    },
+    {
+      "id": "cb7b",
+      "userId": "1761103316978",
+      "class": "Sauna",
+      "date": "2006-01-01",
+      "time": "17:00 - 18:00",
+      "name": "Lê Nguyễn Quang Huy",
+      "email": "huygunpow1609@gmail.com"
+    },
+    {
+      "id": "9059",
+      "userId": "1761066434315",
+      "class": "Sauna",
+      "date": "2006-09-22",
+      "time": "7:00 - 8:00",
+      "name": "Phạm Hoàng Trúc Đan",
+      "email": "LilianaNuThanF1@gmail.com"
+    },
+    {
+      "id": "f188",
+      "userId": "1761066434315",
+      "class": "Aerobic",
+      "date": "2006-09-08",
+      "time": "17:00 - 18:00",
+      "name": "Phạm Hoàng Trúc Đan",
+      "email": "LilianaNuThanF1@gmail.com"
+    },
+    {
+      "id": "3002",
+      "userId": "1761066434315",
+      "class": "Sauna",
+      "date": "2006-01-31",
+      "time": "18:00 - 19:00",
+      "name": "Phạm Hoàng Trúc Đan",
+      "email": "LilianaNuThanF1@gmail.com"
+    },
+    {
+      "id": "946d",
+      "userId": "1761066434315",
+      "class": "CrossFit",
+      "date": "2006-05-09",
+      "time": "17:00 - 18:00",
+      "name": "Phạm Hoàng Trúc Đan",
+      "email": "LilianaNuThanF1@gmail.com"
+    },
+    {
+      "id": "d5ec",
+      "userId": "a9d1",
+      "class": "Aerobic",
+      "date": "2006-02-28",
+      "time": "8:00 - 9:00",
       "name": "Trần Hoàng Duy",
       "email": "duyhoangtran2006@gmail.com"
     }

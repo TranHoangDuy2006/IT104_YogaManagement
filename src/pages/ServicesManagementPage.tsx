@@ -59,14 +59,14 @@ export default function ServicesManagementPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
-      <main className="flex-1 p-6 font-[inter]">
+      <main className="flex-1 bg-[#f9fafb] font-[inter]">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-[28px] font-bold">Quản lý Dịch vụ</h1>
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-5 py-2 shadow transition-all w-[210px] h-[40px] text-[17px] font-medium transform hover:scale-105 hover:shadow-lg hover:-translate-y-1 duration-200 hover:cursor-pointer"
             onClick={() => setIsModalOpen(true)}
           >
-            <i className="fa fa-plus mr-2"></i>
+            <i className="fa fa-plus mr-3"></i>
             Thêm dịch vụ mới
           </button>
         </div>
@@ -96,7 +96,7 @@ export default function ServicesManagementPage() {
                         setIsModalOpen(true);
                       }}
                     >
-                      <i className="fa-solid fa-pen-to-square fa-lg"></i>
+                      <i className="fa-solid fa-pen-to-square fa-lg mr-1"></i>
                       {" "} Sửa
                     </button>
                     <button
@@ -106,7 +106,7 @@ export default function ServicesManagementPage() {
                           setIsDeleteModalOpen(true);
                         }}
                     >
-                      <i className="fa-solid fa-trash-can fa-lg"></i>
+                      <i className="fa-solid fa-trash-can fa-lg mr-1"></i>
                       {" "} Xóa  
                     </button>
                   </td>

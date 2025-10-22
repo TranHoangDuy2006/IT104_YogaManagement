@@ -19,6 +19,12 @@
 - Modal thêm/sửa user UI đẹp, xác thực dữ liệu cơ bản, cập nhật realtime danh sách
 - Modal xác nhận xoá user, tối ưu trải nghiệm người dùng
 - Tối ưu UI/UX, responsive cho mọi màn hình, sử dụng FontAwesome cho icon
+- Hiển thị lịch tập của từng user dưới dạng bảng đẹp, có cột Ngày, Giờ, Lớp học, Tên, Email
+- Tạo createAsyncThunk fetchBookingsByUser, gọi API /bookings?userId={id} cho từng user
+- Nút "Lịch" chuyển thành "Mở Lịch"/"Ẩn Lịch" với màu hover tím, UX rõ ràng
+- Sửa icon đăng xuất Navbar thành fa-solid fa-right-from-bracket (FontAwesome 6)
+- Cải thiện responsive, style cho bảng lịch, tối ưu trải nghiệm admin
+- Fix các lỗi nhỏ về type, linter, logic hiển thị
 
 ### Đang phát triển
 

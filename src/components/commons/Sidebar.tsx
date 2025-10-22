@@ -8,7 +8,7 @@ export default function Sidebar() {
   const handleNavigateWithDelay = (path: string) => {
     setTimeout(() => {
       navigate(path);
-    }, 1000);
+    }, 1500);
   };
 
   const handleLogout = () => {
@@ -16,7 +16,7 @@ export default function Sidebar() {
     localStorage.removeItem("role");
     setTimeout(() => {
       navigate("/login");
-    }, 1000);
+    }, 1500);
   };
 
   return (
@@ -27,19 +27,25 @@ export default function Sidebar() {
           className={`px-3 py-2 rounded-lg font-[19px] w-full text-left transition-all duration-200 hover:bg-[#2d3748] hover:text-blue-400 hover:scale-105 hover:shadow-lg hover:underline hover:cursor-pointer ${location.pathname === '/admin/schedules-management' ? 'border-l-4 border-blue-400 bg-[#263043] text-blue-300 font-bold' : ''}`}
           onClick={() => handleNavigateWithDelay('/admin/schedules-management')}
         >
-          Quản lý lịch
+          <i className="fa-solid fa-calendar-days mr-2.5"></i>Quản lý lịch
+        </button>
+        <button
+          className={`px-3 py-2 rounded-lg font-[19px] w-full text-left transition-all duration-200 hover:bg-[#2d3748] hover:text-blue-400 hover:scale-105 hover:shadow-lg hover:underline hover:cursor-pointer ${location.pathname === '/admin/users-management' ? 'border-l-4 border-blue-400 bg-[#263043] text-blue-300 font-bold' : ''}`}
+          onClick={() => handleNavigateWithDelay('/admin/users-management')}
+        >
+          <i className="fa-solid fa-users mr-2.5"></i>Quản lý người dùng
         </button>
         <button
           className={`px-3 py-2 rounded-lg font-[19px] w-full text-left transition-all duration-200 hover:bg-[#2d3748] hover:text-blue-400 hover:scale-105 hover:shadow-lg hover:underline hover:cursor-pointer ${location.pathname === '/admin/services-management' ? 'border-l-4 border-blue-400 bg-[#263043] text-blue-300 font-bold' : ''}`}
           onClick={() => handleNavigateWithDelay('/admin/services-management')}
         >
-          Quản lý dịch vụ
+          <i className="fa-solid fa-gear mr-2.5"></i>Quản lý dịch vụ
         </button>
         <button
           className="px-3 py-2 rounded-lg font-[19px] w-full text-left transition-all duration-200 hover:bg-[#2d3748] hover:text-blue-400 hover:scale-105 hover:shadow-lg hover:underline hover:cursor-pointer"
-          onClick={() => handleNavigateWithDelay("/")}
+          onClick={() => handleNavigateWithDelay("/home")}
         >
-          Trang chủ
+          <i className="fa-solid fa-house mr-2.5"></i>Trang chủ
         </button>
         <button
           className="text-[#f87171] font-semibold px-3 py-2 rounded-lg w-full text-left transition-all duration-200 hover:bg-red-500 hover:text-white hover:shadow-lg hover:scale-105 hover:animate-shake hover:cursor-pointer"
@@ -59,7 +65,7 @@ export default function Sidebar() {
               animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both;
             }
           `}</style>
-          Đăng xuất
+          <i className="fa-solid fa-right-from-bracket mr-2.5"></i>Đăng xuất
         </button>
       </nav>
     </aside>

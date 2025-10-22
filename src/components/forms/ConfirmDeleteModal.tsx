@@ -20,13 +20,13 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose
             className="px-6 py-2 rounded-lg bg-gray-600 text-white font-semibold hover:bg-gray-700 hover:cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-gray-300"
             onClick={onClose}
           >
-            <i className="fa-solid fa-xmark fa-xl"></i>{" "} Hủy
+            <i className="fa-solid fa-xmark fa-xl mr-1"></i>{" "} Hủy
           </button>
           <button
             className="px-6 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 hover:cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-red-300"
             onClick={onConfirm}
           >
-            <i className="fa-solid fa-trash-can"></i>{" "} Xóa
+            <i className="fa-solid fa-trash-can mr-1"></i>{" "} Xóa
           </button>
         </div>
       </div>

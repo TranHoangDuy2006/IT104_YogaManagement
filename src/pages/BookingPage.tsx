@@ -97,7 +97,7 @@ export default function BookingPage() {
               setEditBooking(null);
             }}
           >
-            <i className="fa-solid fa-plus"></i> Đặt lịch mới
+            <i className="fa-solid fa-plus mr-2"></i> Đặt lịch mới
           </button>
         </div>
 
@@ -137,14 +137,14 @@ export default function BookingPage() {
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold shadow-sm hover:bg-blue-500 hover:cursor-pointer hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 mr-3"
                       onClick={() => handleEdit(b)}
                     >
-                      <i className="fa-solid fa-pen-to-square fa-lg"></i>
+                      <i className="fa-solid fa-pen-to-square fa-lg mr-1"></i>
                       Sửa
                     </button>
                     <button
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold shadow-sm hover:bg-red-500 hover:text-white hover:cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 active:scale-95"
                       onClick={() => handleDelete(b.id!)}
                     >
-                      <i className="fa-solid fa-trash-can fa-lg"></i>
+                      <i className="fa-solid fa-trash-can fa-lg mr-1"></i>
                       Xóa
                     </button>
                   </td>
