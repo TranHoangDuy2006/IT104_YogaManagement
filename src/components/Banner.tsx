@@ -1,6 +1,22 @@
 import hero from "../assets/Yoga_1.png";
+import { useNavigate } from "react-router-dom";
 
 export default function Banner() {
+  const navigate = useNavigate();
+
+  const handleStart = () => {
+    const currentUser = localStorage.getItem("currentUser");
+    if (currentUser) {
+      setTimeout(() => {
+        navigate("/bookings");
+      }, 2000);
+    } else {
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    }
+  };
+
   return (
     <section className="relative overflow-hidden rounded-b-md w-full">
       <div className="relative h-[380px] md:h-[420px] xl:h-[745.9px] w-full">
@@ -17,7 +33,9 @@ export default function Banner() {
             Transform Your Body, Transform Your Life
           </p>
           <button
-            className="mt-4 bg-[#2b71ff] hover:bg-[#205ae0] hover:cursor-pointer text-white text-[19.8px] font-semibold w-[194px] h-[44px] rounded-lg transition-all duration-200 ease-in-out shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 hover:scale-105 hover:shadow-xl">
+            className="mt-4 bg-[#2b71ff] hover:bg-[#205ae0] hover:cursor-pointer text-white text-[19.8px] font-semibold w-[194px] h-[44px] rounded-lg transition-all duration-200 ease-in-out shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 hover:scale-105 hover:shadow-xl"
+            onClick={handleStart}
+          >
             Bắt đầu ngay
           </button>
         </div>

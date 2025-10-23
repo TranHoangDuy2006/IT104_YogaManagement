@@ -86,7 +86,7 @@ export default function RegisterForm() {
     setLocalLoading(true);
     setErrorMsg("");
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    const userWithRole = { ...data, role: "user" };
+  const userWithRole = { ...data, role: "user", id: "" };
     const rs = await dispatch(registerUser(userWithRole));
     setLocalLoading(false);
     if (registerUser.fulfilled.match(rs)) {

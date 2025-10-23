@@ -31,7 +31,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
   };
 
   return (
-    <header className="flex items-center justify-between bg-[#1f2630] text-white h-14 w-full select-none">
+  <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-[#1f2630] text-white h-14 select-none shadow">
       <button
         className="tracking-wide text-[24px] font-[700] py-2 ml-0 lg:ml-[88.5px] hover:cursor-pointer cursor-pointer bg-transparent border-none"
         onClick={() => handleNavigate("/")}

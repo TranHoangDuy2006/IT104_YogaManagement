@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import {
+  getBookingsByUser,
+  createBooking as apiCreateBooking,
+  updateBooking as apiUpdateBooking,
+  deleteBooking as apiDeleteBooking
+} from "../apis/api";
 
 export interface Booking {
   id?: number;
@@ -26,7 +31,7 @@ const initialState: BookingState = {
 export const fetchBookingsByUser = createAsyncThunk<Booking[], number>(
   "bookings/fetchByUser",
   async (userId) => {
-    const response = await axios.get<Booking[]>(`http://localhost:1904/bookings?userId=${userId}`);
+    const response = await getBookingsByUser(String(userId));
     return response.data;
   }
 );
@@ -39,7 +44,7 @@ export const addBooking = createAsyncThunk<Booking, Booking, { rejectValue: stri
       return rejectWithValue("Vui lòng nhập đầy đủ thông tin!");
     }
     // Kiểm tra trùng lặp sẽ thực hiện ở component trước khi gọi thunk
-    const response = await axios.post<Booking>("http://localhost:1904/bookings", booking);
+    const response = await apiCreateBooking(booking);
     return response.data;
   }
 );
@@ -51,7 +56,7 @@ export const updateBooking = createAsyncThunk<Booking, Booking, { rejectValue: s
     if (!booking.class || !booking.date || !booking.time) {
       return rejectWithValue("Vui lòng nhập đầy đủ thông tin!");
     }
-    const response = await axios.patch<Booking>(`http://localhost:1904/bookings/${booking.id}`, booking);
+    const response = await apiUpdateBooking(booking.id, booking);
     return response.data;
   }
 );
@@ -60,7 +65,7 @@ export const deleteBooking = createAsyncThunk<number, number, { rejectValue: str
   "bookings/delete",
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:1904/bookings/${id}`);
+      await apiDeleteBooking(id);
       return id;
     } catch {
       return rejectWithValue("Xóa lịch thất bại!");

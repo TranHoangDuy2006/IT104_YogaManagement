@@ -1,29 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
-import axios from "axios";
-import ConfirmDeleteModal from "../components/forms/ConfirmDeleteModal";
-import AddUserModal from "../components/forms/AddUserModal";
-import EditUserModal from "../components/forms/EditUserModal";
+import { getUsers, getBookingsByUser, deleteBooking } from "../apis/api";
+import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
+import AddUserModal from "../components/modals/AddUserModal";
+import EditUserModal from "../components/modals/EditUserModal";
 import type { AppDispatch } from "../stores/userStore";
 import { deleteUser, updateUser, addUser } from "../slices/userSlice";
 import { fetchBookingsByUser } from "../slices/fetchBookingsByUserThunk";
 import type { Booking } from "../slices/bookingSlice";
+import type { User } from "../types/User";
 
-type User = {
-  id: string;
-  fullName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  role: string;
-};
+// Component hiển thị thông báo
+function Notification({ message }: { message: string }) {
+  return (
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+      <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-fade-in">
+        <svg
+          className="w-5 h-5 text-white"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>{message}</span>
+      </div>
+      <style>{`
+        @keyframes fade-in {
+          0% { opacity: 0; transform: translateY(-10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.4s cubic-bezier(.4,0,.2,1) forwards;
+        }
+      `}</style>
+    </div>
+  );
+}
 
 export default function UserManagementPage() {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
 
   const [users, setUsers] = useState<User[]>([]);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
   const [expandedUserId, setExpandedUserId] = useState<string | null>(null);
   const [bookingsByUser, setBookingsByUser] = useState<Record<string, Booking[]>>({});
   const [loadingBookingsId, setLoadingBookingsId] = useState<string | null>(null);
@@ -42,16 +65,23 @@ export default function UserManagementPage() {
     role: "user",
   });
 
-  // Lấy thông tin admin hiện tại
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
     setAdminEmail(currentUser.email);
   }, []);
 
-  // Fetch users (trừ admin)
   useEffect(() => {
-    axios.get<User[]>("http://localhost:1904/users").then((res) => {
-      setUsers(res.data.filter((u) => u.email !== adminEmail));
+    getUsers().then((res) => {
+      setUsers(
+        res.data
+          .filter((u) => u.email !== adminEmail)
+          .map((u) => ({
+            ...u,
+            id: u.id ? String(u.id) : "",
+            confirmPassword: u.confirmPassword ?? "",
+            role: u.role ?? "user",
+          }))
+      );
     });
   }, [adminEmail]);
 
@@ -62,7 +92,6 @@ export default function UserManagementPage() {
           <>
             <h2 className="text-[29px] font-bold mb-6">Quản lý người dùng</h2>
 
-            {/* Danh sách user */}
             <div className="bg-white rounded-lg shadow p-6 mb-8">
               <button
                 className="mb-4 px-4 py-2 rounded bg-green-500 text-white font-semibold hover:bg-green-600 hover:cursor-pointer flex items-center gap-2"
@@ -71,7 +100,6 @@ export default function UserManagementPage() {
                 <i className="fa-solid fa-user-plus" /> Thêm người dùng
               </button>
 
-              {/* Modal thêm người dùng */}
               <AddUserModal
                 isOpen={addModalOpen}
                 onClose={() => setAddModalOpen(false)}
@@ -80,6 +108,9 @@ export default function UserManagementPage() {
                 onSubmit={async (user) => {
                   await dispatch(addUser(user));
                   setUsers([...users, user]);
+                  setSuccessMsg("Thêm người dùng thành công!");
+                  setShowSuccess(true);
+                  setTimeout(() => setShowSuccess(false), 1800);
                   setAddModalOpen(false);
                   setNewUser({
                     id: "",
@@ -92,7 +123,8 @@ export default function UserManagementPage() {
                 }}
               />
 
-              {/* Bảng danh sách người dùng */}
+              {showSuccess && <Notification message={successMsg} />}
+
               <table className="min-w-full">
                 <thead>
                   <tr>
@@ -102,6 +134,7 @@ export default function UserManagementPage() {
                     <th className="px-4 py-2 text-left">Thao tác</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {users.map((u) => (
                     <React.Fragment key={u.id}>
@@ -109,10 +142,11 @@ export default function UserManagementPage() {
                         <td className="px-4 py-2">{u.fullName}</td>
                         <td className="px-4 py-2">{u.email}</td>
                         <td className="px-4 py-2">{u.role}</td>
+
                         <td className="px-4 py-2">
                           <div className="flex gap-3">
                             <button
-                              className="px-5 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold text-base hover:bg-yellow-500 hover:text-white hover:cursor-pointer flex items-center gap-2"
+                              className="px-5 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-500 hover:text-white hover:cursor-pointer flex items-center gap-2"
                               onClick={() => {
                                 setEditUser(u);
                                 setEditModalOpen(true);
@@ -120,8 +154,9 @@ export default function UserManagementPage() {
                             >
                               <i className="fa-solid fa-pen-to-square" /> Sửa
                             </button>
+
                             <button
-                              className="px-5 py-2 rounded-lg bg-red-100 text-red-600 font-semibold text-base hover:bg-red-500 hover:text-white hover:cursor-pointer flex items-center gap-2"
+                              className="px-5 py-2 rounded-lg bg-red-100 text-red-600 font-semibold hover:bg-red-500 hover:text-white hover:cursor-pointer flex items-center gap-2"
                               onClick={() => {
                                 setUserToDelete(u);
                                 setDeleteModalOpen(true);
@@ -129,12 +164,13 @@ export default function UserManagementPage() {
                             >
                               <i className="fa-solid fa-trash" /> Xóa
                             </button>
+
                             <button
-                              className={`px-5 py-2 rounded-lg font-semibold text-base flex items-center gap-2 hover:cursor-pointer
-                                ${expandedUserId === u.id
-                                  ? 'bg-gray-200 text-gray-700 hover:bg-purple-400 hover:text-white'
-                                  : 'bg-blue-100 text-blue-700 hover:bg-purple-500 hover:text-white'}
-                              `}
+                              className={`px-5 py-2 rounded-lg font-semibold flex items-center gap-2 ${
+                                expandedUserId === u.id
+                                  ? "bg-gray-200 text-gray-700 hover:bg-purple-400 hover:text-white hover:cursor-pointer"
+                                  : "bg-blue-100 text-blue-700 hover:bg-purple-500 hover:text-white hover:cursor-pointer"
+                              }`}
                               onClick={async () => {
                                 const id = u.id;
                                 if (expandedUserId === id) {
@@ -142,9 +178,9 @@ export default function UserManagementPage() {
                                   return;
                                 }
                                 setExpandedUserId(id);
-                                // nếu đã load thì không load lại
                                 if (bookingsByUser[id]) return;
                                 setLoadingBookingsId(id);
+
                                 try {
                                   const res = await dispatch(fetchBookingsByUser(id));
                                   const payload = (res as unknown as { payload?: Booking[] }).payload;
@@ -157,12 +193,17 @@ export default function UserManagementPage() {
                                 }
                               }}
                             >
-                              <i className={`fa-solid fa-calendar-days mr-2 ${expandedUserId === u.id ? 'text-gray-500' : 'text-blue-500'}`} />
-                              {expandedUserId === u.id ? 'Ẩn Lịch' : 'Mở Lịch'}
+                              <i
+                                className={`fa-solid fa-calendar-days mr-1 ${
+                                  expandedUserId === u.id ? "text-gray-500" : "text-blue-500"
+                                }`}
+                              />
+                              {expandedUserId === u.id ? "Ẩn Lịch" : "Mở Lịch"}
                             </button>
                           </div>
                         </td>
                       </tr>
+
                       {expandedUserId === u.id && (
                         <tr className="bg-gray-50">
                           <td colSpan={4} className="py-6 bg-white">
@@ -207,7 +248,6 @@ export default function UserManagementPage() {
               </table>
             </div>
 
-            {/* Modal xác nhận xóa */}
             {deleteModalOpen && userToDelete && (
               <ConfirmDeleteModal
                 isOpen={deleteModalOpen}
@@ -215,23 +255,21 @@ export default function UserManagementPage() {
                 onConfirm={async () => {
                   await dispatch(deleteUser(userToDelete.id));
                   setUsers(users.filter((u) => u.id !== userToDelete.id));
-                  // Xoá tất cả bookings của user
+
                   try {
-                    const bookingsRes = await axios.get(`http://localhost:1904/bookings?userId=${userToDelete.id}`);
-                    const bookings: { id: string }[] = bookingsRes.data;
-                    await Promise.all(
-                      bookings.map((b) => axios.delete(`http://localhost:1904/bookings/${b.id}`))
-                    );
+                    const bookingsRes = await getBookingsByUser(userToDelete.id);
+                    const bookings = bookingsRes.data;
+                    await Promise.all(bookings.map((b) => deleteBooking(Number(b.id))));
                   } catch (e) {
                     console.error("Lỗi khi xoá bookings của người dùng!", e);
                   }
+
                   setDeleteModalOpen(false);
                   setUserToDelete(null);
                 }}
               />
             )}
 
-            {/* Modal chỉnh sửa người dùng */}
             {editModalOpen && editUser && (
               <EditUserModal
                 isOpen={editModalOpen}
@@ -241,13 +279,15 @@ export default function UserManagementPage() {
                 onSubmit={async (user) => {
                   await dispatch(updateUser({ id: user.id, user }));
                   setUsers(users.map((u) => (u.id === user.id ? user : u)));
+                  setSuccessMsg("Cập nhật thông tin người dùng thành công!");
+                  setShowSuccess(true);
+                  setTimeout(() => setShowSuccess(false), 1800);
                   setEditModalOpen(false);
                 }}
               />
             )}
           </>
         )}
-
         <Outlet />
       </main>
     </div>

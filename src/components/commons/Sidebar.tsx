@@ -8,7 +8,7 @@ export default function Sidebar() {
   const handleNavigateWithDelay = (path: string) => {
     setTimeout(() => {
       navigate(path);
-    }, 1500);
+    }, 2000);
   };
 
   const handleLogout = () => {
@@ -16,11 +16,11 @@ export default function Sidebar() {
     localStorage.removeItem("role");
     setTimeout(() => {
       navigate("/login");
-    }, 1500);
+    }, 2000);
   };
 
   return (
-    <aside className="w-[250px] h-screen sticky top-0 left-0 bg-[#232b36] text-white flex flex-col py-4 px-6 gap-4 font-[inter]">
+    <aside className="w-[250px] h-screen sticky top-0 left-0 bg-[#232b36] text-white flex flex-col py-4 px-6 gap-4 font-[inter] select-none">
       <h2 className="text-[20px] font-bold mb-[32px]">Admin Dashboard</h2>
       <nav className="flex flex-col gap-2">
         <button
@@ -30,7 +30,7 @@ export default function Sidebar() {
           <i className="fa-solid fa-calendar-days mr-2.5"></i>Quản lý lịch
         </button>
         <button
-          className={`px-3 py-2 rounded-lg font-[19px] w-full text-left transition-all duration-200 hover:bg-[#2d3748] hover:text-blue-400 hover:scale-105 hover:shadow-lg hover:underline hover:cursor-pointer ${location.pathname === '/admin/users-management' ? 'border-l-4 border-blue-400 bg-[#263043] text-blue-300 font-bold' : ''}`}
+          className={`px-3 py-2 rounded-lg font-[19px] w-full text-left transition-all duration-200 hover:bg-[#2d3748] hover:text-blue-400 hover:scale-105 hover:shadow-lg hover:underline hover:cursor-pointer truncate overflow-hidden whitespace-nowrap ${location.pathname === '/admin/users-management' ? 'border-l-4 border-blue-400 bg-[#263043] text-blue-300 font-bold' : ''}`}
           onClick={() => handleNavigateWithDelay('/admin/users-management')}
         >
           <i className="fa-solid fa-users mr-2.5"></i>Quản lý người dùng

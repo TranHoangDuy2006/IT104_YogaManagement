@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 
-import axios from "axios";
-import AddServiceModal from "../components/forms/AddServiceModal";
-import ConfirmDeleteModal from "../components/forms/ConfirmDeleteModal";
+import { getServices, createService, updateService } from "../apis/api";
+import AddServiceModal from "../components/modals/AddServiceModal";
+import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
 
 export default function ServicesManagementPage() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get("http://localhost:1904/services");
+        const response = await getServices();
         setServices(response.data);
       } catch {
         alert("Không thể tải danh sách dịch vụ!");
@@ -32,7 +32,7 @@ export default function ServicesManagementPage() {
   const handleAddService = async (service: { name: string; description: string; image: string }) => {
     if (editService) {
       try {
-        const response = await axios.patch(`http://localhost:1904/services/${editService.id}`, service);
+        const response = await updateService(editService.id, service);
         const updatedService = response.data;
         setServices(prev => prev.map(s =>
           s.id === editService.id ? updatedService : s
@@ -44,7 +44,7 @@ export default function ServicesManagementPage() {
       }
     } else {
       try {
-        const response = await axios.post("http://localhost:1904/services", service);
+        const response = await createService(service);
         const newService = response.data;
         setServices(prev => [
           ...prev,
@@ -61,7 +61,7 @@ export default function ServicesManagementPage() {
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
       <main className="flex-1 bg-[#f9fafb] font-[inter]">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-[28px] font-bold">Quản lý Dịch vụ</h1>
+          <h1 className="text-[28px] font-bold">Quản lý dịch vụ</h1>
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-5 py-2 shadow transition-all w-[210px] h-[40px] text-[17px] font-medium transform hover:scale-105 hover:shadow-lg hover:-translate-y-1 duration-200 hover:cursor-pointer"
             onClick={() => setIsModalOpen(true)}

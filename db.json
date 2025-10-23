@@ -31,6 +31,14 @@
       "password": "minhduc2006",
       "confirmPassword": "minhduc2006",
       "role": "user"
+    },
+    {
+      "id": "1761215969642",
+      "fullName": "Đoàn Nhật Cường",
+      "email": "cuongliam2006@gmail.com",
+      "password": "cuong123456",
+      "confirmPassword": "cuong123456",
+      "role": "user"
     }
   ],
   "courses": [
@@ -84,7 +92,7 @@
     {
       "id": "d7a9",
       "userId": "a9d1",
-      "class": "HIIT",
+      "class": "Aerobic",
       "date": "2006-12-22",
       "time": "18:00 - 19:00",
       "name": "Trần Hoàng Duy",
@@ -156,9 +164,27 @@
     {
       "id": "d5ec",
       "userId": "a9d1",
-      "class": "Aerobic",
+      "class": "HIIT",
       "date": "2006-02-28",
       "time": "8:00 - 9:00",
+      "name": "Trần Hoàng Duy",
+      "email": "duyhoangtran2006@gmail.com"
+    },
+    {
+      "id": "add3",
+      "userId": "a9d1",
+      "class": "Boxing",
+      "date": "2006-06-12",
+      "time": "6:00 - 7:00",
+      "name": "Trần Hoàng Duy",
+      "email": "duyhoangtran2006@gmail.com"
+    },
+    {
+      "id": "2061",
+      "userId": "a9d1",
+      "class": "Mediatation",
+      "date": "2006-03-09",
+      "time": "6:00 - 7:00",
       "name": "Trần Hoàng Duy",
       "email": "duyhoangtran2006@gmail.com"
     }

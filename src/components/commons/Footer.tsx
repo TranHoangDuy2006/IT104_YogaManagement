@@ -30,7 +30,7 @@ export default function Footer() {
       <hr className="border-t border-gray-500 opacity-40 w-[88%] mx-auto mt-12 mb-4" />
 
       <div className="text-center text-white/70 pb-2 mt-4 text-base font-normal">
-        © 2024 Gym Management. All rights reserved.
+        © 2025 Gym Management. All rights reserved.
       </div>
     </footer>
   )

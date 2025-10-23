@@ -43,7 +43,7 @@ export default function AdminPage() {
                     <span className="text-gray-500">Quản lý lịch học, lịch đặt chỗ.</span>
                   </li>
                 </ul>
-                <p className="text-base text-gray-600 italic">Chọn chức năng ở Sidebar để bắt đầu quản lý hệ thống Yoga!</p>
+                <p className="text-base text-gray-600 italic underline">Chọn chức năng ở Sidebar để bắt đầu quản lý hệ thống Yoga!</p>
                 <style>{`
                   @keyframes fade-in {
                     from { opacity: 0; transform: translateY(20px); }

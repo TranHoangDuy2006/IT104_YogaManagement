@@ -1,6 +1,7 @@
+
 # Yoga Management Project
 
-## Tiến độ dự án (22/10/2025)
+## Tiến độ dự án (24/10/2025)
 
 ### Đã hoàn thành
 
@@ -25,6 +26,8 @@
 - Sửa icon đăng xuất Navbar thành fa-solid fa-right-from-bracket (FontAwesome 6)
 - Cải thiện responsive, style cho bảng lịch, tối ưu trải nghiệm admin
 - Fix các lỗi nhỏ về type, linter, logic hiển thị
+- Trang quản lý lịch tập (SchedulesManagementPage): thống kê, biểu đồ, lọc, phân trang, modal sửa/xoá booking
+- Import type Booking từ file type, chuẩn hóa type toàn dự án
 
 ### Đang phát triển
 
@@ -65,6 +68,8 @@
    - Đăng nhập: <http://localhost:5174/login>
    - Đặt lịch: <http://localhost:5174/booking>
    - Quản lý người dùng: <http://localhost:5174/admin>
+   - Quản lý lịch tập: <http://localhost:5174/admin/schedules-management>
+   - Quản lý dịch vụ: <http://localhost:5174/admin/services-management>
    - API: <http://localhost:1904/users>
 
 ---

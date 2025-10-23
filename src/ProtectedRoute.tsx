@@ -52,7 +52,9 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
               <path d="M12 2a10 10 0 0 1 10 10" stroke="#6366F1" strokeWidth="4" strokeLinecap="round" />
             </svg>
           </span>
-          <div className="text-xl font-bold text-blue-700 tracking-wide animate-pulse">Đang kiểm tra quyền truy cập...</div>
+          <div className="text-xl font-bold text-blue-700 tracking-wide animate-pulse">
+            {showNoAccess ? "Bạn sẽ được điều hướng về trang đăng nhập" : "Đang kiểm tra quyền truy cập..."}
+          </div>
           <div className="text-base text-gray-500 italic">Vui lòng chờ trong giây lát</div>
         </div>
         <style>{`

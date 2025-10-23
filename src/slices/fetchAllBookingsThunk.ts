@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { getBookings } from "../apis/api";
 
 export const fetchAllBookings = createAsyncThunk(
   "bookings/fetchAll",
   async () => {
-    const response = await axios.get("http://localhost:1904/bookings");
+    const response = await getBookings();
     return response.data;
   }
 );

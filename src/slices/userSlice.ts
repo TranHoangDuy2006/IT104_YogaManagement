@@ -24,26 +24,10 @@ export const deleteUser = createAsyncThunk<string, string>(
     return id;
   }
 );
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
-interface User {
-  fullName: string;
-  email: string;
-  password: string;
-  role?: string; 
-}
-
-interface UserState {
-  data: User | null;
-  loading: boolean;
-  error: string | null;
-}
-
-interface LoginCredentials {
-  email: string;
-  password: string;
-}
+import type { User, UserState, LoginCredentials } from "../types/User";
 
 const initialState: UserState = {
   data: null,

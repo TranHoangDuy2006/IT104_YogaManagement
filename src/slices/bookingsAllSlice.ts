@@ -1,13 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchAllBookings } from "./fetchAllBookingsThunk";
+import type { Booking } from "./bookingSlice";
+
+interface BookingsAllState {
+  data: Booking[];
+  loading: boolean;
+  error: string | null;
+}
+
+const initialState: BookingsAllState = {
+  data: [],
+  loading: false,
+  error: null,
+};
 
 const bookingsAllSlice = createSlice({
   name: "bookingsAll",
-  initialState: {
-    data: [],
-    loading: false,
-    error: null as string | null,
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -17,7 +26,7 @@ const bookingsAllSlice = createSlice({
       })
       .addCase(fetchAllBookings.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.data = action.payload as Booking[];
       })
       .addCase(fetchAllBookings.rejected, (state, action) => {
         state.loading = false;

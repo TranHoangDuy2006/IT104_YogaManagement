@@ -4,7 +4,27 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../stores/userStore";
 import Navbar from "../components/commons/Navbar";
 import BookingModal from "../components/forms/BookingModal";
-import ConfirmDeleteModal from "../components/forms/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
+
+function Notification({ message }: { message: string }) {
+  return (
+    <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50">
+      <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-fade-in">
+        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+        <span>{message}</span>
+      </div>
+      <style>{`
+        @keyframes fade-in {
+          0% { opacity: 0; transform: translateY(-10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.4s cubic-bezier(.4,0,.2,1) forwards;
+        }
+      `}</style>
+    </div>
+  );
+}
 import {
   fetchBookingsByUser,
   addBooking,
@@ -27,6 +47,8 @@ export default function BookingPage() {
   const [editBooking, setEditBooking] = useState<any | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState<string>("");
 
   useEffect(() => {
     dispatch(fetchBookingsByUser(currentUserId));
@@ -40,17 +62,23 @@ export default function BookingPage() {
     setEditBooking(null);
   };
 
-  const handleSave = (data: any) => {
+  const handleSave = async (data: any) => {
     if (data.id) {
-      dispatch(updateBooking(data));
+      await dispatch(updateBooking(data));
+      setSuccessMsg("Sửa lịch tập thành công!");
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 2000);
     } else {
-      dispatch(
+      await dispatch(
         addBooking({
           ...data,
           name: currentUser.fullName || "Admin",
           email: currentUser.email || "admin@gmail.com",
         })
       );
+      setSuccessMsg("Thêm lịch tập thành công!");
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 1800);
     }
     setShowForm(false);
     setEditBooking(null);
@@ -80,14 +108,12 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-[inter] select-none">
-      <Navbar
-        showUser={false}
-        showPracticeSchedule={false}
-        showHomePage={true}
-      />
+    <div className="min-h-screen bg-gray-50 font-[inter] select-none pt-16">
 
-      <div className="w-full bg-white rounded-xl shadow-md max-w-[1280px] mx-auto mt-8 p-8 h-auto">
+  {showSuccess && <Notification message={successMsg} />}
+  <Navbar showUser={false} showPracticeSchedule={false} showHomePage={true} />
+
+      <div className="w-full bg-white rounded-xl shadow-md max-w-[1280px] mx-auto mt-8 p-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-[30.6px] font-bold">Quản lý lịch tập</h1>
           <button
@@ -101,51 +127,43 @@ export default function BookingPage() {
           </button>
         </div>
 
-        {loading && (
-          <div className="text-blue-500 font-semibold mb-4">
-            Đang tải dữ liệu...
-          </div>
-        )}
-        {error && (
-          <div className="text-red-500 font-semibold mb-4">{error}</div>
-        )}
+        {loading && <div className="text-blue-500 font-semibold mb-4">Đang tải dữ liệu...</div>}
+        {error && <div className="text-red-500 font-semibold mb-4">{error}</div>}
 
         <div className="w-full max-w-[1248px] mx-auto rounded-lg mt-6 overflow-x-auto">
           <table className="w-full bg-gray-50 rounded-xl shadow-sm">
             <thead>
               <tr className="text-black font-semibold text-lg">
-                <th className="px-6 text-left w-[204px] h-[48px]">Lớp học</th>
-                <th className="py-4 text-left w-[226px] h-[48px]">Ngày tập</th>
-                <th className="py-4 text-left w-[247px] h-[48px]">Khung giờ</th>
-                <th className="py-4 text-left w-[182px] h-[48px]">Họ tên</th>
-                <th className="py-4 text-left w-[161px] h-[48px]">Email</th>
-                <th className="py-4 text-left w-[226px] h-[48px]">Thao tác</th>
+                <th className="px-6 py-4 text-center">Lớp học</th>
+                <th className="py-4 text-center">Ngày tập</th>
+                <th className="py-4 text-center">Khung giờ</th>
+                <th className="py-4 text-center">Họ tên</th>
+                <th className="py-4 text-center">Email</th>
+                <th className="py-4 text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody>
               {currentItems.map((b: any) => (
                 <tr key={b.id} className="hover:bg-gray-100">
-                  <td className="px-6 py-3 bg-white">{b.class}</td>
-                  <td className="py-3 bg-white">{b.date}</td>
-                  <td className="py-3 bg-white">{b.time}</td>
-                  <td className="py-3 bg-white">{b.name}</td>
-                  <td className="py-3 bg-white truncate max-w-[160px] whitespace-nowrap pr-6">
+                  <td className="px-6 py-3 bg-white text-center">{b.class}</td>
+                  <td className="py-3 bg-white text-center">{b.date}</td>
+                  <td className="py-3 bg-white text-center">{b.time}</td>
+                  <td className="py-3 bg-white text-center">{b.name}</td>
+                  <td className="py-3 bg-white truncate max-w-[160px] whitespace-nowrap pr-6 text-center">
                     {b.email}
                   </td>
-                  <td className="py-3 pl-2 bg-white">
+                  <td className="py-3 pl-2 bg-white text-center">
                     <button
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold shadow-sm hover:bg-blue-500 hover:cursor-pointer hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 mr-3"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold shadow-sm hover:bg-blue-500 hover:text-white hover:cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 mr-3"
                       onClick={() => handleEdit(b)}
                     >
-                      <i className="fa-solid fa-pen-to-square fa-lg mr-1"></i>
-                      Sửa
+                      <i className="fa-solid fa-pen-to-square fa-lg mr-1"></i> Sửa
                     </button>
                     <button
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold shadow-sm hover:bg-red-500 hover:text-white hover:cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 active:scale-95"
                       onClick={() => handleDelete(b.id!)}
                     >
-                      <i className="fa-solid fa-trash-can fa-lg mr-1"></i>
-                      Xóa
+                      <i className="fa-solid fa-trash-can fa-lg mr-1"></i> Xóa
                     </button>
                   </td>
                 </tr>
@@ -154,10 +172,11 @@ export default function BookingPage() {
           </table>
         </div>
 
-        <div className="flex justify-center items-center py-4">
+        {/* Pagination */}
+        <div className="flex justify-center items-center mt-6 gap-1">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
-            className={`px-3 py-1 rounded-l-lg bg-gray-100 w-[50px] h-[50px] ${
+            className={`px-3 py-1 rounded-l-lg bg-gray-100 w-[40px] h-[40px] ${
               currentPage === 1
                 ? "cursor-not-allowed opacity-50"
                 : "hover:bg-gray-200 hover:cursor-pointer"
@@ -170,7 +189,7 @@ export default function BookingPage() {
             <button
               key={i}
               onClick={() => handlePageChange(i + 1)}
-              className={`px-3 py-1 w-[50px] h-[50px] hover:cursor-pointer transition-all duration-300 ease-in-out rounded-none ${
+              className={`px-3 py-1 w-[40px] h-[40px] hover:cursor-pointer transition-all duration-300 ease-in-out rounded-none ${
                 currentPage === i + 1
                   ? "bg-blue-500 text-white scale-105 shadow-lg"
                   : "bg-white hover:bg-gray-100"
@@ -181,7 +200,7 @@ export default function BookingPage() {
           ))}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
-            className={`px-3 py-1 rounded-r-lg bg-gray-100 w-[50px] h-[50px] ${
+            className={`px-3 py-1 rounded-r-lg bg-gray-100 w-[40px] h-[40px] ${
               bookings.length === 0 || currentPage === totalPages
                 ? "cursor-not-allowed opacity-50"
                 : "hover:bg-gray-200 hover:cursor-pointer"

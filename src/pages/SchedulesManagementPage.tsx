@@ -14,7 +14,7 @@ import {
 } from "chart.js";
 
 import BookingModal from "../components/forms/BookingModal";
-import ConfirmDeleteModal from "../components/forms/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
 import { fetchAllBookings } from "../slices/fetchAllBookingsThunk";
 import { updateBooking, deleteBooking } from "../slices/bookingSlice";
 import type { RootState, AppDispatch } from "../stores/userStore";
@@ -358,7 +358,7 @@ export default function SchedulesManagementPage() {
               <button
                 key={i}
                 onClick={() => handlePageChange(i + 1)}
-                className={`px-3 py-1 w-[50px] h-[50px] transition-all rounded-none ${
+                className={`px-3 py-1 w-[50px] h-[50px] transition-all rounded-none hover:cursor-pointer ${
                   currentPage === i + 1
                     ? "bg-blue-500 text-white scale-105 shadow-lg"
                     : "bg-white hover:bg-gray-100"
