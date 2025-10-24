@@ -1,7 +1,7 @@
 
 # Yoga Management Project
 
-## Tiến độ dự án (24/10/2025)
+## Tiến độ dự án (25/10/2025)
 
 ### Đã hoàn thành
 
@@ -74,3 +74,47 @@
 
 ---
 Mọi vấn đề/báo lỗi vui lòng liên hệ Trần Hoàng Duy - N24DTCN021 (Admin Page).
+
+## Cập nhật hôm nay (25/10/2025)
+
+- Bảo mật / JWT
+  - Thay đổi cách lưu thông tin user trên frontend: mã hoá payload user thành JWT trước khi lưu vào `localStorage` trong `src/slices/userSlice.ts`.
+  - Thay `jwt-simple` (node-only) bằng `jwt-encode` cho việc mã hoá trên frontend (đã cài đặt). Sử dụng `jwt-decode` để giải mã khi cần hiển thị thông tin user.
+  - Cập nhật các file đọc `localStorage.currentUser` để giải mã JWT thay vì dùng `JSON.parse`:
+    - `src/components/commons/Navbar.tsx`
+    - `src/ProtectedRoute.tsx`
+    - `src/pages/BookingPage.tsx`
+    - `src/pages/UsersManagementPage.tsx`
+    - `src/pages/AdminPage.tsx`
+  - Lưu ý bảo mật: việc đặt secret trên frontend là không an toàn cho môi trường production. Thực tế nên tạo và ký JWT ở backend, frontend chỉ lưu token và gửi kèm Authorization header.
+
+- UI / UX & sửa nhỏ
+  - Navbar
+    - Thêm icon FontAwesome cho menu responsive.
+    - Nút hamburger/close đổi sang icon FontAwesome (`fa-bars`, `fa-xmark`).
+    - Nếu user có role `admin`, tên hiển thị (`{userName}`) đổi sang màu đỏ và icon user đổi thành `fa-user-secret`.
+  - Modal chỉnh sửa người dùng (`src/components/modals/EditUserModal.tsx`)
+    - Loại bỏ viền đen mặc định khi focus; chỉ hiển thị viền xanh (focus:ring-2 focus:ring-blue-500) cho các input/select.
+
+- Kiểm tra & kiểu TypeScript
+  - Thêm kiểu trả về khi giải mã JWT (`jwtDecode<T>`), sửa một vài lỗi TypeScript liên quan tới payload JWT.
+  - Nếu TypeScript báo thiếu declaration cho `jwt-encode`, thêm file `declarations.d.ts` với `declare module 'jwt-encode';`.
+
+### Lệnh cần chạy sau cập nhật
+
+1. Cài thêm gói (nếu chưa có):
+
+```powershell
+npm install jwt-encode jwt-decode
+```
+
+1. (Tùy chọn) Thêm khai báo TypeScript nếu cần:
+
+```ts
+// declarations.d.ts
+declare module 'jwt-encode';
+```
+
+### Ghi chú
+
+- Những thay đổi này nhằm mục đích demo cách mã hoá token trên frontend và đồng bộ hoá logic giải mã ở các component. Để bảo mật thực sự, hãy xử lý tạo và xác thực JWT trên backend.
