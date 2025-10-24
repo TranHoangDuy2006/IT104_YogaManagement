@@ -23,21 +23,21 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
   const handleNavigate = (path: string) => {
     setTimeout(() => {
       navigate(path)
-    }, 1500)
+    }, 2000)
   }
 
   const handleLogout = () => {
     if (!isLoggedIn) {
       setTimeout(() => {
         navigate("/login");
-      }, 1500);
+      }, 2000);
       return;
     }
     localStorage.removeItem("currentUser");
     localStorage.removeItem("role");
     setTimeout(() => {
       navigate("/login");
-    }, 1500);
+    }, 2000);
   };
 
   return (
@@ -65,9 +65,13 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
 
         {showUser && isLoggedIn && (
           <span className="ml-4 mt-0.5 text-gray-200 group">
-            <i className="fa-regular fa-user mr-2.5"></i>
+            {userRole === 'admin' ? (
+              <i className="fa-solid fa-user-secret mr-2.5"></i>
+            ) : (
+              <i className="fa-regular fa-user mr-2.5"></i>
+            )}
             <span>Xin chào, </span>
-            <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">
+            <span className={`font-bold transition-colors duration-200 group-hover:text-yellow-300 ${userRole === 'admin' ? 'text-red-500' : 'text-yellow-400'}`}>
               {userName}
             </span>
           </span>
@@ -127,7 +131,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
             <span className="mt-2 text-sm text-gray-200 group flex items-center">
               <i className="fa-regular fa-user mr-2.5"></i>
               <span>Xin chào, </span>
-              <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">
+              <span className={`font-bold transition-colors duration-200 group-hover:text-yellow-300 ${userRole === 'admin' ? 'text-red-500' : 'text-yellow-400'}`}>
                 {userName}
               </span>
             </span>
