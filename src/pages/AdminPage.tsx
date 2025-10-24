@@ -1,15 +1,17 @@
 import Sidebar from "../components/commons/Sidebar";
 import { useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 export default function AdminPage() {
   const location = useLocation();
   let userName = "";
   try {
-    const user = JSON.parse(localStorage.getItem("currentUser") || "null");
+    const token = localStorage.getItem("currentUser");
+    const user = token ? jwtDecode<Partial<{ fullName?: string }>>(token) : {};
     userName = user?.fullName || "";
   } catch (e) {
-    console.error("Error parsing user data:", e);
+    console.error("Error decoding user data:", e);
   }
 
   return (

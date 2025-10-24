@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../stores/userStore";
@@ -36,7 +37,9 @@ import { usePagination } from "../hooks/usePagination";
 export default function BookingPage() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+  // Giải mã JWT lấy thông tin user
+  const token = localStorage.getItem("currentUser");
+  const currentUser = token ? jwtDecode<Partial<{ id?: number; fullName?: string; email?: string }>>(token) : {};
   const currentUserId = currentUser?.id || 1;
 
   const bookings = useSelector((state: RootState) => state.bookings.data);

@@ -1,13 +1,23 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
+import { jwtDecode } from "jwt-decode"
 import type { RootState } from "../../stores/userStore"
 
 export default function Navbar({ showUser, showPracticeSchedule, showHomePage }: { showUser?: boolean; showPracticeSchedule?: boolean; showHomePage?: boolean }) {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
-  const userName = useSelector((state: RootState) => state.user.data?.fullName) || JSON.parse(localStorage.getItem("currentUser") || "{}").fullName
-  const userRole = useSelector((state: RootState) => state.user.data?.role) || JSON.parse(localStorage.getItem("currentUser") || "{}").role
+  const getUserFromLocal = (): { fullName?: string; role?: string } => {
+    const token = localStorage.getItem("currentUser");
+    if (!token) return {};
+    try {
+      return jwtDecode<{ fullName?: string; role?: string }>(token);
+    } catch {
+      return {};
+    }
+  };
+  const userName = useSelector((state: RootState) => state.user.data?.fullName) || getUserFromLocal().fullName;
+  const userRole = useSelector((state: RootState) => state.user.data?.role) || getUserFromLocal().role;
   const isLoggedIn = Boolean(userName);
 
   const handleNavigate = (path: string) => {

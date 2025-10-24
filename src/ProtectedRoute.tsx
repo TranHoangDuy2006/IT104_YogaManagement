@@ -2,14 +2,17 @@ import { type JSX, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../src/stores/userStore";
+import type { User } from "./types/User";
+import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const userState = useSelector((state: RootState) => state.user);
   const reduxUser = userState.data;
-  let currentUser = reduxUser;
+  let currentUser: Partial<User> | null = reduxUser;
   if (!currentUser) {
     try {
-      currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      const token = localStorage.getItem('currentUser');
+      currentUser = token ? jwtDecode<Partial<User>>(token) : null;
     } catch {
       currentUser = null;
     }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 import { getUsers, getBookingsByUser, deleteBooking } from "../apis/api";
@@ -66,8 +67,9 @@ export default function UserManagementPage() {
   });
 
   useEffect(() => {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-    setAdminEmail(currentUser.email);
+    const token = localStorage.getItem("currentUser");
+    const currentUser = token ? jwtDecode<Partial<{ email?: string }>>(token) : {};
+    setAdminEmail(currentUser.email || "");
   }, []);
 
   useEffect(() => {

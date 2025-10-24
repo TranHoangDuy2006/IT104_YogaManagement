@@ -28,14 +28,13 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   const [visible, setVisible] = useState(isOpen);
   const [closing, setClosing] = useState(false);
 
-  // Khi isOpen thay đổi → bật/tắt hiệu ứng
   useEffect(() => {
     if (isOpen) {
       setVisible(true);
       setClosing(false);
     } else if (visible) {
       setClosing(true);
-      const timer = setTimeout(() => setVisible(false), 300); // khớp thời gian animation
+      const timer = setTimeout(() => setVisible(false), 300); 
       return () => clearTimeout(timer);
     }
   }, [isOpen]);

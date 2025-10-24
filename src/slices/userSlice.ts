@@ -27,6 +27,7 @@ export const deleteUser = createAsyncThunk<string, string>(
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import jwtEncode from "jwt-encode";
 import type { User, UserState, LoginCredentials } from "../types/User";
 
 const initialState: UserState = {
@@ -96,7 +97,10 @@ const userSlice = createSlice({
         state.data = action.payload;
         state.error = null;
 
-        localStorage.setItem("currentUser", JSON.stringify(action.payload));
+        // Mã hoá thông tin user bằng JWT và lưu vào localStorage
+  const secret = "yoga_demo_secret"; // Chỉ dùng cho demo, không bảo mật thực sự
+  const token = jwtEncode(action.payload, secret);
+  localStorage.setItem("currentUser", token);
         if (action.payload.role) {
           localStorage.setItem("role", action.payload.role);
         }
