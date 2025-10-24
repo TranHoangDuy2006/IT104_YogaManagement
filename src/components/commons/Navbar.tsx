@@ -74,52 +74,48 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
       <button
         className="sm:hidden flex items-center px-2 py-1 focus:outline-none"
         onClick={() => setOpen((v) => !v)}
-        aria-label="Open menu"
+        aria-label={open ? "Close menu" : "Open menu"}
       >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
+        {open ? (
+          <i className="fa-solid fa-xmark text-2xl"></i>
+        ) : (
+          <i className="fa-solid fa-bars text-2xl"></i>
+        )}
       </button>
 
       {open && (
         <nav className="absolute top-14 left-0 w-full bg-[#1f2630] flex flex-col items-center space-y-2 py-4 z-50 sm:hidden shadow-lg animate-fade-in text-[18.6px] font-[400]">
-          <a
-            href="#"
-            className="navbar-link"
-            onClick={() => setOpen(false)}
-          >
-            Trang chủ
-          </a>
-          <a
-            href="#"
-            className="navbar-link"
-            onClick={() => setOpen(false)}
-          >
-            Lịch tập
-          </a>
+          {showHomePage && (
+            <a
+              href="#"
+              className="navbar-link flex items-center"
+              onClick={() => setOpen(false)}
+            >
+              <i className="fa-solid fa-house mr-2.5"></i>Trang chủ
+            </a>
+          )}
+          {showPracticeSchedule && isLoggedIn && (
+            <a
+              href="#"
+              className="navbar-link flex items-center"
+              onClick={() => setOpen(false)}
+            >
+              <i className="fa-solid fa-calendar-days mr-2.5"></i>Lịch tập
+            </a>
+          )}
           {userRole === 'admin' && (
             <a
               href="#"
-              className="navbar-link"
+              className="navbar-link flex items-center"
               onClick={() => setOpen(false)}
             >
-              Quản lý
+              <i className="fa-solid fa-user-shield mr-2.5"></i>Quản lý
             </a>
           )}
 
           {showUser && isLoggedIn && (
-            <span className="mt-2 text-sm text-gray-200 group">
+            <span className="mt-2 text-sm text-gray-200 group flex items-center">
+              <i className="fa-regular fa-user mr-2.5"></i>
               <span>Xin chào, </span>
               <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">
                 {userName}
@@ -127,10 +123,10 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
             </span>
           )}
           <button
-            className="navbar-link mt-2 bg-transparent border-none cursor-pointer"
+            className="navbar-link mt-2 bg-transparent border-none cursor-pointer flex items-center"
             onClick={handleLogout}
           >
-            {isLoggedIn ? "Đăng xuất" : "Đăng nhập"}
+            <i className="fa-solid fa-right-from-bracket mr-2.5"></i>{isLoggedIn ? "Đăng xuất" : "Đăng nhập"}
           </button>
         </nav>
       )}
