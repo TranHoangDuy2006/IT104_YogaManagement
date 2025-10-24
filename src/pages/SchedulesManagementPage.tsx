@@ -13,7 +13,7 @@ import {
   Legend,
 } from "chart.js";
 
-import BookingModal from "../components/forms/BookingModal";
+import BookingModal from "../components/modals/BookingModal";
 import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
 import { fetchAllBookings } from "../slices/fetchAllBookingsThunk";
 import { updateBooking, deleteBooking } from "../slices/bookingSlice";
@@ -161,7 +161,7 @@ export default function SchedulesManagementPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
-      <main className="flex-1 bg-[#f9fafb] p-6">
+      <main className="flex-1 bg-[#f9fafb]">
         <h1 className="text-[29px] font-bold mb-4">Thống kê lịch tập</h1>
 
         {/* --- Thống kê tổng --- */}
@@ -229,7 +229,7 @@ export default function SchedulesManagementPage() {
           <div>
             <label className="block mb-2 font-medium">Lớp học</label>
             <select
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 hover:cursor-pointer"
+              className="w-full h-[45px] border-3 border-gray-300 rounded-lg px-3 py-2 focus:border-blue-500 focus:outline-none hover:cursor-pointer"
               value={filterClass}
               onChange={(e) => {
                 setFilterClass(e.target.value);
@@ -248,7 +248,7 @@ export default function SchedulesManagementPage() {
             <label className="block mb-2 font-medium">Email</label>
             <input
               type="text"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400"
+              className="w-full border-3 border-gray-300 rounded-lg px-3 py-2 focus:border-blue-500 focus:outline-none"
               placeholder="Tìm theo email"
               value={filterEmail}
               onChange={(e) => {
@@ -261,7 +261,7 @@ export default function SchedulesManagementPage() {
             <label className="block mb-2 font-medium">Ngày</label>
             <input
               type="date"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 hover:cursor-pointer"
+              className="w-full border-3 border-gray-300 rounded-lg px-3 py-2 focus:border-blue-500 focus:outline-none"
               value={filterDate}
               onChange={(e) => {
                 setFilterDate(e.target.value);
@@ -280,7 +280,7 @@ export default function SchedulesManagementPage() {
                   (head) => (
                     <th
                       key={head}
-                      className="px-4 py-3 text-left font-semibold bg-gray-100"
+                      className="px-4 py-3 font-semibold bg-gray-100 text-center"
                     >
                       {head}
                     </th>
@@ -289,29 +289,35 @@ export default function SchedulesManagementPage() {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-100">
-                  <td className="px-4 py-3 border-t border-gray-200">{item.class}</td>
-                  <td className="px-4 py-3 border-t border-gray-200">{item.date}</td>
-                  <td className="px-4 py-3 border-t border-gray-200">{item.time}</td>
-                  <td className="px-4 py-3 border-t border-gray-200">{item.name}</td>
-                  <td className="px-4 py-3 border-t border-gray-200">{item.email}</td>
-                  <td className="px-4 py-3 border-t border-gray-200">
-                    <button
-                      className="mr-3 px-4 py-1 rounded-lg bg-blue-100 text-blue-600 font-semibold hover:bg-blue-500 hover:text-white hover:cursor-pointer"
-                      onClick={() => handleEdit(item)}
-                    >
-                      <i className="fa-solid fa-pen-to-square mr-1"></i> Sửa
-                    </button>
-                    <button
-                      className="px-4 py-1 rounded-lg bg-red-100 text-red-600 font-semibold hover:bg-red-500 hover:text-white hover:cursor-pointer"
-                      onClick={() => handleDelete(item)}
-                    >
-                      <i className="fa-solid fa-trash mr-1"></i> Xóa
-                    </button>
-                  </td>
+              {currentItems.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-8 text-gray-500 text-lg font-semibold">Không tìm thấy lịch tập</td>
                 </tr>
-              ))}
+              ) : (
+                currentItems.map((item) => (
+                  <tr key={item.id} className="hover:bg-gray-100">
+                    <td className="px-4 py-3 border-t border-gray-200 text-center">{item.class}</td>
+                    <td className="px-4 py-3 border-t border-gray-200 text-center">{item.date}</td>
+                    <td className="px-4 py-3 border-t border-gray-200 text-center">{item.time}</td>
+                    <td className="px-4 py-3 border-t border-gray-200 text-center">{item.name}</td>
+                    <td className="px-4 py-3 border-t border-gray-200 text-center">{item.email}</td>
+                    <td className="px-4 py-3 border-t border-gray-200 text-center">
+                      <button
+                        className="mr-3 px-4 py-1 rounded-lg bg-blue-100 text-blue-600 font-semibold hover:bg-blue-500 hover:text-white hover:cursor-pointer"
+                        onClick={() => handleEdit(item)}
+                      >
+                        <i className="fa-solid fa-pen-to-square mr-1"></i> Sửa
+                      </button>
+                      <button
+                        className="px-4 py-1 rounded-lg bg-red-100 text-red-600 font-semibold hover:bg-red-500 hover:text-white hover:cursor-pointer"
+                        onClick={() => handleDelete(item)}
+                      >
+                        <i className="fa-solid fa-trash mr-1"></i> Xóa
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
 

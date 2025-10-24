@@ -55,6 +55,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
 
         {showUser && isLoggedIn && (
           <span className="ml-4 mt-0.5 text-gray-200 group">
+            <i className="fa-regular fa-user mr-2.5"></i>
             <span>Xin chào, </span>
             <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">
               {userName}

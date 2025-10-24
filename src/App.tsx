@@ -1,29 +1,36 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
+import { lazy, Suspense } from "react";
+import LoadingSpinner from "./components/commons/LoadingSpinner";
 import RegisterForm from "./components/forms/RegisterForm";
 import LoginForm from "./components/forms/LoginForm";
-import NotFound from "./pages/NotFoundPage";
-import AdminPage from "./pages/AdminPage";
-import BookingPage from "./pages/BookingPage";
-import ServicesManagementPage from "./pages/ServicesManagementPage";
-import SchedulesManagementPage from "./pages/SchedulesManagementPage";
-import UsersManagementPage from "./pages/UsersManagementPage";
 import ProtectedRoute from "./ProtectedRoute";
 
-export default function App() {
+const HomePage = lazy(() => import("./pages/HomePage"));
+const AdminPage = lazy(() => import("./pages/AdminPage"));
+const BookingPage = lazy(() => import("./pages/BookingPage"));
+const ServicesManagementPage = lazy(() => import("./pages/ServicesManagementPage"));
+const SchedulesManagementPage = lazy(() => import("./pages/SchedulesManagementPage"));
+const UsersManagementPage = lazy(() => import("./pages/UsersManagementPage"));
+const NotFound = lazy(() => import("./pages/NotFoundPage"));
+
+function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/home" element={<HomePage />} />
-      <Route path="/register" element={<RegisterForm />} />
-      <Route path="/login" element={<LoginForm />} />
-      <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>}>
-        <Route path="schedules-management" element={<SchedulesManagementPage />} />
-        <Route path="services-management" element={<ServicesManagementPage />} />
-        <Route path="users-management" element={<UsersManagementPage />} />
-      </Route>
-      <Route path="*" element={<NotFound />} />
-      <Route path="/bookings" element={<BookingPage />} />
-    </Routes>
+    <Suspense fallback={<LoadingSpinner />}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/register" element={<RegisterForm />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>}>
+          <Route path="schedules-management" element={<SchedulesManagementPage />} />
+          <Route path="services-management" element={<ServicesManagementPage />} />
+          <Route path="users-management" element={<UsersManagementPage />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+        <Route path="/bookings" element={<BookingPage />} />
+      </Routes>
+    </Suspense>
   );
-} 
+}
+
+export default App;

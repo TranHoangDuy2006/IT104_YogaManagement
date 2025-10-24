@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../stores/userStore";
 import Navbar from "../components/commons/Navbar";
-import BookingModal from "../components/forms/BookingModal";
+import BookingModal from "../components/modals/BookingModal";
 import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
 
 function Notification({ message }: { message: string }) {

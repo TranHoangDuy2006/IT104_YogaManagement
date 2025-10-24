@@ -2,10 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCourses } from "../apis/api";
 import type { Course } from "../types/Course";
+import { useSortedCourses } from "../hooks/useSortedCourses";
 
 export default function ClassList() {
   const navigate = useNavigate();
   const [courses, setCourses] = useState<Course[]>([]);
+  const sortedCourses = useSortedCourses(courses);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -39,7 +41,7 @@ export default function ClassList() {
       </h2>
 
       <div className="mt-6 grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {courses.map(c => (
+        {sortedCourses.map(c => (
           <article
             key={c.id}
             className="bg-white rounded-xl shadow-md border border-gray-200 w-full max-w-[394.66px] h-[320px] text-white mx-auto transition-all duration-300 hover:-translate-y-2 hover:shadow-blue-300 hover:shadow-2xl hover:border-transparent group cursor-pointer hover:bg-gradient-to-br hover:from-blue-50 hover:to-blue-200 flex flex-col"
