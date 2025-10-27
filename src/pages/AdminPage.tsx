@@ -1,17 +1,16 @@
 import Sidebar from "../components/commons/Sidebar";
 import { useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 
 export default function AdminPage() {
   const location = useLocation();
   let userName = "";
   try {
-    const token = localStorage.getItem("currentUser");
-    const user = token ? jwtDecode<Partial<{ fullName?: string }>>(token) : {};
+    const userStr = localStorage.getItem("currentUser");
+    const user = userStr ? JSON.parse(userStr) : {};
     userName = user?.fullName || "";
   } catch (e) {
-    console.error("Error decoding user data:", e);
+    console.error("Error parsing user data:", e);
   }
 
   return (
@@ -24,7 +23,7 @@ export default function AdminPage() {
                   <span className="text-3xl text-blue-500"><i className="fa-solid fa-user-shield" /></span>
                   <h2 className="text-2xl font-extrabold text-blue-700 tracking-wide drop-shadow">
                     Chào mừng, Admin
-                    {userName && <span className="text-red-500"> {userName}</span>}
+                    {userName && <span className="text-red-500">{userName}</span>}
                   </h2>
                 </div>
                 <p className="text-lg text-gray-700 mb-4 text-center">Sử dụng <span className="font-semibold text-blue-500">Sidebar</span> bên trái để chuyển giữa các chức năng quản lý:</p>

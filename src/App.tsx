@@ -27,7 +27,7 @@ function App() {
           <Route path="users-management" element={<UsersManagementPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
-        <Route path="/bookings" element={<BookingPage />} />
+        <Route path="/bookings" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
       </Routes>
     </Suspense>
   );

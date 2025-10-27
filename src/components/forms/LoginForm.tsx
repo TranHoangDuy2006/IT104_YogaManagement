@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 function Notification({ message }: { message: string }) {
   return (
     <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
@@ -50,6 +51,7 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<LoginFormData>({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data: LoginFormData) => {
@@ -57,11 +59,19 @@ export default function LoginForm() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     const result = await dispatch(loginUser(data));
     setLocalLoading(false);
+    
     if (loginUser.fulfilled.match(result)) {
       setShowSuccess(true);
+      reset(); 
       setTimeout(() => {
         setShowSuccess(false);
-        navigate("/");
+
+        const user = result.payload as any;
+        if (user && user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       }, 1500);
     }
   };
@@ -110,7 +120,7 @@ export default function LoginForm() {
                   autoComplete="current-password"
                 />
                 <span
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 cursor-pointer transition-colors duration-200 hover:text-blue-600 hover:scale-110"
                   onClick={() => setShowPassword((v) => !v)}
                 >
                   <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>

@@ -3,15 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 
 import BookingModal from "../components/modals/BookingModal";
 import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
@@ -321,19 +313,32 @@ export default function SchedulesManagementPage() {
             </tbody>
           </table>
 
-          {/* --- Modal sửa booking --- */}
-          {editModalOpen && selectedBooking && (
+          {/* --- Modal sửa/Thêm booking --- */}
+          {editModalOpen && (
             <BookingModal
-              booking={normalizeBookingId(selectedBooking)}
+              booking={selectedBooking ? normalizeBookingId(selectedBooking) : undefined}
               bookings={bookings.map(normalizeBookingId)}
               onSave={(data) => {
-                void handleSaveBooking(normalizeBookingId(data));
+                if (!selectedBooking) {
+                  // Thêm mới
+                  axios.post("http://localhost:1904/bookings", {
+                    ...data,
+                    id: undefined,
+                  }).then(() => {
+                    setEditModalOpen(false);
+                    setSelectedBooking(null);
+                    dispatch(fetchAllBookings());
+                  });
+                } else {
+                  // Sửa
+                  void handleSaveBooking(normalizeBookingId(data));
+                }
               }}
               onClose={() => {
                 setEditModalOpen(false);
                 setSelectedBooking(null);
               }}
-              currentUserId={selectedBooking.userId}
+              currentUserId={selectedBooking ? selectedBooking.userId : 0}
             />
           )}
 

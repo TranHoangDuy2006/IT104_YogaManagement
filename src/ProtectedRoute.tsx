@@ -3,7 +3,6 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../src/stores/userStore";
 import type { User } from "./types/User";
-import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const userState = useSelector((state: RootState) => state.user);
@@ -11,8 +10,8 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   let currentUser: Partial<User> | null = reduxUser;
   if (!currentUser) {
     try {
-      const token = localStorage.getItem('currentUser');
-      currentUser = token ? jwtDecode<Partial<User>>(token) : null;
+      const userStr = localStorage.getItem('currentUser');
+      currentUser = userStr ? JSON.parse(userStr) : null;
     } catch {
       currentUser = null;
     }

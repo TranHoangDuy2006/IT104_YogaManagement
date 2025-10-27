@@ -39,6 +39,13 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    document.body.classList.add("overflow-hidden");
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, []);
+
   if (!visible) return null;
 
   return (

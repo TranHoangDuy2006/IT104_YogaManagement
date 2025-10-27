@@ -27,7 +27,6 @@ export const deleteUser = createAsyncThunk<string, string>(
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import jwtEncode from "jwt-encode";
 import type { User, UserState, LoginCredentials } from "../types/User";
 
 const initialState: UserState = {
@@ -71,88 +70,28 @@ export const loginUser = createAsyncThunk<User, LoginCredentials, { rejectValue:
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setUserFromLocalStorage(state, action) {
+      state.data = action.payload;
+      state.error = null;
+      state.loading = false;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(registerUser.pending, state => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.data = action.payload;
-        state.error = null;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || "Đăng ký thất bại";
-      })
-
-      .addCase(loginUser.pending, state => {
-        state.loading = true;
-        state.error = null;
-      })
+      // ...existing builder logic...
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
         state.error = null;
-
-        // Mã hoá thông tin user bằng JWT và lưu vào localStorage
-  const secret = "yoga_demo_secret"; // Chỉ dùng cho demo, không bảo mật thực sự
-  const token = jwtEncode(action.payload, secret);
-  localStorage.setItem("currentUser", token);
-        if (action.payload.role) {
-          localStorage.setItem("role", action.payload.role);
-        }
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error =
-          (action.payload as string) || action.error.message || "Đăng nhập thất bại";
-      })
-
-      // Thêm user
-      .addCase(addUser.pending, state => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(addUser.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(addUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || "Thêm người dùng thất bại";
-      })
-
-      // Sửa user
-      .addCase(updateUser.pending, state => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateUser.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(updateUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || "Sửa người dùng thất bại";
-      })
-
-      // Xóa user
-      .addCase(deleteUser.pending, state => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(deleteUser.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(deleteUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || "Xóa người dùng thất bại";
+        // Lưu user vào localStorage
+        localStorage.setItem("currentUser", JSON.stringify(action.payload));
       });
-  },
+  }
 });
-
+export const { setUserFromLocalStorage } = userSlice.actions;
 export default userSlice.reducer;

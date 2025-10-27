@@ -1,4 +1,4 @@
-/* Spinner loading effect for login button */
+@import "tailwindcss";
 .spinner-border {
   display: inline-block;
   border-style: solid;
@@ -36,7 +36,6 @@
 .animate-fade-in-modal {
   animation: fade-in-modal 0.35s cubic-bezier(.4,2,.3,1);
 }
-@import "tailwindcss";
 
 .inter {
   font-family: "Inter", sans-serif;

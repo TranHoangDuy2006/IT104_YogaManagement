@@ -1,24 +1,34 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { useSelector } from "react-redux"
-import { jwtDecode } from "jwt-decode"
+import { useDispatch } from "react-redux"
+import { useAppSelector } from "../../hooks/useAppSelector"
 import type { RootState } from "../../stores/userStore"
+import { setUserFromLocalStorage } from "../../slices/userSlice"
 
 export default function Navbar({ showUser, showPracticeSchedule, showHomePage }: { showUser?: boolean; showPracticeSchedule?: boolean; showHomePage?: boolean }) {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
-  const getUserFromLocal = (): { fullName?: string; role?: string } => {
-    const token = localStorage.getItem("currentUser");
-    if (!token) return {};
-    try {
-      return jwtDecode<{ fullName?: string; role?: string }>(token);
-    } catch {
-      return {};
-    }
-  };
-  const userName = useSelector((state: RootState) => state.user.data?.fullName) || getUserFromLocal().fullName;
-  const userRole = useSelector((state: RootState) => state.user.data?.role) || getUserFromLocal().role;
+
+  const dispatch = useDispatch();
+
+  // Lấy user từ Redux state bằng useAppSelector
+  const user = useAppSelector((state: RootState) => state.user.data);
+  const userName = user?.fullName;
+  const userRole = user?.role;
   const isLoggedIn = Boolean(userName);
+
+  // Khi Navbar mount, nếu localStorage có user thì dispatch lên Redux
+  useEffect(() => {
+    const userData = localStorage.getItem("currentUser");
+    if (userData) {
+      try {
+        dispatch(setUserFromLocalStorage(JSON.parse(userData)));
+      } catch {
+        // Nếu dữ liệu localStorage lỗi, xóa luôn
+        localStorage.removeItem("currentUser");
+      }
+    }
+  }, [dispatch]);
 
   const handleNavigate = (path: string) => {
     setTimeout(() => {
@@ -34,7 +44,6 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
       return;
     }
     localStorage.removeItem("currentUser");
-    localStorage.removeItem("role");
     setTimeout(() => {
       navigate("/login");
     }, 2000);
@@ -55,8 +64,11 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
           <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/")}><i className="fa-solid fa-house mr-2.5"></i>Trang chủ</button>
         )}
 
-        {showPracticeSchedule && isLoggedIn && (
-          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/bookings")}><i className="fa-solid fa-calendar-days mr-2.5"></i>Lịch tập</button>
+        {showPracticeSchedule && isLoggedIn && userRole !== 'admin' && (
+          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/bookings")}> <i className="fa-solid fa-calendar-days mr-2.5"></i>Lịch đã đặt</button>
+        )}
+        {showPracticeSchedule && isLoggedIn && userRole === 'admin' && (
+          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/admin/schedules-management")}> <i className="fa-solid fa-calendar-days mr-2.5"></i>Quản lí lịch</button>
         )}
 
         {userRole === 'admin' && (
@@ -108,13 +120,22 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
               <i className="fa-solid fa-house mr-2.5"></i>Trang chủ
             </a>
           )}
-          {showPracticeSchedule && isLoggedIn && (
+          {showPracticeSchedule && isLoggedIn && userRole !== 'admin' && (
             <a
               href="#"
               className="navbar-link flex items-center"
-              onClick={() => setOpen(false)}
+              onClick={() => { setOpen(false); navigate("/bookings"); }}
             >
-              <i className="fa-solid fa-calendar-days mr-2.5"></i>Lịch tập
+              <i className="fa-solid fa-calendar-days mr-2.5"></i>Lịch đã đặt
+            </a>
+          )}
+          {showPracticeSchedule && isLoggedIn && userRole === 'admin' && (
+            <a
+              href="#"
+              className="navbar-link flex items-center"
+              onClick={() => { setOpen(false); navigate("/admin/schedules-management"); }}
+            >
+              <i className="fa-solid fa-calendar-days mr-2.5"></i>Quản lí lịch
             </a>
           )}
           {userRole === 'admin' && (

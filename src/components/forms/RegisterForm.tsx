@@ -86,11 +86,12 @@ export default function RegisterForm() {
     setLocalLoading(true);
     setErrorMsg("");
     await new Promise((resolve) => setTimeout(resolve, 1500));
-  const userWithRole = { ...data, role: "user", id: "" };
+    const userWithRole = { ...data, role: "user", id: "" };
     const rs = await dispatch(registerUser(userWithRole));
     setLocalLoading(false);
     if (registerUser.fulfilled.match(rs)) {
       setShowSuccess(true);
+      reset(); 
       setTimeout(() => {
         setShowSuccess(false);
         navigate("/");
@@ -154,7 +155,7 @@ export default function RegisterForm() {
                   autoComplete="new-password"
                 />
                 <span
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 cursor-pointer transition-colors duration-200 hover:text-blue-600 hover:scale-110"
                   onClick={() => setShowPassword((v) => !v)}
                 >
                   <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
@@ -173,7 +174,7 @@ export default function RegisterForm() {
                   autoComplete="confirm-password"
                 />
                 <span
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 cursor-pointer transition-colors duration-200 hover:text-blue-600 hover:scale-110"
                   onClick={() => setShowConfirmPassword((v) => !v)}
                 >
                   <i className={`fa-solid ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}></i>

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 import { getUsers, getBookingsByUser, deleteBooking } from "../apis/api";
 import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
 import AddUserModal from "../components/modals/AddUserModal";
 import EditUserModal from "../components/modals/EditUserModal";
+import AddScheduleForUserModal from "../components/modals/AddScheduleForUserModal";
 import type { AppDispatch } from "../stores/userStore";
 import { deleteUser, updateUser, addUser } from "../slices/userSlice";
 import { fetchBookingsByUser } from "../slices/fetchBookingsByUserThunk";
+import { addBooking } from "../slices/bookingSlice";
 import type { Booking } from "../slices/bookingSlice";
 import type { User } from "../types/User";
 
@@ -65,10 +66,11 @@ export default function UserManagementPage() {
     confirmPassword: "",
     role: "user",
   });
+  const [addScheduleModalOpen, setAddScheduleModalOpen] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("currentUser");
-    const currentUser = token ? jwtDecode<Partial<{ email?: string }>>(token) : {};
+    const userStr = localStorage.getItem("currentUser");
+    const currentUser = userStr ? JSON.parse(userStr) : {};
     setAdminEmail(currentUser.email || "");
   }, []);
 
@@ -95,12 +97,20 @@ export default function UserManagementPage() {
             <h2 className="text-[29px] font-bold mb-6">Quản lý người dùng</h2>
 
             <div className="bg-white rounded-lg shadow p-6 mb-8">
-              <button
-                className="mb-4 px-4 py-2 rounded bg-green-500 text-white font-semibold hover:bg-green-600 hover:cursor-pointer flex items-center gap-2"
-                onClick={() => setAddModalOpen(true)}
-              >
-                <i className="fa-solid fa-user-plus" /> Thêm người dùng
-              </button>
+              <div className="flex justify-between items-center mb-4">
+                <button
+                  className="px-4 py-2 rounded bg-[#2b80ff] text-white font-semibold hover:bg-blue-700 hover:cursor-pointer flex items-center gap-2"
+                  onClick={() => setAddModalOpen(true)}
+                >
+                  <i className="fa-solid fa-user-plus" /> Thêm người dùng
+                </button>
+                <button
+                  className="px-4 py-2 rounded bg-green-500 text-white font-semibold hover:bg-green-600 hover:cursor-pointer flex items-center gap-2"
+                  onClick={() => setAddScheduleModalOpen(true)}
+                >
+                  <i className="fa-solid fa-calendar-plus" /> Thêm lịch mới
+                </button>
+              </div>
 
               <AddUserModal
                 isOpen={addModalOpen}
@@ -124,6 +134,21 @@ export default function UserManagementPage() {
                   });
                 }}
               />
+
+              {addScheduleModalOpen && (
+                <AddScheduleForUserModal
+                  users={users}
+                  bookings={[]}
+                  onSave={async (booking) => {
+                    await dispatch(addBooking(booking));
+                    setSuccessMsg("Thêm lịch mới thành công!");
+                    setShowSuccess(true);
+                    setTimeout(() => setShowSuccess(false), 1800);
+                    setAddScheduleModalOpen(false);
+                  }}
+                  onClose={() => setAddScheduleModalOpen(false)}
+                />
+              )}
 
               {showSuccess && <Notification message={successMsg} />}
 

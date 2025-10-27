@@ -48,6 +48,13 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    document.body.classList.add("overflow-hidden");
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, []);
+
   if (!visible) return null;
 
   const handleSave = () => {
