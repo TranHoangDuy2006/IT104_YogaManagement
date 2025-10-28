@@ -1,7 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import '../Animations.css';
 
-export default function Sidebar() {
+interface SidebarProps {
+  setShowLogoutMsg?: (show: boolean) => void;
+}
+
+export default function Sidebar({ setShowLogoutMsg }: SidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,12 +20,17 @@ export default function Sidebar() {
     localStorage.removeItem("currentUser");
     localStorage.removeItem("role");
     setTimeout(() => {
-      navigate("/login");
-    }, 2000);
+      if (setShowLogoutMsg) setShowLogoutMsg(true);
+      setTimeout(() => {
+        if (setShowLogoutMsg) setShowLogoutMsg(false);
+        navigate("/login");
+      }, 2000);
+    }, 1000);
   };
 
   return (
     <aside className="w-[250px] h-screen sticky top-0 left-0 bg-[#232b36] text-white flex flex-col py-4 px-6 gap-4 font-[inter] select-none">
+      
       <h2 className="text-[20px] font-bold mb-[32px]">Admin Dashboard</h2>
       <nav className="flex flex-col gap-2">
         <button
@@ -52,22 +62,10 @@ export default function Sidebar() {
           style={{ position: 'relative', overflow: 'hidden' }}
           onClick={handleLogout}
         >
-          <style>{`
-            @keyframes shake {
-              0% { transform: translateX(0); }
-              20% { transform: translateX(-4px); }
-              40% { transform: translateX(4px); }
-              60% { transform: translateX(-4px); }
-              80% { transform: translateX(4px); }
-              100% { transform: translateX(0); }
-            }
-            .hover:animate-shake:hover {
-              animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both;
-            }
-          `}</style>
+          {/* Animation shake style now imported from Animations.css */}
           <i className="fa-solid fa-right-from-bracket mr-2.5"></i>Đăng xuất
         </button>
       </nav>
     </aside>
-  )
+  );
 }

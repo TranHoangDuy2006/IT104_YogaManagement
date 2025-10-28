@@ -1,23 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-function Notification({ message }: { message: string }) {
-  return (
-    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
-      <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-fade-in">
-        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-        <span>{message}</span>
-      </div>
-      <style>{`
-        @keyframes fade-in {
-          0% { opacity: 0; transform: translateY(-10px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.4s cubic-bezier(.4,0,.2,1) forwards;
-        }
-      `}</style>
-    </div>
-  );
-}
+import React, { useState } from "react";
+import '../Animations.css';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -25,8 +8,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import type { AppDispatch, RootState } from "../../stores/userStore"; 
 import { loginUser } from "../../slices/userSlice";
-import { useState } from "react";
 import LoginBg from "../../assets/Login_Register_Background.jpg";
+
+function Notification({ message, show }: { message: string, show: boolean }) {
+  const [visible, setVisible] = useState(true);
+  React.useEffect(() => {
+    if (!show) {
+      setTimeout(() => setVisible(false), 400);
+    } else {
+      setVisible(true);
+    }
+  }, [show]);
+  if (!visible) return null;
+  return (
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+      <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
+        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+        <span>{message}</span>
+      </div>
+    </div>
+  );
+}
 
 interface LoginFormData {
   email: string;
@@ -56,7 +58,7 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     setLocalLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     const result = await dispatch(loginUser(data));
     setLocalLoading(false);
     
@@ -72,7 +74,7 @@ export default function LoginForm() {
         } else {
           navigate("/");
         }
-      }, 1500);
+      }, 2000);
     }
   };
 
@@ -83,7 +85,7 @@ export default function LoginForm() {
     setTimeout(() => {
       navigate("/register");
       setIsDelay(false);
-    }, 1500);
+    }, 2000);
   };
 
   return (
@@ -92,7 +94,7 @@ export default function LoginForm() {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 via-white/30 to-purple-900/40 z-10" />
 
       {showSuccess && (
-        <Notification message="Đăng nhập thành công!" />
+        <Notification message="Đăng nhập thành công!" show={showSuccess} />
       )}
 
       <div className="relative z-20 w-full max-w-md">

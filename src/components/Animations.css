@@ -1,0 +1,106 @@
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.animate-shake:hover {
+  animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; transform: scale(0.96); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fade-out {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.95); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.animate-fade-out {
+  animation: fade-out 0.3s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.92) translateY(10px); }
+  60% { opacity: 0.7; transform: scale(1.04) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; transform: scale(1) translateY(0); }
+  40% { opacity: 0.7; transform: scale(1.02) translateY(-5px); }
+  100% { opacity: 0; transform: scale(0.95) translateY(20px); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+@keyframes modal-appear {
+  0% { opacity: 0; transform: scale(0.85) translateY(15px); }
+  60% { opacity: 0.8; transform: scale(1.02) translateY(-3px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes modal-disappear {
+  0% { opacity: 1; transform: scale(1) translateY(0); }
+  40% { opacity: 0.8; transform: scale(1.03) translateY(-8px); }
+  100% { opacity: 0; transform: scale(0.9) translateY(20px); }
+}
+
+@keyframes backdrop-appear {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes backdrop-disappear {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.modal-appear {
+  animation: modal-appear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.modal-disappear {
+  animation: modal-disappear 0.3s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+}
+
+.backdrop-appear {
+  animation: backdrop-appear 0.3s ease-out forwards;
+}
+
+.backdrop-disappear {
+  animation: backdrop-disappear 0.25s ease-in forwards;
+}
+
+@keyframes fade-in-edit {
+  0% { opacity: 0; transform: scale(0.8) translateY(-20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fade-out-edit {
+  0% { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0.8) translateY(-20px); }
+}
+
+.animate-fade-in-edit {
+  animation: fade-in-edit 0.3s ease forwards;
+}
+
+.animate-fade-out-edit {
+  animation: fade-out-edit 0.3s ease forwards;
+}

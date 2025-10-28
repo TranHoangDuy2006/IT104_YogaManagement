@@ -9,22 +9,25 @@ import { fetchBookingsByUser, addBooking, updateBooking, deleteBooking } from ".
 import { usePagination } from "../hooks/usePagination";
 import Footer from "../components/commons/Footer";
 
-function Notification({ message }: { message: string }) {
+import '../components/Animations.css';
+
+import React from "react";
+function Notification({ message, show }: { message: string, show: boolean }) {
+  const [visible, setVisible] = React.useState(true);
+  React.useEffect(() => {
+    if (!show) {
+      setTimeout(() => setVisible(false), 400);
+    } else {
+      setVisible(true);
+    }
+  }, [show]);
+  if (!visible) return null;
   return (
     <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50">
-      <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-fade-in">
+      <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
         <span>{message}</span>
       </div>
-      <style>{`
-        @keyframes fade-in {
-          0% { opacity: 0; transform: translateY(-10px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.4s cubic-bezier(.4,0,.2,1) forwards;
-        }
-      `}</style>
     </div>
   );
 }
@@ -75,7 +78,7 @@ export default function BookingPage() {
       );
       setSuccessMsg("Thêm lịch tập thành công!");
       setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 1800);
+      setTimeout(() => setShowSuccess(false), 2000);
     }
     setShowForm(false);
     setEditBooking(null);
@@ -106,9 +109,8 @@ export default function BookingPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 font-[inter] select-none pt-16">
-      {/* Nội dung chính */}
       <div className="flex-1">
-        {showSuccess && <Notification message={successMsg} />}
+      {showSuccess && <Notification message={successMsg} show={showSuccess} />}
         <Navbar showUser={false} showPracticeSchedule={false} showHomePage={true} />
 
         <div className="w-full bg-white rounded-xl shadow-md max-w-[1280px] mx-auto mt-8 p-8">
@@ -129,85 +131,91 @@ export default function BookingPage() {
           {error && <div className="text-red-500 font-semibold mb-4">{error}</div>}
 
           <div className="w-full max-w-[1248px] mx-auto rounded-lg mt-6 overflow-x-auto">
-            <table className="w-full bg-gray-50 rounded-xl shadow-sm">
-              <thead>
-                <tr className="text-black font-semibold text-lg">
-                  <th className="px-6 py-4 text-center">Lớp học</th>
-                  <th className="py-4 text-center">Ngày tập</th>
-                  <th className="py-4 text-center">Khung giờ</th>
-                  <th className="py-4 text-center">Họ tên</th>
-                  <th className="py-4 text-center">Email</th>
-                  <th className="py-4 text-center">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((b: any) => (
-                  <tr key={b.id} className="hover:bg-gray-100">
-                    <td className="px-6 py-3 bg-white text-center">{b.class}</td>
-                    <td className="py-3 bg-white text-center">{b.date}</td>
-                    <td className="py-3 bg-white text-center">{b.time}</td>
-                    <td className="py-3 bg-white text-center">{b.name}</td>
-                    <td className="py-3 bg-white truncate max-w-[160px] whitespace-nowrap pr-6 text-center">
-                      {b.email}
-                    </td>
-                    <td className="py-3 pl-2 bg-white text-center">
-                      <button
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold shadow-sm hover:bg-blue-500 hover:text-white hover:cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 mr-3"
-                        onClick={() => handleEdit(b)}
-                      >
-                        <i className="fa-solid fa-pen-to-square fa-lg mr-1"></i> Sửa
-                      </button>
-                      <button
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold shadow-sm hover:bg-red-500 hover:text-white hover:cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 active:scale-95"
-                        onClick={() => handleDelete(b.id!)}
-                      >
-                        <i className="fa-solid fa-trash-can fa-lg mr-1"></i> Xóa
-                      </button>
-                    </td>
+            {currentItems.length === 0 ? (
+              <div className="text-center text-gray-500 text-lg py-12">Chưa có lịch nào được đặt</div>
+            ) : (
+              <table className="w-full bg-gray-50 rounded-xl shadow-sm">
+                <thead>
+                  <tr className="text-black font-semibold text-lg">
+                    <th className="px-6 py-4 text-center">Lớp học</th>
+                    <th className="py-4 text-center">Ngày tập</th>
+                    <th className="py-4 text-center">Khung giờ</th>
+                    <th className="py-4 text-center">Họ tên</th>
+                    <th className="py-4 text-center">Email</th>
+                    <th className="py-4 text-center">Thao tác</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {currentItems.map((b: any) => (
+                    <tr key={b.id} className="hover:bg-gray-100">
+                      <td className="px-6 py-3 bg-white text-center">{b.class}</td>
+                      <td className="py-3 bg-white text-center">{b.date}</td>
+                      <td className="py-3 bg-white text-center">{b.time}</td>
+                      <td className="py-3 bg-white text-center">{b.name}</td>
+                      <td className="py-3 bg-white truncate max-w-[160px] whitespace-nowrap pr-6 text-center">
+                        {b.email}
+                      </td>
+                      <td className="py-3 pl-2 bg-white text-center">
+                        <button
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold shadow-sm hover:bg-blue-500 hover:text-white hover:cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 mr-3"
+                          onClick={() => handleEdit(b)}
+                        >
+                          <i className="fa-solid fa-pen-to-square fa-lg mr-1"></i> Sửa
+                        </button>
+                        <button
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold shadow-sm hover:bg-red-500 hover:text-white hover:cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 active:scale-95"
+                          onClick={() => handleDelete(b.id!)}
+                        >
+                          <i className="fa-solid fa-trash-can fa-lg mr-1"></i> Xóa
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-center items-center mt-6 gap-1">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              className={`px-3 py-1 rounded-l-lg bg-gray-100 w-[40px] h-[40px] ${
-                currentPage === 1
-                  ? "cursor-not-allowed opacity-50"
-                  : "hover:bg-gray-200 hover:cursor-pointer"
-              }`}
-              disabled={currentPage === 1}
-            >
-              ‹
-            </button>
-            {[...Array(totalPages)].map((_, i) => (
+          {currentItems.length > 0 && (
+            <div className="flex justify-center items-center mt-6 gap-1">
               <button
-                key={i}
-                onClick={() => handlePageChange(i + 1)}
-                className={`px-3 py-1 w-[40px] h-[40px] hover:cursor-pointer transition-all duration-300 ease-in-out rounded-none ${
-                  currentPage === i + 1
-                    ? "bg-blue-500 text-white scale-105 shadow-lg"
-                    : "bg-white hover:bg-gray-100"
+                onClick={() => handlePageChange(currentPage - 1)}
+                className={`px-3 py-1 rounded-l-lg bg-gray-100 w-[40px] h-[40px] ${
+                  currentPage === 1
+                    ? "cursor-not-allowed opacity-50"
+                    : "hover:bg-gray-200 hover:cursor-pointer"
                 }`}
+                disabled={currentPage === 1}
               >
-                {i + 1}
+                ‹
               </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              className={`px-3 py-1 rounded-r-lg bg-gray-100 w-[40px] h-[40px] ${
-                bookings.length === 0 || currentPage === totalPages
-                  ? "cursor-not-allowed opacity-50"
-                  : "hover:bg-gray-200 hover:cursor-pointer"
-              }`}
-              disabled={bookings.length === 0 || currentPage === totalPages}
-            >
-              ›
-            </button>
-          </div>
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => handlePageChange(i + 1)}
+                  className={`px-3 py-1 w-[40px] h-[40px] hover:cursor-pointer transition-all duration-300 ease-in-out rounded-none ${
+                    currentPage === i + 1
+                      ? "bg-blue-500 text-white scale-105 shadow-lg"
+                      : "bg-white hover:bg-gray-100"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                className={`px-3 py-1 rounded-r-lg bg-gray-100 w-[40px] h-[40px] ${
+                  bookings.length === 0 || currentPage === totalPages
+                    ? "cursor-not-allowed opacity-50"
+                    : "hover:bg-gray-200 hover:cursor-pointer"
+                }`}
+                disabled={bookings.length === 0 || currentPage === totalPages}
+              >
+                ›
+              </button>
+            </div>
+          )}
         </div>
 
         {showForm && (

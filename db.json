@@ -14,7 +14,7 @@
       "email": "LilianaNuThanF1@gmail.com",
       "password": "TrucDan1904",
       "confirmPassword": "TrucDan1904",
-      "role": "admin"
+      "role": "user"
     },
     {
       "id": "1761103316978",
@@ -38,6 +38,14 @@
       "email": "cuongliam2006@gmail.com",
       "password": "cuong123456",
       "confirmPassword": "cuong123456",
+      "role": "user"
+    },
+    {
+      "id": "",
+      "fullName": "Nguyễn Hoàng Thuỳ Linh",
+      "email": "linhthuy2210@gmail.com",
+      "password": "linh123456",
+      "confirmPassword": "linh123456",
       "role": "user"
     }
   ],
@@ -202,29 +210,89 @@
       "userId": "1761215969642",
       "class": "Mediatation",
       "date": "2006-03-11",
-      "time": "17:00 - 18:00",
+      "time": "7:00 - 8:00",
       "name": "Đoàn Nhật Cường",
       "email": "cuongliam2006@gmail.com"
+    },
+    {
+      "id": "44fa",
+      "userId": "363c",
+      "class": "Boxing",
+      "date": "2006-12-30",
+      "time": "8:00 - 9:00",
+      "name": "Trần Minh Đức",
+      "email": "ductranminh2006@gmail.com"
+    },
+    {
+      "id": "b3e0",
+      "userId": "363c",
+      "class": "Sauna",
+      "date": "2006-11-03",
+      "time": "6:00 - 7:00",
+      "name": "Trần Minh Đức",
+      "email": "ductranminh2006@gmail.com"
     }
   ],
   "services": [
     {
       "id": "8a5a",
       "name": "Gym",
-      "description": "Rèn luyện tâm trí và giảm cáng thẳng",
-      "image": "https://www.verywellmind.com/thmb/MQWhY7u5mTDfaO4vgDHRvnHYcaA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-938890492-becc3fc4757849bea672f148454943f9.jpg"
+      "description": "Rèn luyện tâm trí và giảm căng thẳng",
+      "imageUrl": "https://www.verywellmind.com/thmb/MQWhY7u5mTDfaO4vgDHRvnHYcaA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-938890492-becc3fc4757849bea672f148454943f9.jpg",
+      "isActive": true,
+      "courses": [
+        "9cae"
+      ]
     },
     {
       "id": "1b2c",
       "name": "Personal Training",
       "description": "Huấn luyện viên cá nhân giúp tối ưu hóa hiệu quả tập luyện",
-      "image": "https://vitalityweightlossinstitute.com/wp-content/uploads/2025/04/What_makes_a_great_personal_trainer_-Blog-1200x800px_8338a95e-5fa3-42d8-901a-7893cea29330.jpg"
+      "imageUrl": "https://vitalityweightlossinstitute.com/wp-content/uploads/2025/04/What_makes_a_great_personal_trainer_-Blog-1200x800px_8338a95e-5fa3-42d8-901a-7893cea29330.jpg",
+      "isActive": true,
+      "courses": [
+        "ce86"
+      ]
     },
     {
       "id": "2d3e",
       "name": "Nutrition Counseling",
       "description": "Tư vấn dinh dưỡng để hỗ trợ mục tiêu sức khỏe và thể hình",
-      "image": "https://wp04-media.cdn.ihealthspot.com/wp-content/uploads/sites/66/2021/04/iStock-1258586742-300x200.jpg"
+      "imageUrl": "https://wp04-media.cdn.ihealthspot.com/wp-content/uploads/sites/66/2021/04/iStock-1258586742-300x200.jpg",
+      "isActive": true,
+      "courses": [
+        "b748"
+      ]
+    },
+    {
+      "id": "8349",
+      "name": "Physical Therapy",
+      "description": "Vật lý trị liệu phục hồi chấn thương và cải thiện vận động",
+      "imageUrl": "https://post.healthline.com/wp-content/uploads/2022/09/mature-male-physical-therapy-1296-728-header.jpg",
+      "isActive": true,
+      "courses": [
+        "4f42"
+      ]
+    },
+    {
+      "id": "a59f",
+      "name": "Senior Wellness",
+      "description": "Lớp tập trung vào sức khỏe xương khớp và tim mạch cho người cao tuổi",
+      "imageUrl": "https://www.actsretirement.org/media/8709/gettyimages-674720396.png",
+      "isActive": true,
+      "courses": [
+        "0fbf"
+      ]
+    },
+    {
+      "id": "6115",
+      "name": "Kid Fitness",
+      "description": "Chương trình thể chất đặc biệt dành cho trẻ em và thanh thiếu niên",
+      "imageUrl": "https://lakeshoresf.com/wp-content/uploads/2021/04/Kids-Fitness-Training-Lincoln-Park-Chicago-1.jpeg",
+      "isActive": true,
+      "courses": [
+        "d18f"
+      ]
     }
   ]
 }

@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import LoadingSpinner from "./components/commons/LoadingSpinner";
 import RegisterForm from "./components/forms/RegisterForm";
 import LoginForm from "./components/forms/LoginForm";
-import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./components/commons/ProtectedRoute";
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));

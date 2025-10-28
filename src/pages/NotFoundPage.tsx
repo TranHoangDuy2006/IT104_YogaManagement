@@ -6,7 +6,7 @@ export default function NotFound() {
   const handleBackHome = () => {
     setTimeout(() => {
       navigate("/");
-    }, 1000);
+    }, 2000);
   };
 
   return (

@@ -7,11 +7,21 @@ import type { AppDispatch } from "../../stores/userStore"
 import { registerUser } from "../../slices/userSlice"
 import { useNavigate, Link } from "react-router-dom"
 import React, { useState } from "react"
-// Notification component
-function Notification({ message }: { message: string }) {
+import RegisterBg from "../../assets/Login_Register_Background.jpg"
+
+function Notification({ message, show }: { message: string, show: boolean }) {
+  const [visible, setVisible] = React.useState(true);
+  React.useEffect(() => {
+    if (!show) {
+      setTimeout(() => setVisible(false), 400);
+    } else {
+      setVisible(true);
+    }
+  }, [show]);
+  if (!visible) return null;
   return (
-    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
-      <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-fade-in">
+    <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50`}>
+      <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
         <span>{message}</span>
       </div>
@@ -20,14 +30,20 @@ function Notification({ message }: { message: string }) {
           0% { opacity: 0; transform: translateY(-10px); }
           100% { opacity: 1; transform: translateY(0); }
         }
+        @keyframes fade-out {
+          0% { opacity: 1; transform: translateY(0); }
+          100% { opacity: 0; transform: translateY(-10px); }
+        }
         .animate-fade-in {
           animation: fade-in 0.4s cubic-bezier(.4,0,.2,1) forwards;
+        }
+        .animate-fade-out {
+          animation: fade-out 0.4s cubic-bezier(.4,0,.2,1) forwards;
         }
       `}</style>
     </div>
   );
 }
-import RegisterBg from "../../assets/Login_Register_Background.jpg"
 
 interface RegisterFormData {
   fullName: string
@@ -55,7 +71,7 @@ export default function RegisterForm() {
   const [errorMsg, setErrorMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  // Tự động ẩn thông báo lỗi sau 2 giây
+
   React.useEffect(() => {
     if (errorMsg) {
       const timer = setTimeout(() => setErrorMsg("") , 3000);
@@ -70,7 +86,7 @@ export default function RegisterForm() {
     setTimeout(() => {
       navigate("/login")
       setIsDelay(false)
-    }, 1500)
+    }, 2000)
   }
 
   const {
@@ -108,7 +124,7 @@ export default function RegisterForm() {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 via-white/30 to-purple-900/40 z-10" />
 
       {showSuccess && (
-        <Notification message="Đăng ký tài khoản thành công!" />
+        <Notification message="Đăng ký tài khoản thành công!" show={showSuccess} />
       )}
       {errorMsg && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">

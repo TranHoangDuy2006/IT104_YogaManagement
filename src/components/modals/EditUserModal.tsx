@@ -1,13 +1,7 @@
-import React, { useEffect, useState } from "react";
 
-type User = {
-  id: string;
-  fullName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  role: string;
-};
+import React, { useEffect, useState } from "react";
+import '../Animations.css';
+import type { User } from '../../types/User';
 
 interface EditUserModalProps {
   isOpen: boolean;
@@ -17,13 +11,7 @@ interface EditUserModalProps {
   setEditUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-const EditUserModal: React.FC<EditUserModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  onSubmit, 
-  editUser, 
-  setEditUser 
-}) => {
+const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, onSubmit, editUser, setEditUser }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [animationClass, setAnimationClass] = useState('');
 
@@ -86,7 +74,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
             />
           </label>
           <label className="flex flex-col text-base font-semibold text-gray-600 mb-2">
-            Role
+            Vai trò
             <select
               value={editUser.role}
               onChange={e => setEditUser({ ...editUser, role: e.target.value })}
@@ -113,37 +101,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
           </div>
         </form>
       </div>
-      <style>{`
-        @keyframes fade-in {
-          0% { 
-            opacity: 0; 
-            transform: scale(0.8) translateY(-20px); 
-          }
-          100% { 
-            opacity: 1; 
-            transform: scale(1) translateY(0); 
-          }
-        }
-        
-        @keyframes fade-out {
-          0% { 
-            opacity: 1; 
-            transform: scale(1) translateY(0); 
-          }
-          100% { 
-            opacity: 0; 
-            transform: scale(0.8) translateY(-20px); 
-          }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.3s ease forwards;
-        }
-        
-        .animate-fade-out {
-          animation: fade-out 0.3s ease forwards;
-        }
-      `}</style>
     </div>
   );
 };

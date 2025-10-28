@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import '../Animations.css';
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { useAppSelector } from "../../hooks/useAppSelector"
@@ -7,25 +8,23 @@ import { setUserFromLocalStorage } from "../../slices/userSlice"
 
 export default function Navbar({ showUser, showPracticeSchedule, showHomePage }: { showUser?: boolean; showPracticeSchedule?: boolean; showHomePage?: boolean }) {
   const [open, setOpen] = useState(false)
+  const [showLogoutMsg, setShowLogoutMsg] = useState(false);
   const navigate = useNavigate()
 
   const dispatch = useDispatch();
 
-  // Lấy user từ Redux state bằng useAppSelector
   const user = useAppSelector((state: RootState) => state.user.data);
   const userName = user?.fullName;
   const userRole = user?.role;
   const isLoggedIn = Boolean(userName);
 
-  // Khi Navbar mount, nếu localStorage có user thì dispatch lên Redux
   useEffect(() => {
     const userData = localStorage.getItem("currentUser");
     if (userData) {
       try {
         dispatch(setUserFromLocalStorage(JSON.parse(userData)));
-      } catch {
-        // Nếu dữ liệu localStorage lỗi, xóa luôn
-        localStorage.removeItem("currentUser");
+      } catch (e) {
+        console.error("Error parsing user data from localStorage:", e);
       }
     }
   }, [dispatch]);
@@ -45,12 +44,24 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
     }
     localStorage.removeItem("currentUser");
     setTimeout(() => {
-      navigate("/login");
-    }, 2000);
+      setShowLogoutMsg(true);
+      setTimeout(() => {
+        setShowLogoutMsg(false);
+        navigate("/login");
+      }, 2000);
+    }, 1000);
   };
 
   return (
   <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-[#1f2630] text-white h-14 select-none shadow">
+      {showLogoutMsg && (
+        <div className="fixed top-1 left-1/2 -translate-x-1/2 z-[9999] animate-fade-in">
+          <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <i className="fa-solid fa-circle-check text-xl mr-2"></i>
+            <span>Đã đăng xuất</span>
+          </div>
+        </div>
+      )}
       <button
         className="tracking-wide text-[24px] font-[700] py-2 ml-0 lg:ml-[88.5px] hover:cursor-pointer cursor-pointer bg-transparent border-none"
         onClick={() => handleNavigate("/")}

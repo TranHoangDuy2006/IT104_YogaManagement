@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import '../Animations.css';
 import { getCourses } from "../../apis/api";
 import type { Booking } from "../../slices/bookingSlice";
 
@@ -19,13 +20,7 @@ const timeOptions = [
   { value: "18:00 - 19:00", label: "18:00 - 19:00" },
 ];
 
-export default function BookingModal({
-  booking,
-  bookings,
-  onSave,
-  onClose,
-  currentUserId,
-}: BookingModalProps) {
+export default function BookingModal({ booking, bookings, onSave, onClose, currentUserId }: BookingModalProps) {
   const [classType, setClassType] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -58,7 +53,7 @@ export default function BookingModal({
     setIsClosing(true);
     setTimeout(() => {
       onClose();
-    }, 300); // Thời gian phải khớp với duration trong CSS
+    }, 300); 
   };
 
   const handleSave = () => {
@@ -93,7 +88,6 @@ export default function BookingModal({
       email: booking?.email ?? "",
     });
     
-    // Đóng modal sau khi lưu thành công
     handleClose();
   };
 
@@ -110,27 +104,6 @@ export default function BookingModal({
         ? "bg-black/0 backdrop-blur-none" 
         : "bg-black/40 backdrop-blur-[1px]"
     }`}>
-      <style>{`
-        @keyframes fadeIn {
-          0% { opacity: 0; transform: scale(0.92) translateY(10px); }
-          60% { opacity: 0.7; transform: scale(1.04) translateY(-2px); }
-          100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        
-        @keyframes fadeOut {
-          0% { opacity: 1; transform: scale(1) translateY(0); }
-          40% { opacity: 0.7; transform: scale(1.02) translateY(-5px); }
-          100% { opacity: 0; transform: scale(0.95) translateY(20px); }
-        }
-        
-        .fade-in {
-          animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        
-        .fade-out {
-          animation: fadeOut 0.3s cubic-bezier(0.4, 0, 0.6, 1) forwards;
-        }
-      `}</style>
 
       <form
         className={`bg-white rounded-xl shadow-2xl p-8 w-full max-w-[600px] min-h-[480px] transform transition-all duration-300 ${

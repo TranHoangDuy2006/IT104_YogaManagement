@@ -20,9 +20,9 @@ export default function Footer() {
         <div className="md:ml-8">
           <h4 className="mb-2 text-2xl font-bold mt-6">Theo dõi chúng tôi</h4>
           <div className="flex gap-4 text-white/80">
-            <a href="#" className="text-base font-normal text-gray-400 transition-all duration-200 hover:text-blue-400 hover:scale-110 hover:underline hover:drop-shadow-lg">Facebook</a>
-            <a href="#" className="text-base font-normal text-gray-400 transition-all duration-200 hover:text-pink-400 hover:scale-110 hover:underline hover:drop-shadow-lg">Instagram</a>
-            <a href="#" className="text-base font-normal text-gray-400 transition-all duration-200 hover:text-sky-400 hover:scale-110 hover:underline hover:drop-shadow-lg">Twitter</a>
+            <a href="https://www.facebook.com/itzduy2k6.1904/" className="text-base font-normal text-gray-400 transition-all duration-200 hover:text-blue-400 hover:scale-110 hover:underline hover:drop-shadow-lg">Facebook</a>
+            <a href="https://www.instagram.com/thduy.1904/" className="text-base font-normal text-gray-400 transition-all duration-200 hover:text-pink-400 hover:scale-110 hover:underline hover:drop-shadow-lg">Instagram</a>
+            <a href="https://x.com/hoangtd2006_" className="text-base font-normal text-gray-400 transition-all duration-200 hover:text-sky-400 hover:scale-110 hover:underline hover:drop-shadow-lg">Twitter</a>
           </div>
         </div>
       </div>

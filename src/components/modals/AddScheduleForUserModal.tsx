@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
+import '../Animations.css';
 import { getCourses } from "../../apis/api";
 import type { Booking } from "../../slices/bookingSlice";
 import type { User } from "../../types/User";
@@ -20,12 +21,7 @@ const timeOptions = [
   { value: "18:00 - 19:00", label: "18:00 - 19:00" },
 ];
 
-export default function AddScheduleForUserModal({
-  users,
-  bookings,
-  onSave,
-  onClose,
-}: AddScheduleForUserModalProps) {
+export default function AddScheduleForUserModal({ users, bookings, onSave, onClose }: AddScheduleForUserModalProps) {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [classType, setClassType] = useState("");
   const [date, setDate] = useState("");
@@ -108,24 +104,7 @@ export default function AddScheduleForUserModal({
         ? "bg-black/0 backdrop-blur-none" 
         : "bg-black/40 backdrop-blur-[1px]"
     }`}>
-      <style>{`
-        @keyframes fadeIn {
-          0% { opacity: 0; transform: scale(0.92) translateY(10px); }
-          60% { opacity: 0.7; transform: scale(1.04) translateY(-2px); }
-          100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        @keyframes fadeOut {
-          0% { opacity: 1; transform: scale(1) translateY(0); }
-          40% { opacity: 0.7; transform: scale(1.02) translateY(-5px); }
-          100% { opacity: 0; transform: scale(0.95) translateY(20px); }
-        }
-        .fade-in {
-          animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        .fade-out {
-          animation: fadeOut 0.3s cubic-bezier(0.4, 0, 0.6, 1) forwards;
-        }
-      `}</style>
+
       <form
         className={`bg-white rounded-xl shadow-2xl p-8 w-full max-w-[600px] min-h-[520px] transform transition-all duration-300 ${
           isClosing 
@@ -134,7 +113,7 @@ export default function AddScheduleForUserModal({
         }`}
         onSubmit={e => e.preventDefault()}
       >
-        <h2 className="text-3xl font-bold mb-6">Thêm lịch mới cho user</h2>
+        <h2 className="text-3xl font-bold mb-6">Thêm lịch mới cho người dùng</h2>
         <div className="mb-4">
           <label className="block font-semibold mb-2 text-xl" htmlFor="userSelect">Chọn người dùng</label>
           <select

@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import type { User } from "../types/User";
 import type { Booking } from "../types/Booking";
@@ -24,7 +23,7 @@ export const deleteBooking = (id: number) => axios.delete(`${API_BASE}/bookings/
 // SERVICES
 export const getServices = () => axios.get<Service[]>(`${API_BASE}/services`);
 export const createService = (service: Omit<Service, "id">) => axios.post<Service>(`${API_BASE}/services`, service);
-export const updateService = (id: number, service: Partial<Service>) => axios.patch<Service>(`${API_BASE}/services/${id}`, service);
+export const updateService = (id: string, service: Partial<Service>) => axios.patch<Service>(`${API_BASE}/services/${id}`, service);
 
 // COURSES
 export const getCourses = () => axios.get<Course[]>(`${API_BASE}/courses`);

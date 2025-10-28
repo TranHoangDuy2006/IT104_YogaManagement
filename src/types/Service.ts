@@ -1,6 +1,8 @@
 export interface Service {
-  id: number;
+  id: string;
   name: string;
   description: string;
-  image: string;
+  isActive: boolean;
+  imageUrl?: string;
+  courses?: string[];
 }

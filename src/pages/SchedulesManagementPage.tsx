@@ -2,8 +2,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PieController } from "chart.js";
 
 import BookingModal from "../components/modals/BookingModal";
 import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
@@ -11,7 +11,7 @@ import { fetchAllBookings } from "../slices/fetchAllBookingsThunk";
 import { updateBooking, deleteBooking } from "../slices/bookingSlice";
 import type { RootState, AppDispatch } from "../stores/userStore";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PieController);
 
 type Booking = {
   id: number;
@@ -55,7 +55,6 @@ export default function SchedulesManagementPage() {
     axios.get("http://localhost:1904/courses").then((res) => setCourses(res.data));
   }, []);
 
-  // Debounce cho email
   useEffect(() => {
     if (debounceRef.current) window.clearTimeout(debounceRef.current);
     debounceRef.current = window.setTimeout(() => {
@@ -66,7 +65,6 @@ export default function SchedulesManagementPage() {
     };
   }, [filterEmail]);
 
-  // Lọc danh sách booking
   const filteredBookings = bookings.filter((b) => {
     const matchClass = filterClass ? b.class === filterClass : true;
     const matchEmail = debouncedEmail
@@ -76,7 +74,6 @@ export default function SchedulesManagementPage() {
     return matchClass && matchEmail && matchDate;
   });
 
-  // Phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
@@ -88,25 +85,21 @@ export default function SchedulesManagementPage() {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
-  // Thống kê số lượng
   const courseStats = courses.map((course) => ({
     name: course.name,
     count: bookings.filter((b) => b.class === course.name).length,
   }));
 
-  // Xử lý sửa
   const handleEdit = (booking: Booking) => {
     setSelectedBooking(booking);
     setEditModalOpen(true);
   };
 
-  // Xử lý xoá
   const handleDelete = (booking: Booking) => {
     setDeleteBookingId(booking.id);
     setDeleteModalOpen(true);
   };
 
-  // Lưu booking sau khi sửa
   const handleSaveBooking = async (data: Booking) => {
     if (!selectedBooking) return;
     await dispatch(
@@ -124,7 +117,6 @@ export default function SchedulesManagementPage() {
     dispatch(fetchAllBookings());
   };
 
-  // Xác nhận xoá booking
   const handleConfirmDelete = async () => {
     if (deleteBookingId != null) {
       await dispatch(deleteBooking(deleteBookingId));
@@ -134,29 +126,11 @@ export default function SchedulesManagementPage() {
     }
   };
 
-  // Cấu hình biểu đồ
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-        position: "top" as const,
-        labels: { font: { size: 16, weight: "bold" as const } },
-      },
-      title: { display: false },
-    },
-    scales: {
-      x: { grid: { display: false } },
-      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: "#e5e7eb" } },
-    },
-  };
-
   return (
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
       <main className="flex-1 bg-[#f9fafb]">
         <h1 className="text-[29px] font-bold mb-4">Thống kê lịch tập</h1>
 
-        {/* --- Thống kê tổng --- */}
         <div
           className="grid gap-4 mb-6 overflow-x-auto pb-2"
           style={{
@@ -186,37 +160,37 @@ export default function SchedulesManagementPage() {
           ))}
         </div>
 
-        {/* --- Biểu đồ --- */}
-        <div className="bg-white p-6 rounded-lg shadow mb-6">
-          <Bar
-            data={{
-              labels: courseStats.map((c) => c.name),
-              datasets: [
-                {
-                  label: "Số lượng lịch đặt",
-                  data: courseStats.map((c) => c.count),
-                  backgroundColor: courseStats.map(
-                    (_, idx) =>
-                      [
-                        "rgba(96,165,250,0.5)",
-                        "rgba(74,222,128,0.4)",
-                        "rgba(192,132,252,0.4)",
-                        "rgba(239,68,68,0.4)",
-                        "rgba(253,224,71,0.4)",
-                        "rgba(34,197,94,0.4)",
-                      ][idx % 6]
-                  ),
-                  borderRadius: 8,
-                  borderSkipped: false,
-                  maxBarThickness: 120,
+        <div className="bg-white p-6 rounded-lg shadow mb-6 flex justify-center">
+          <div className="w-[400px] max-w-full">
+            <Pie
+              data={{
+                labels: courseStats.map((c) => c.name),
+                datasets: [
+                  {
+                    label: "Số lượng lịch đặt",
+                    data: courseStats.map((c) => c.count),
+                    backgroundColor: [
+                      "rgba(96,165,250,0.5)",
+                      "rgba(74,222,128,0.4)",
+                      "rgba(192,132,252,0.4)",
+                      "rgba(239,68,68,0.4)",
+                      "rgba(253,224,71,0.4)",
+                      "rgba(34,197,94,0.4)",
+                    ],
+                    borderWidth: 2,
+                  },
+                ],
+              }}
+              options={{
+                plugins: {
+                  legend: { display: true, position: "top" },
+                  title: { display: false },
                 },
-              ],
-            }}
-            options={chartOptions}
-          />
+              }}
+            />
+          </div>
         </div>
 
-        {/* --- Bộ lọc --- */}
         <form className="bg-white p-6 rounded-lg shadow mb-6 grid grid-cols-3 gap-4">
           <div>
             <label className="block mb-2 font-medium">Lớp học</label>
@@ -263,7 +237,6 @@ export default function SchedulesManagementPage() {
           </div>
         </form>
 
-        {/* --- Bảng dữ liệu --- */}
         <div className="overflow-x-auto bg-white rounded-lg shadow">
           <table className="min-w-full">
             <thead>
@@ -313,14 +286,13 @@ export default function SchedulesManagementPage() {
             </tbody>
           </table>
 
-          {/* --- Modal sửa/Thêm booking --- */}
           {editModalOpen && (
             <BookingModal
               booking={selectedBooking ? normalizeBookingId(selectedBooking) : undefined}
               bookings={bookings.map(normalizeBookingId)}
               onSave={(data) => {
                 if (!selectedBooking) {
-                  // Thêm mới
+
                   axios.post("http://localhost:1904/bookings", {
                     ...data,
                     id: undefined,
@@ -330,7 +302,7 @@ export default function SchedulesManagementPage() {
                     dispatch(fetchAllBookings());
                   });
                 } else {
-                  // Sửa
+
                   void handleSaveBooking(normalizeBookingId(data));
                 }
               }}
@@ -342,7 +314,6 @@ export default function SchedulesManagementPage() {
             />
           )}
 
-          {/* --- Modal xác nhận xoá --- */}
           {deleteModalOpen && (
             <ConfirmDeleteModal
               isOpen={deleteModalOpen}
@@ -351,7 +322,6 @@ export default function SchedulesManagementPage() {
             />
           )}
 
-          {/* --- Phân trang --- */}
           <div className="flex justify-center items-center py-4">
             <button
               onClick={() => handlePageChange(currentPage - 1)}

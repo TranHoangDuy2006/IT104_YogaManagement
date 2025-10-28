@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../components/Animations.css';
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 import { getUsers, getBookingsByUser, deleteBooking } from "../apis/api";
@@ -13,11 +14,19 @@ import { addBooking } from "../slices/bookingSlice";
 import type { Booking } from "../slices/bookingSlice";
 import type { User } from "../types/User";
 
-// Component hiển thị thông báo
-function Notification({ message }: { message: string }) {
+function Notification({ message, show }: { message: string, show: boolean }) {
+  const [visible, setVisible] = React.useState(true);
+  React.useEffect(() => {
+    if (!show) {
+      setTimeout(() => setVisible(false), 400);
+    } else {
+      setVisible(true);
+    }
+  }, [show]);
+  if (!visible) return null;
   return (
     <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
-      <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-fade-in">
+      <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
         <svg
           className="w-5 h-5 text-white"
           fill="none"
@@ -29,15 +38,6 @@ function Notification({ message }: { message: string }) {
         </svg>
         <span>{message}</span>
       </div>
-      <style>{`
-        @keyframes fade-in {
-          0% { opacity: 0; transform: translateY(-10px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.4s cubic-bezier(.4,0,.2,1) forwards;
-        }
-      `}</style>
     </div>
   );
 }
@@ -66,6 +66,7 @@ export default function UserManagementPage() {
     confirmPassword: "",
     role: "user",
   });
+
   const [addScheduleModalOpen, setAddScheduleModalOpen] = useState(false);
 
   useEffect(() => {
@@ -150,15 +151,15 @@ export default function UserManagementPage() {
                 />
               )}
 
-              {showSuccess && <Notification message={successMsg} />}
+              {showSuccess && <Notification message={successMsg} show={showSuccess} />}
 
               <table className="min-w-full">
                 <thead>
                   <tr>
-                    <th className="px-4 py-2 text-left">Họ tên</th>
-                    <th className="px-4 py-2 text-left">Email</th>
-                    <th className="px-4 py-2 text-left">Role</th>
-                    <th className="px-4 py-2 text-left">Thao tác</th>
+                    <th className="px-4 py-2 text-center">Họ tên</th>
+                    <th className="px-4 py-2 text-center">Email</th>
+                    <th className="px-4 py-2 text-center">Vai trò</th>
+                    <th className="px-4 py-2 text-center">Thao tác</th>
                   </tr>
                 </thead>
 
@@ -166,12 +167,12 @@ export default function UserManagementPage() {
                   {users.map((u) => (
                     <React.Fragment key={u.id}>
                       <tr className="hover:bg-gray-100">
-                        <td className="px-4 py-2">{u.fullName}</td>
-                        <td className="px-4 py-2">{u.email}</td>
-                        <td className="px-4 py-2">{u.role}</td>
+                        <td className="px-4 py-2 text-center">{u.fullName}</td>
+                        <td className="px-4 py-2 text-center">{u.email}</td>
+                        <td className="px-4 py-2 text-center">{u.role}</td>
 
                         <td className="px-4 py-2">
-                          <div className="flex gap-3">
+                          <div className="flex gap-3 justify-center align-middle">
                             <button
                               className="px-5 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-500 hover:text-white hover:cursor-pointer flex items-center gap-2"
                               onClick={() => {
@@ -244,21 +245,21 @@ export default function UserManagementPage() {
                                   <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden shadow">
                                     <thead className="bg-blue-50">
                                       <tr>
-                                        <th className="px-3 py-2 text-left text-sm font-semibold text-blue-700">Ngày</th>
-                                        <th className="px-3 py-2 text-left text-sm font-semibold text-blue-700">Giờ</th>
-                                        <th className="px-3 py-2 text-left text-sm font-semibold text-blue-700">Lớp học</th>
-                                        <th className="px-3 py-2 text-left text-sm font-semibold text-blue-700">Tên</th>
-                                        <th className="px-3 py-2 text-left text-sm font-semibold text-blue-700">Email</th>
+                                        <th className="px-3 py-2 text-sm font-semibold text-blue-700 text-center">Ngày</th>
+                                        <th className="px-3 py-2 text-sm font-semibold text-blue-700 text-center">Giờ</th>
+                                        <th className="px-3 py-2 text-sm font-semibold text-blue-700 text-center">Lớp học</th>
+                                        <th className="px-3 py-2 text-sm font-semibold text-blue-700 text-center">Tên</th>
+                                        <th className="px-3 py-2 text-sm font-semibold text-blue-700 text-center">Email</th>
                                       </tr>
                                     </thead>
                                     <tbody>
                                       {(bookingsByUser[u.id] || []).map((b) => (
                                         <tr key={b.id} className="hover:bg-blue-100">
-                                          <td className="px-3 py-2 text-gray-700">{b.date}</td>
-                                          <td className="px-3 py-2 text-gray-700">{b.time}</td>
-                                          <td className="px-3 py-2 text-gray-700">{b.class}</td>
-                                          <td className="px-3 py-2 text-gray-700">{b.name}</td>
-                                          <td className="px-3 py-2 text-gray-700">{b.email}</td>
+                                          <td className="px-3 py-2 text-gray-700 text-center">{b.date}</td>
+                                          <td className="px-3 py-2 text-gray-700 text-center">{b.time}</td>
+                                          <td className="px-3 py-2 text-gray-700 text-center">{b.class}</td>
+                                          <td className="px-3 py-2 text-gray-700 text-center">{b.name}</td>
+                                          <td className="px-3 py-2 text-gray-700 text-center">{b.email}</td>
                                         </tr>
                                       ))}
                                     </tbody>

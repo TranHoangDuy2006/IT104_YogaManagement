@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
+import '../Animations.css';
 
 type User = {
   id: string;
@@ -18,13 +19,7 @@ interface AddUserModalProps {
   setNewUser: React.Dispatch<React.SetStateAction<User>>;
 }
 
-const AddUserModal: React.FC<AddUserModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  newUser,
-  setNewUser,
-}) => {
+const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSubmit, newUser, setNewUser }) => {
   const [visible, setVisible] = useState(isOpen);
   const [closing, setClosing] = useState(false);
 
@@ -135,7 +130,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
 
           <div className="flex flex-col">
             <label className="text-base font-semibold text-gray-600 mb-2">
-              Role
+              Vai trò
             </label>
             <select
               value={newUser.role}
@@ -167,22 +162,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
         </form>
       </div>
 
-      <style>{`
-        @keyframes fade-in {
-          0% { opacity: 0; transform: scale(0.96); }
-          100% { opacity: 1; transform: scale(1); }
-        }
-        @keyframes fade-out {
-          0% { opacity: 1; transform: scale(1); }
-          100% { opacity: 0; transform: scale(0.95); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.3s cubic-bezier(.4,0,.2,1) forwards;
-        }
-        .animate-fade-out {
-          animation: fade-out 0.3s cubic-bezier(.4,0,.2,1) forwards;
-        }
-      `}</style>
+      {/* Animation CSS moved to Animations.css */}
     </div>
   );
 };
