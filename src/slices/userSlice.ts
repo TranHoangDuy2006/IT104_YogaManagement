@@ -1,4 +1,7 @@
-// Thêm user
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import type { User, UserState, LoginCredentials } from "../types/User";
+
 export const addUser = createAsyncThunk<User, User>(
   "user/addUser",
   async (user) => {
@@ -7,7 +10,6 @@ export const addUser = createAsyncThunk<User, User>(
   }
 );
 
-// Sửa user
 export const updateUser = createAsyncThunk<User, { id: string; user: Partial<User> }>(
   "user/updateUser",
   async ({ id, user }) => {
@@ -16,7 +18,6 @@ export const updateUser = createAsyncThunk<User, { id: string; user: Partial<Use
   }
 );
 
-// Xóa user
 export const deleteUser = createAsyncThunk<string, string>(
   "user/deleteUser",
   async (id) => {
@@ -24,10 +25,6 @@ export const deleteUser = createAsyncThunk<string, string>(
     return id;
   }
 );
-
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import type { User, UserState, LoginCredentials } from "../types/User";
 
 const initialState: UserState = {
   data: null,
@@ -93,5 +90,6 @@ const userSlice = createSlice({
       });
   }
 });
+
 export const { setUserFromLocalStorage } = userSlice.actions;
 export default userSlice.reducer;

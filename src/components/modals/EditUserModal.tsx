@@ -47,7 +47,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, onSubmit
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className={`bg-white rounded-2xl shadow-2xl p-8 w-full max-w-[520px] ${animationClass}`}>
+      <div className={`bg-white rounded-2xl shadow-2xl p-6 w-full max-w-[520px] ${animationClass}`}>
         <h3 className="text-3xl font-bold text-center text-gray-800 mb-8">
           Sửa thông tin người dùng
         </h3>

@@ -1,10 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  getBookingsByUser,
-  createBooking as apiCreateBooking,
-  updateBooking as apiUpdateBooking,
-  deleteBooking as apiDeleteBooking
-} from "../apis/api";
+import { getBookingsByUser, createBooking as apiCreateBooking, updateBooking as apiUpdateBooking, deleteBooking as apiDeleteBooking } from "../apis/api";
 
 export interface Booking {
   id?: number;
@@ -39,11 +34,11 @@ export const fetchBookingsByUser = createAsyncThunk<Booking[], number>(
 export const addBooking = createAsyncThunk<Booking, Booking, { rejectValue: string }>(
   "bookings/add",
   async (booking, { rejectWithValue }) => {
-    // Kiểm tra dữ liệu không trống
+
     if (!booking.class || !booking.date || !booking.time) {
       return rejectWithValue("Vui lòng nhập đầy đủ thông tin!");
     }
-    // Kiểm tra trùng lặp sẽ thực hiện ở component trước khi gọi thunk
+
     const response = await apiCreateBooking(booking);
     return response.data;
   }

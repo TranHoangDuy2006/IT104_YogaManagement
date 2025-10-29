@@ -1,15 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, Fragment } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchServices, addService, updateService, deleteService } from "../slices/servicesSlice";
 import type { Service } from "../types/Service";
 import type { Course } from "../types/Course";
-import { getServices, createService, updateService, getCourses } from "../apis/api";
-import AddServiceModal from "../components/modals/AddServiceModal";
+import { getCourses } from "../apis/api";
+import AddServiceModal from "../components/modals/ServiceModal";
 import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
-import EditCoursesForServiceModal from "../components/modals/EditCoursesForServiceModal";
+import EditCoursesForServiceModal from "../components/modals/EditCourseForServiceModal";
 
 function ServicesManagementPage() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
-  const [services, setServices] = useState<Service[]>([]);
+    const dispatch: any = useDispatch();
+    const services = useSelector((state: any) => state.services.data) as Service[];
   const [courses, setCourses] = useState<Course[]>([]);
   const [editService, setEditService] = useState<Service | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,14 +25,7 @@ function ServicesManagementPage() {
   const [openDropdowns, setOpenDropdowns] = useState<{[id: string]: boolean}>({});
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await getServices();
-        setServices(response.data);
-      } catch (e) {
-        console.error("Cannot load services", e);
-      }
-    };
+    dispatch(fetchServices());
     const fetchCourses = async () => {
       try {
         const response = await getCourses();
@@ -37,45 +34,30 @@ function ServicesManagementPage() {
         console.error("Cannot load courses", e);
       }
     };
-    fetchServices();
     fetchCourses();
-  }, []);
+  }, [dispatch]);
 
   const handleAddService = async (service: Omit<Service, "id">) => {
     if (editService) {
-      try {
-        const response = await updateService(editService.id, service);
-        const updatedService: Service = response.data;
-        setServices((prev) =>
-          prev.map((s) => (s.id === editService.id ? updatedService : s))
-        );
-        setEditService(null);
-        setIsModalOpen(false);
-        setSuccessMsg("Sửa dịch vụ thành công");
-        setShowSuccess(true);
-        setTimeout(() => setShowSuccess(false), 2000);
-      } catch (e) {
-        console.error("Cannot update service", e);
-      }
+      await dispatch(updateService({ id: editService.id, service }));
+      setEditService(null);
+      setIsModalOpen(false);
+      setSuccessMsg("Sửa dịch vụ thành công");
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 2000);
     } else {
-      try {
-        const response = await createService(service);
-        const newService: Service = response.data;
-        setServices((prev) => [...prev, newService]);
-        setIsModalOpen(false);
-        setSuccessMsg("Thêm dịch vụ thành công");
-        setShowSuccess(true);
-        setTimeout(() => setShowSuccess(false), 2000);
-      } catch (e) {
-        console.error("Cannot create new service", e);
-      }
+      await dispatch(addService(service));
+      setIsModalOpen(false);
+      setSuccessMsg("Thêm dịch vụ thành công");
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 2000);
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
       {showSuccess && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+        <div className="fixed top-6 left-1/2 translate-x-1/2.5 z-50 animate-fade-in">
           <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
             <i className="fa-solid fa-circle-check text-xl mr-2"></i>
             <span>{successMsg}</span>
@@ -84,7 +66,7 @@ function ServicesManagementPage() {
       )}
 
       <main className="flex-1 bg-[#f9fafb] font-[inter]">
-        <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 bg-[#f9fafb]">
           <h1 className="text-[28px] font-bold">Quản lý dịch vụ</h1>
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-5 py-2 shadow transition-all w-[220px] h-[40px] text-[17px] font-medium transform hover:scale-105 hover:shadow-lg hover:-translate-y-1 duration-200 hover:cursor-pointer"
@@ -150,7 +132,7 @@ function ServicesManagementPage() {
                           disabled={service.isActive === false}
                         >
                           <i className="fa-solid fa-list-check fa-lg mr-1"></i>{" "}
-                          Quản lý khoá học
+                          Các khoá học
                         </button>
 
                         <button
@@ -218,11 +200,9 @@ function ServicesManagementPage() {
               <ConfirmDeleteModal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
-                onConfirm={() => {
+                onConfirm={async () => {
                   if (serviceToDelete !== null) {
-                    setServices((prev) =>
-                      prev.filter((s) => s.id !== serviceToDelete)
-                    );
+                    await dispatch(deleteService(serviceToDelete));
                   }
                   setIsDeleteModalOpen(false);
                   setServiceToDelete(null);
@@ -252,24 +232,12 @@ function ServicesManagementPage() {
           selectedCourseIds={editCoursesService?.courses || []}
           onSave={async (selectedCourseIds) => {
             if (!editCoursesService) return;
-            try {
-              const response = await updateService(editCoursesService.id, {
-                courses: selectedCourseIds,
-              });
-              const updatedService: Service = response.data;
-              setServices((prev) =>
-                prev.map((s) =>
-                  s.id === editCoursesService.id ? updatedService : s
-                )
-              );
-              setIsEditCoursesModalOpen(false);
-              setEditCoursesService(null);
-              setSuccessMsg("Cập nhật khoá học cho dịch vụ thành công");
-              setShowSuccess(true);
-              setTimeout(() => setShowSuccess(false), 2000);
-            } catch (e) {
-              console.error("Không thể cập nhật khoá học cho dịch vụ", e);
-            }
+            await dispatch(updateService({ id: editCoursesService.id, service: { courses: selectedCourseIds } }));
+            setIsEditCoursesModalOpen(false);
+            setEditCoursesService(null);
+            setSuccessMsg("Cập nhật khoá học cho dịch vụ thành công");
+            setShowSuccess(true);
+            setTimeout(() => setShowSuccess(false), 2000);
           }}
         />
       </main>

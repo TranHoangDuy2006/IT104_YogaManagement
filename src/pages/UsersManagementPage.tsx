@@ -95,7 +95,7 @@ export default function UserManagementPage() {
       <main className="flex-1">
         {location.pathname === "/admin/users-management" && (
           <>
-            <h2 className="text-[29px] font-bold mb-6">Quản lý người dùng</h2>
+            <h2 className="text-[29px] font-bold mb-6 bg-gray-50">Quản lý người dùng</h2>
 
             <div className="bg-white rounded-lg shadow p-6 mb-8">
               <div className="flex justify-between items-center mb-4">
@@ -226,7 +226,7 @@ export default function UserManagementPage() {
                                   expandedUserId === u.id ? "text-gray-500" : "text-blue-500"
                                 }`}
                               />
-                              {expandedUserId === u.id ? "Ẩn Lịch" : "Mở Lịch"}
+                              {expandedUserId === u.id ? "Ẩn Lịch Tập" : "Mở Lịch Tập"}
                             </button>
                           </div>
                         </td>

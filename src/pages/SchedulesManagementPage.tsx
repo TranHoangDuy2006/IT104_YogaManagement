@@ -129,35 +129,32 @@ export default function SchedulesManagementPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
       <main className="flex-1 bg-[#f9fafb]">
-        <h1 className="text-[29px] font-bold mb-4">Thống kê lịch tập</h1>
+      <h1 className="text-[29px] font-bold mb-4 bg-[#f9fafb]">Thống kê lịch tập</h1>
 
         <div
-          className="grid gap-4 mb-6 overflow-x-auto pb-2"
+          className="grid gap-4 mb-6 overflow-x-auto pb-2 top-[56px] z-20"
           style={{
-            gridTemplateColumns: `repeat(${courses.length}, minmax(220px, 1fr))`,
+            gridTemplateColumns: `repeat(3, minmax(220px, 1fr))`,
           }}
         >
-          {courseStats.map((c, idx) => (
-            <div
-              key={c.name}
-              className="bg-white rounded-lg shadow p-6 flex flex-col items-start min-w-[220px]"
-            >
-              <span className="text-[20px] font-semibold mb-2">
-                Tổng số lịch {c.name}
-              </span>
-              <span
-                className={`text-3xl font-bold ${
-                  idx % 3 === 0
-                    ? "text-blue-600"
-                    : idx % 3 === 1
-                    ? "text-green-600"
-                    : "text-purple-600"
-                }`}
+          {(() => {
+            const colorClasses = ["text-blue-600","text-green-600","text-purple-600","text-red-600","text-yellow-500","text-pink-500","text-orange-500","text-teal-600","text-indigo-600","text-gray-700"];
+            return courseStats.map((c, idx) => (
+              <div
+                key={c.name}
+                className="bg-white rounded-lg shadow p-6 flex flex-col items-start min-w-[220px]"
               >
-                {c.count}
-              </span>
-            </div>
-          ))}
+                <span className="text-[20px] font-semibold mb-2">
+                  Tổng số lịch {c.name}
+                </span>
+                <span
+                  className={`text-3xl font-bold ${colorClasses[idx % colorClasses.length]}`}
+                >
+                  {c.count}
+                </span>
+              </div>
+            ));
+          })()}
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow mb-6 flex justify-center">
@@ -169,14 +166,7 @@ export default function SchedulesManagementPage() {
                   {
                     label: "Số lượng lịch đặt",
                     data: courseStats.map((c) => c.count),
-                    backgroundColor: [
-                      "rgba(96,165,250,0.5)",
-                      "rgba(74,222,128,0.4)",
-                      "rgba(192,132,252,0.4)",
-                      "rgba(239,68,68,0.4)",
-                      "rgba(253,224,71,0.4)",
-                      "rgba(34,197,94,0.4)",
-                    ],
+                    backgroundColor: ["rgba(96,165,250,0.5)","rgba(74,222,128,0.4)","rgba(192,132,252,0.4)","rgba(239,68,68,0.4)","rgba(253,224,71,0.4)","rgba(236,72,153,0.4)","rgba(251,146,60,0.4)","rgba(20,184,166,0.4)","rgba(99,102,241,0.4)","rgba(55,65,81,0.4)"], 
                     borderWidth: 2,
                   },
                 ],

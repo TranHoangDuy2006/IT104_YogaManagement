@@ -27,3 +27,6 @@ export const updateService = (id: string, service: Partial<Service>) => axios.pa
 
 // COURSES
 export const getCourses = () => axios.get<Course[]>(`${API_BASE}/courses`);
+export const createCourse = (course: Omit<Course, "id">) => axios.post<Course>(`${API_BASE}/courses`, course);
+export const updateCourse = (id: string, course: Partial<Course>) => axios.patch<Course>(`${API_BASE}/courses/${id}`, course);
+export const deleteCourse = (id: string) => axios.delete(`${API_BASE}/courses/${id}`);

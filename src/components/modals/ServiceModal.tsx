@@ -110,7 +110,7 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSa
 
         <div className="mb-6">
           <label className="block font-semibold mb-2 text-gray-700">
-            URL Hình ảnh
+            URL hình ảnh
           </label>
           <input
             type="text"

@@ -41,11 +41,11 @@
       "role": "user"
     },
     {
-      "id": "",
+      "id": "1761704873737",
       "fullName": "Nguyễn Hoàng Thuỳ Linh",
       "email": "linhthuy2210@gmail.com",
-      "password": "linh123456",
-      "confirmPassword": "linh123456",
+      "password": "linhthuy123456",
+      "confirmPassword": "linhthuy123456",
       "role": "user"
     }
   ],
@@ -85,6 +85,24 @@
       "name": "CrossFit",
       "description": "Bài tập cường độ cao đa dạng và thử thách",
       "image": "https://www.wheystore.vn/upload/news_optimize/wst_1603445576_crossfit_la_gi__8_dieu_ban_can_biet_truoc_khi_tap_crossfit_image_1603445576_1.jpg"
+    },
+    {
+      "id": "f469",
+      "name": "Pilates",
+      "description": "Bài tập tăng cường cơ trung tâm, cải thiện tư thế và sự thăng bằng",
+      "image": "https://cdn.unityfitness.vn/2025/03/Cac-bai-tap-Pilates.jpg"
+    },
+    {
+      "id": "94ce",
+      "name": "BodyPump",
+      "description": "Bài tập với tạ nhẹ và lặp lại nhiều lần giúp săn chắc cơ thể",
+      "image": "https://images.squarespace-cdn.com/content/v1/60b770454e1e5542857bb262/1628844487930-Q2EH4DHBYBL1J196KVLD/BODYPUMP+960x540.jpg"
+    },
+    {
+      "id": "888c",
+      "name": "Stretching",
+      "description": "Tập trung vào kéo giãn toàn thân, giảm đau nhức và tăng phạm vi chuyển động",
+      "image": "https://thethaothientruong.vn/wp-content/uploads/2025/07/Stretching-la-gi-1.jpg"
     }
   ],
   "bookings": [
@@ -134,29 +152,11 @@
       "email": "huygunpow1609@gmail.com"
     },
     {
-      "id": "9059",
-      "userId": "1761066434315",
-      "class": "Sauna",
-      "date": "2006-09-22",
-      "time": "7:00 - 8:00",
-      "name": "Phạm Hoàng Trúc Đan",
-      "email": "LilianaNuThanF1@gmail.com"
-    },
-    {
       "id": "f188",
       "userId": "1761066434315",
       "class": "Aerobic",
       "date": "2006-09-08",
       "time": "17:00 - 18:00",
-      "name": "Phạm Hoàng Trúc Đan",
-      "email": "LilianaNuThanF1@gmail.com"
-    },
-    {
-      "id": "3002",
-      "userId": "1761066434315",
-      "class": "Sauna",
-      "date": "2006-01-31",
-      "time": "18:00 - 19:00",
       "name": "Phạm Hoàng Trúc Đan",
       "email": "LilianaNuThanF1@gmail.com"
     },
@@ -183,15 +183,6 @@
       "userId": "a9d1",
       "class": "Boxing",
       "date": "2006-06-12",
-      "time": "6:00 - 7:00",
-      "name": "Trần Hoàng Duy",
-      "email": "duyhoangtran2006@gmail.com"
-    },
-    {
-      "id": "2061",
-      "userId": "a9d1",
-      "class": "Mediatation",
-      "date": "2006-03-09",
       "time": "6:00 - 7:00",
       "name": "Trần Hoàng Duy",
       "email": "duyhoangtran2006@gmail.com"
@@ -231,6 +222,15 @@
       "time": "6:00 - 7:00",
       "name": "Trần Minh Đức",
       "email": "ductranminh2006@gmail.com"
+    },
+    {
+      "id": "473a",
+      "userId": "1761704873737",
+      "class": "Mediatation",
+      "date": "2006-03-11",
+      "time": "7:00 - 8:00",
+      "name": "Nguyễn Hoàng Thuỳ Linh",
+      "email": "linhthuy2210@gmail.com"
     }
   ],
   "services": [

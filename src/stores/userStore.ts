@@ -1,5 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "../slices/userSlice";
+import coursesReducer from "../slices/coursesSlice";
+import servicesReducer from "../slices/servicesSlice";
 import bookingReducer from "../slices/bookingSlice";
 import bookingsAllReducer from "../slices/bookingsAllSlice";
 
@@ -8,6 +10,8 @@ const store = configureStore({
   user: userReducer,
   bookings: bookingReducer,
   bookingsAll: bookingsAllReducer,
+  courses: coursesReducer,
+  services: servicesReducer,
   },
 });
 

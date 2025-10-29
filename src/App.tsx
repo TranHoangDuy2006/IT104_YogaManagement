@@ -11,6 +11,7 @@ const BookingPage = lazy(() => import("./pages/BookingPage"));
 const ServicesManagementPage = lazy(() => import("./pages/ServicesManagementPage"));
 const SchedulesManagementPage = lazy(() => import("./pages/SchedulesManagementPage"));
 const UsersManagementPage = lazy(() => import("./pages/UsersManagementPage"));
+const ClassesManagementPage = lazy(() => import("./pages/ClassesManagementPage"));
 const NotFound = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="schedules-management" element={<SchedulesManagementPage />} />
           <Route path="services-management" element={<ServicesManagementPage />} />
           <Route path="users-management" element={<UsersManagementPage />} />
+          <Route path="classes-management" element={<ClassesManagementPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
         <Route path="/bookings" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />

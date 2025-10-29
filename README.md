@@ -12,6 +12,13 @@
 - Hiệu ứng animation cho thông báo, modal, sidebar
 - Sử dụng Redux Toolkit, React Router, TailwindCSS, FontAwesome
 
+## Tiến trình ngày 30/10/2025
+
+- Hoàn thiện CRUD lớp học và dịch vụ sử dụng createAsyncThunk (Redux Toolkit), chuẩn REST API (POST/PATCH/DELETE)
+- Fix lỗi Redux: thêm reducer cho courses/services vào store
+- Kiểm tra và xác nhận logic BookingPage
+- Cập nhật UI NotFoundPage
+
 ## Hướng dẫn sử dụng
 
 1. Cài dependencies: `npm install`

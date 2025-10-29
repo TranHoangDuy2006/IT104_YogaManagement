@@ -176,7 +176,6 @@ export default function BookingPage() {
             )}
           </div>
 
-          {/* Pagination */}
           {currentItems.length > 0 && (
             <div className="flex justify-center items-center mt-6 gap-1">
               <button
