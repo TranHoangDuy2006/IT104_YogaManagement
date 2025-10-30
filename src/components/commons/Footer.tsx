@@ -5,8 +5,7 @@ export default function Footer() {
         <div>
           <h4 className="mb-2 text-2xl font-bold mt-6">Về chúng tôi</h4>
           <p className="text-base font-normal text-gray-400 leading-relaxed">
-            Gym Management – Nơi bạn bắt đầu hành trình fitness của mình với các trang thiết bị hiện đại
-            và đội ngũ huấn luyện viên chuyên nghiệp.
+            Gym Management – Nơi bạn bắt đầu hành trình fitness của mình với các trang thiết bị hiện đại và đội ngũ huấn luyện viên chuyên nghiệp.
           </p>
         </div>
 

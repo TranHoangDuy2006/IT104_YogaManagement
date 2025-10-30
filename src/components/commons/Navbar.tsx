@@ -55,7 +55,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
   return (
   <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-[#1f2630] text-white h-14 select-none shadow">
       {showLogoutMsg && (
-        <div className="fixed top-1 left-1/2 -translate-x-1/2 z-[9999] animate-fade-in">
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[9999] animate-fade-in">
           <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
             <i className="fa-solid fa-circle-check text-xl mr-2"></i>
             <span>Đã đăng xuất</span>

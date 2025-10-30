@@ -47,6 +47,14 @@
       "password": "linhthuy123456",
       "confirmPassword": "linhthuy123456",
       "role": "user"
+    },
+    {
+      "id": "",
+      "fullName": "Trần Hữu Trung Phong",
+      "email": "Phongtran2006@gmail.com",
+      "password": "phong123456",
+      "confirmPassword": "phong123456",
+      "role": "user"
     }
   ],
   "courses": [
@@ -156,7 +164,7 @@
       "userId": "1761066434315",
       "class": "Aerobic",
       "date": "2006-09-08",
-      "time": "17:00 - 18:00",
+      "time": "18:00 - 19:00",
       "name": "Phạm Hoàng Trúc Đan",
       "email": "LilianaNuThanF1@gmail.com"
     },
@@ -206,15 +214,6 @@
       "email": "cuongliam2006@gmail.com"
     },
     {
-      "id": "44fa",
-      "userId": "363c",
-      "class": "Boxing",
-      "date": "2006-12-30",
-      "time": "8:00 - 9:00",
-      "name": "Trần Minh Đức",
-      "email": "ductranminh2006@gmail.com"
-    },
-    {
       "id": "b3e0",
       "userId": "363c",
       "class": "Sauna",
@@ -224,15 +223,6 @@
       "email": "ductranminh2006@gmail.com"
     },
     {
-      "id": "473a",
-      "userId": "1761704873737",
-      "class": "Mediatation",
-      "date": "2006-03-11",
-      "time": "7:00 - 8:00",
-      "name": "Nguyễn Hoàng Thuỳ Linh",
-      "email": "linhthuy2210@gmail.com"
-    },
-    {
       "id": "10cf",
       "userId": "1761215969642",
       "class": "CrossFit",
@@ -240,6 +230,60 @@
       "time": "7:00 - 8:00",
       "name": "Đoàn Nhật Cường",
       "email": "cuongliam2006@gmail.com"
+    },
+    {
+      "id": "cc8a",
+      "userId": "1761215969642",
+      "class": "CrossFit",
+      "date": "2006-01-09",
+      "time": "17:00 - 18:00",
+      "name": "Đoàn Nhật Cường",
+      "email": "cuongliam2006@gmail.com"
+    },
+    {
+      "id": "d7bc",
+      "userId": "1761215969642",
+      "class": "Stretching",
+      "date": "2006-03-28",
+      "time": "7:00 - 8:00",
+      "name": "Đoàn Nhật Cường",
+      "email": "cuongliam2006@gmail.com"
+    },
+    {
+      "id": "a6c2",
+      "userId": "1761215969642",
+      "class": "Pilates",
+      "date": "2006-01-18",
+      "time": "8:00 - 9:00",
+      "name": "Đoàn Nhật Cường",
+      "email": "cuongliam2006@gmail.com"
+    },
+    {
+      "id": "ff17",
+      "userId": "363c",
+      "class": "CrossFit",
+      "date": "2006-12-12",
+      "time": "7:00 - 8:00",
+      "name": "Trần Minh Đức",
+      "email": "ductranminh2006@gmail.com"
+    },
+    {
+      "id": "a89b",
+      "userId": "363c",
+      "class": "BodyPump",
+      "date": "2006-06-07",
+      "time": "6:00 - 7:00",
+      "name": "Trần Minh Đức",
+      "email": "ductranminh2006@gmail.com"
+    },
+    {
+      "id": "99d2",
+      "userId": "363c",
+      "class": "Pilates",
+      "date": "2006-12-31",
+      "time": "18:00 - 19:00",
+      "name": "Trần Minh Đức",
+      "email": "ductranminh2006@gmail.com"
     }
   ],
   "services": [
@@ -248,7 +292,7 @@
       "name": "Gym",
       "description": "Rèn luyện tâm trí và giảm căng thẳng",
       "imageUrl": "https://www.verywellmind.com/thmb/MQWhY7u5mTDfaO4vgDHRvnHYcaA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-938890492-becc3fc4757849bea672f148454943f9.jpg",
-      "isActive": false,
+      "isActive": true,
       "courses": [
         "ce86",
         "94ce"

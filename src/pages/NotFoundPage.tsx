@@ -25,7 +25,7 @@ export default function NotFound() {
             <span
               key={i}
               className="text-[110px] font-extrabold bg-gradient-to-br from-red-500 via-red-600 to-red-700 bg-clip-text text-transparent drop-shadow-lg animate-bounce"
-              style={{ animationDelay: `${i * 0.2}s` }}
+              style={{ animationDelay: `${i * 0.8}s` }}
             >
               {n}
             </span>

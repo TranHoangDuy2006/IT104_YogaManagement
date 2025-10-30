@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form"
+import '../Animations.css';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 
@@ -25,22 +26,6 @@ function Notification({ message, show }: { message: string, show: boolean }) {
         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
         <span>{message}</span>
       </div>
-      <style>{`
-        @keyframes fade-in {
-          0% { opacity: 0; transform: translateY(-10px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fade-out {
-          0% { opacity: 1; transform: translateY(0); }
-          100% { opacity: 0; transform: translateY(-10px); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.4s cubic-bezier(.4,0,.2,1) forwards;
-        }
-        .animate-fade-out {
-          animation: fade-out 0.4s cubic-bezier(.4,0,.2,1) forwards;
-        }
-      `}</style>
     </div>
   );
 }
@@ -65,6 +50,11 @@ const schema = yup.object({
 export default function RegisterForm() {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+  React.useEffect(() => {
+    if (localStorage.getItem('currentUser')) {
+      localStorage.removeItem('currentUser');
+    }
+  }, []);
   const [isDelay, setIsDelay] = useState(false)
   const [localLoading, setLocalLoading] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
@@ -103,7 +93,7 @@ export default function RegisterForm() {
   const onSubmit = async (data: RegisterFormData) => {
     setLocalLoading(true);
     setErrorMsg("");
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     const userWithRole = { ...data, role: "user", id: "" };
     const rs = await dispatch(registerUser(userWithRole));
     setLocalLoading(false);
@@ -115,10 +105,12 @@ export default function RegisterForm() {
       setTimeout(() => {
         setShowSuccess(false);
         navigate("/");
-      }, 1800);
+      }, 2000);
     } else if (registerUser.rejected.match(rs)) {
       setErrorMsg(rs.payload as string || "Đăng ký thất bại!");
       reset();
+      setPasswordValue("");
+      setConfirmPasswordValue("");
     }
   };
 
@@ -226,7 +218,7 @@ export default function RegisterForm() {
                   : 'bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white focus:ring-2 focus:ring-blue-400 active:scale-95 hover:scale-105 hover:shadow-lg hover:cursor-pointer'}
               `}
             >
-              <i className="fa-solid fa-clipboard-list mr-1.5"></i>
+              {!localLoading && <i className="fa-solid fa-clipboard-list mr-1.5"></i>}
               {localLoading && (
                 <span className="w-5 h-5 border-2 border-t-2 border-t-white border-blue-500 rounded-full animate-spin inline-block"></span>
               )}

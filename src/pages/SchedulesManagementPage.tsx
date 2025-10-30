@@ -1,5 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { usePagination } from "../hooks/usePagination";
 import { useState, useEffect, useRef } from "react";
+import React from "react";
+function Notification({ message, show }: { message: string, show: boolean }) {
+  const [visible, setVisible] = React.useState(true);
+  React.useEffect(() => {
+    if (!show) {
+      setTimeout(() => setVisible(false), 400);
+    } else {
+      setVisible(true);
+    }
+  }, [show]);
+  if (!visible) return null;
+  return (
+    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50">
+      <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
+        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+        <span>{message}</span>
+      </div>
+    </div>
+  );
+}
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Pie } from "react-chartjs-2";
@@ -74,16 +95,14 @@ export default function SchedulesManagementPage() {
     return matchClass && matchEmail && matchDate;
   });
 
-  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
-
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) setCurrentPage(page);
-  };
+  const {
+    currentPage,
+    totalPages,
+    currentItems,
+    handlePageChange,
+    setCurrentPage,
+  } = usePagination(filteredBookings, itemsPerPage);
 
   const courseStats = courses.map((course) => ({
     name: course.name,
@@ -117,17 +136,23 @@ export default function SchedulesManagementPage() {
     dispatch(fetchAllBookings());
   };
 
+  const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
+  const [deleteSuccessMsg, setDeleteSuccessMsg] = useState("");
   const handleConfirmDelete = async () => {
     if (deleteBookingId != null) {
       await dispatch(deleteBooking(deleteBookingId));
       setDeleteModalOpen(false);
       setDeleteBookingId(null);
+      setDeleteSuccessMsg("Xóa lịch tập thành công!");
+      setShowDeleteSuccess(true);
+      setTimeout(() => setShowDeleteSuccess(false), 2000);
       dispatch(fetchAllBookings());
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
+      {showDeleteSuccess && <Notification message={deleteSuccessMsg} show={showDeleteSuccess} />}
       <main className="flex-1 bg-[#f9fafb]">
       <h1 className="text-[29px] font-bold mb-4 bg-[#f9fafb]">Thống kê lịch tập</h1>
 
@@ -258,13 +283,13 @@ export default function SchedulesManagementPage() {
                     <td className="px-4 py-3 border-t border-gray-200 text-center">{item.email}</td>
                     <td className="px-4 py-3 border-t border-gray-200 text-center">
                       <button
-                        className="mr-3 px-4 py-1 rounded-lg bg-blue-100 text-blue-600 font-semibold hover:bg-blue-500 hover:text-white hover:cursor-pointer"
+                        className="mr-3 px-4 py-1 rounded-lg bg-blue-100 text-blue-600 font-semibold hover:bg-blue-500 hover:text-white hover:cursor-pointer transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
                         onClick={() => handleEdit(item)}
                       >
                         <i className="fa-solid fa-pen-to-square mr-1"></i> Sửa
                       </button>
                       <button
-                        className="px-4 py-1 rounded-lg bg-red-100 text-red-600 font-semibold hover:bg-red-500 hover:text-white hover:cursor-pointer"
+                        className="px-4 py-1 rounded-lg bg-red-100 text-red-600 font-semibold hover:bg-red-500 hover:text-white hover:cursor-pointer transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
                         onClick={() => handleDelete(item)}
                       >
                         <i className="fa-solid fa-trash mr-1"></i> Xóa

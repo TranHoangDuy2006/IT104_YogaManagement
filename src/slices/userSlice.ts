@@ -49,6 +49,15 @@ export const loginUser = createAsyncThunk<User, LoginCredentials, { rejectValue:
   "user/loginUser",
   async (credentials, { rejectWithValue }) => {
     try {
+      // Kiểm tra email có tồn tại không
+      const emailRes = await axios.get<User[]>(
+        "http://localhost:1904/users",
+        { params: { email: credentials.email } }
+      );
+      if (emailRes.data.length === 0) {
+        return rejectWithValue("Email không tồn tại!");
+      }
+      // Kiểm tra mật khẩu
       const response = await axios.get<User[]>(
         "http://localhost:1904/users",
         { params: { email: credentials.email, password: credentials.password } }
@@ -56,7 +65,7 @@ export const loginUser = createAsyncThunk<User, LoginCredentials, { rejectValue:
       if (response.data.length > 0) {
         return response.data[0];
       } else {
-        return rejectWithValue("Sai email hoặc mật khẩu!");
+        return rejectWithValue("Mật khẩu không đúng!");
       }
     } catch {
       return rejectWithValue("Sai email hoặc mật khẩu!");
@@ -80,13 +89,16 @@ const userSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      // ...existing builder logic...
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
         state.error = null;
-        // Lưu user vào localStorage
         localStorage.setItem("currentUser", JSON.stringify(action.payload));
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.data = null;
+        state.error = action.payload || "Sai email hoặc mật khẩu!";
       });
   }
 });

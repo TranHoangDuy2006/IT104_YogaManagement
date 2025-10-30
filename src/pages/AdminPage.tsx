@@ -21,7 +21,7 @@ export default function AdminPage() {
       <Sidebar setShowLogoutMsg={setShowLogoutMsg} />
       <main className="flex-1 p-8 overflow-y-auto max-h-screen">
         {showLogoutMsg && (
-          <div className="fixed top-2 left-[55%] -translate-x-1/2 z-[9999] animate-fade-in">
+          <div className="fixed top-5 left-[55%] -translate-x-1/2 z-[9999] animate-fade-in">
             <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
               <i className="fa-solid fa-circle-check text-xl mr-2"></i>
               <span>Đã đăng xuất</span>
@@ -31,11 +31,15 @@ export default function AdminPage() {
         {location.pathname === '/admin' ? (
           <div className="bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-2xl shadow-2xl p-10 min-h-[400px] flex flex-col items-center justify-center border border-blue-200 animate-fade-in select-none">
             <div className="flex items-center gap-3 mb-6">
-              <span className="text-3xl text-blue-500"><i className="fa-solid fa-user-shield" /></span>
-              <h2 className="text-2xl font-extrabold text-blue-700 tracking-wide drop-shadow">
-                Chào mừng, Admin
-                {userName && <span className="text-red-500"> {userName}</span>}
-              </h2>
+              {!showLogoutMsg && (
+                <>
+                  <span className="text-3xl text-blue-500"><i className="fa-solid fa-user-shield" /></span>
+                  <h2 className="text-2xl font-extrabold text-blue-700 tracking-wide drop-shadow">
+                    Chào mừng, Admin
+                    {userName && <span className="text-red-500"> {userName}</span>}
+                  </h2>
+                </>
+              )}
             </div>
             <p className="text-lg text-gray-700 mb-4 text-center">Sử dụng <span className="font-semibold text-blue-500">Sidebar</span> bên trái để chuyển giữa các chức năng quản lý:</p>
               <ul className="list-none w-full max-w-xl mb-6 flex flex-col gap-3">

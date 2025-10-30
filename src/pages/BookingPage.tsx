@@ -8,6 +8,7 @@ import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
 import { fetchBookingsByUser, addBooking, updateBooking, deleteBooking } from "../slices/bookingSlice";
 import { usePagination } from "../hooks/usePagination";
 import Footer from "../components/commons/Footer";
+import { useLocation } from "react-router-dom";
 
 import '../components/Animations.css';
 
@@ -23,7 +24,7 @@ function Notification({ message, show }: { message: string, show: boolean }) {
   }, [show]);
   if (!visible) return null;
   return (
-    <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50">
+    <div className="fixed top-18 left-1/2 -translate-x-1/2 z-50">
       <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
         <span>{message}</span>
@@ -33,6 +34,10 @@ function Notification({ message, show }: { message: string, show: boolean }) {
 }
 
 export default function BookingPage() {
+  const location = useLocation();
+  // Lấy id lớp học từ hash nếu có
+  const defaultClassId = location.hash ? location.hash.replace('#', '') : "";
+  const [defaultClassName, setDefaultClassName] = useState("");
   const dispatch = useDispatch<AppDispatch>();
 
   const userStr = localStorage.getItem("currentUser");
@@ -60,6 +65,7 @@ export default function BookingPage() {
   const handleCloseForm = () => {
     setShowForm(false);
     setEditBooking(null);
+  setDefaultClassName("");
   };
 
   const handleSave = async (data: any) => {
@@ -119,6 +125,17 @@ export default function BookingPage() {
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 hover:scale-105 hover:cursor-pointer w-[167px] h-[40px] text-[19.6px]"
               onClick={() => {
+                // Nếu có defaultClassId, tìm tên lớp học tương ứng
+                if (defaultClassId) {
+                  // Giả sử bookings có trường class là tên lớp, nhưng cần lấy từ danh sách lớp học
+                  // Nếu có danh sách lớp học trong Redux, nên lấy từ đó. Nếu không, lấy từ bookings
+                  const found = bookings.find(b => b.class === defaultClassId || b.class === defaultClassName);
+                  if (found) {
+                    setDefaultClassName(found.class);
+                  } else {
+                    setDefaultClassName(defaultClassId);
+                  }
+                }
                 setShowForm(true);
                 setEditBooking(null);
               }}
@@ -224,6 +241,7 @@ export default function BookingPage() {
             bookings={bookings}
             currentUserId={currentUserId}
             booking={editBooking}
+            defaultClassName={defaultClassName}
           />
         )}
 

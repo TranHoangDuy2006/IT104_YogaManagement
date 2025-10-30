@@ -10,6 +10,7 @@ interface BookingModalProps {
   onSave: (data: Booking) => void;
   onClose: () => void;
   currentUserId: number;
+  defaultClassName?: string;
 }
 
 const timeOptions = [
@@ -21,7 +22,7 @@ const timeOptions = [
   { value: "18:00 - 19:00", label: "18:00 - 19:00" },
 ];
 
-export default function BookingModal({ booking, bookings, onSave, onClose, currentUserId }: BookingModalProps) {
+export default function BookingModal({ booking, bookings, onSave, onClose, currentUserId, defaultClassName }: BookingModalProps) {
   const [classType, setClassType] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -43,14 +44,19 @@ export default function BookingModal({ booking, bookings, onSave, onClose, curre
         );
         const options = allCourses
           .filter(course => activeCourseIds.has(course.id))
-          .map(course => ({ value: course.name, label: course.name }));
+          .map(course => ({ value: course.name, label: course.name, id: course.id }));
         setClassOptions([{ value: "", label: "Chọn lớp học" }, ...options]);
+
+        if (!booking && defaultClassName) {
+          const found = options.find(opt => opt.id === defaultClassName || opt.value === defaultClassName);
+          if (found) setClassType(found.value);
+        }
       } catch {
         setClassOptions([{ value: "", label: "Chọn lớp học" }]);
       }
     }
     fetchClassOptions();
-  }, []);
+  }, [booking, defaultClassName]);
 
   useEffect(() => {
     if (booking) {

@@ -43,19 +43,44 @@ const schema = yup.object({
 export default function LoginForm() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  React.useEffect(() => {
+    if (localStorage.getItem('currentUser')) {
+      localStorage.removeItem('currentUser');
+    }
+  }, []);
   const { error } = useSelector((state: RootState) => state.user);
-  const [isDelay, setIsDelay] = useState(false);
-  const [localLoading, setLocalLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [passwordValue, setPasswordValue] = useState("");
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm<LoginFormData>({ resolver: yupResolver(schema) });
+
+  let emailError = errors.email?.message || "";
+  let passwordError = errors.password?.message || "";
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  if (error) {
+    const err = error.toLowerCase();
+    if (
+      err.includes("email") ||
+      err.includes("địa chỉ") ||
+      err.includes("không tìm thấy") ||
+      err.includes("tồn tại") ||
+      err.includes("hợp lệ")
+    ) {
+      emailError = error;
+    } else if (err.includes("mật khẩu") || err.includes("password")) {
+      passwordError = error;
+    } else {
+      passwordError = error;
+    }
+  }
+  const [isDelay, setIsDelay] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const onSubmit = async (data: LoginFormData) => {
     setLocalLoading(true);
@@ -64,9 +89,8 @@ export default function LoginForm() {
     setLocalLoading(false);
     
     if (loginUser.fulfilled.match(result)) {
-      setShowSuccess(true);
-      reset(); 
-      setPasswordValue("");
+  setShowSuccess(true);
+  reset();
       setTimeout(() => {
         setShowSuccess(false);
 
@@ -108,11 +132,13 @@ export default function LoginForm() {
               <input
                 type="email"
                 {...register("email")}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className={`w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none ${emailError && !emailFocused ? 'border-red-500' : 'border-gray-300'}`}
                 placeholder="Nhập địa chỉ email..."
                 autoComplete="email"
+                onFocus={() => setEmailFocused(true)}
+                onBlur={() => setEmailFocused(false)}
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+              {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
             </div>
 
             <div>
@@ -121,32 +147,28 @@ export default function LoginForm() {
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none pr-10"
+                  className={`w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none pr-10 ${passwordError && !passwordFocused ? 'border-red-500' : 'border-gray-300'}`}
                   autoComplete="current-password"
                   placeholder="Nhập mật khẩu..."
-                  value={passwordValue}
-                  onChange={e => setPasswordValue(e.target.value)}
+                  onFocus={() => setPasswordFocused(true)}
+                  onBlur={() => setPasswordFocused(false)}
                 />
                 <span
-                  className={`absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 transition-colors duration-200 ${!passwordValue ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:text-blue-600 hover:scale-110"}`}
-                  onClick={() => {
-                    if (passwordValue) setShowPassword((v) => !v);
-                  }}
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 transition-colors duration-200 cursor-pointer hover:text-blue-600 hover:scale-110`}
+                  onClick={() => setShowPassword((v) => !v)}
                 >
                   <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                 </span>
               </div>
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+              {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
             </div>
-
-            {error && <p className="text-red-600 text-sm text-center mt-2">{error}</p>}
 
             <button
               type="submit"
               disabled={localLoading}
               className="w-full bg-blue-600 hover:scale-[1.04] hover:shadow-xl hover:ring-2 hover:ring-blue-400 hover:cursor-pointer text-white font-semibold rounded-md transition-all duration-200 h-[40px] mt-4 disabled:bg-gray-400 focus:outline-none shadow-md flex items-center justify-center gap-2"
             >
-              <i className="fa-solid fa-sign-in mr-1"></i>
+              {!localLoading && <i className="fa-solid fa-sign-in mr-1"></i>}
               {localLoading && (
                 <span className="w-5 h-5 border-2 border-t-2 border-t-white border-blue-500 rounded-full animate-spin inline-block"></span>
               )}
