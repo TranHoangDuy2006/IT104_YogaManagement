@@ -48,6 +48,7 @@ export default function LoginForm() {
   const [localLoading, setLocalLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordValue, setPasswordValue] = useState("");
 
   const {
     register,
@@ -65,6 +66,7 @@ export default function LoginForm() {
     if (loginUser.fulfilled.match(result)) {
       setShowSuccess(true);
       reset(); 
+      setPasswordValue("");
       setTimeout(() => {
         setShowSuccess(false);
 
@@ -107,6 +109,7 @@ export default function LoginForm() {
                 type="email"
                 {...register("email")}
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                placeholder="Nhập địa chỉ email..."
                 autoComplete="email"
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
@@ -120,10 +123,15 @@ export default function LoginForm() {
                   {...register("password")}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none pr-10"
                   autoComplete="current-password"
+                  placeholder="Nhập mật khẩu..."
+                  value={passwordValue}
+                  onChange={e => setPasswordValue(e.target.value)}
                 />
                 <span
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 cursor-pointer transition-colors duration-200 hover:text-blue-600 hover:scale-110"
-                  onClick={() => setShowPassword((v) => !v)}
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 transition-colors duration-200 ${!passwordValue ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:text-blue-600 hover:scale-110"}`}
+                  onClick={() => {
+                    if (passwordValue) setShowPassword((v) => !v);
+                  }}
                 >
                   <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                 </span>
@@ -138,6 +146,7 @@ export default function LoginForm() {
               disabled={localLoading}
               className="w-full bg-blue-600 hover:scale-[1.04] hover:shadow-xl hover:ring-2 hover:ring-blue-400 hover:cursor-pointer text-white font-semibold rounded-md transition-all duration-200 h-[40px] mt-4 disabled:bg-gray-400 focus:outline-none shadow-md flex items-center justify-center gap-2"
             >
+              <i className="fa-solid fa-sign-in mr-1"></i>
               {localLoading && (
                 <span className="w-5 h-5 border-2 border-t-2 border-t-white border-blue-500 rounded-full animate-spin inline-block"></span>
               )}

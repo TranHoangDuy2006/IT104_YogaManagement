@@ -34,7 +34,7 @@ export default function ClassList() {
     const idStr = typeof id === 'number' ? String(id) : id;
     setTimeout(() => {
       navigate(`/bookings#${idStr}`);
-    }, 1000);
+    }, 2000);
   };
 
   return (

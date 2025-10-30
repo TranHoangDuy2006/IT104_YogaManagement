@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import '../Animations.css';
 import { getCourses } from "../../apis/api";
+import { getActiveServicesWithCourses } from "../../apis/activeServiceApi";
 import type { Booking } from "../../slices/bookingSlice";
 
 interface BookingModalProps {
@@ -31,14 +32,24 @@ export default function BookingModal({ booking, bookings, onSave, onClose, curre
   ]);
 
   useEffect(() => {
-    getCourses()
-      .then(res => {
-        const options = res.data.map((course) => ({ value: course.name, label: course.name }));
+    async function fetchClassOptions() {
+      try {
+        const services = await getActiveServicesWithCourses();
+        const coursesRes = await getCourses();
+        const allCourses = coursesRes.data;
+
+        const activeCourseIds = new Set(
+          services.flatMap(s => s.courses || [])
+        );
+        const options = allCourses
+          .filter(course => activeCourseIds.has(course.id))
+          .map(course => ({ value: course.name, label: course.name }));
         setClassOptions([{ value: "", label: "Chọn lớp học" }, ...options]);
-      })
-      .catch(() => {
+      } catch {
         setClassOptions([{ value: "", label: "Chọn lớp học" }]);
-      });
+      }
+    }
+    fetchClassOptions();
   }, []);
 
   useEffect(() => {

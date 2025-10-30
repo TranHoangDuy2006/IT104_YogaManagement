@@ -71,6 +71,8 @@ export default function RegisterForm() {
   const [errorMsg, setErrorMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordValue, setPasswordValue] = useState("");
+  const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
 
   React.useEffect(() => {
     if (errorMsg) {
@@ -107,7 +109,9 @@ export default function RegisterForm() {
     setLocalLoading(false);
     if (registerUser.fulfilled.match(rs)) {
       setShowSuccess(true);
-      reset(); 
+  reset(); 
+  setPasswordValue("");
+  setConfirmPasswordValue("");
       setTimeout(() => {
         setShowSuccess(false);
         navigate("/");
@@ -146,6 +150,7 @@ export default function RegisterForm() {
                 {...register("fullName")}
                 type="text"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none h-[42px]"
+                placeholder="Nhập họ và tên..."
               />
               {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>}
             </div>
@@ -157,6 +162,7 @@ export default function RegisterForm() {
                 type="email"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none h-[42px]"
                 autoComplete="new-email"
+                placeholder="Nhập địa chỉ email..."
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>
@@ -169,10 +175,15 @@ export default function RegisterForm() {
                   type={showPassword ? "text" : "password"}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none h-[42px] pr-10"
                   autoComplete="new-password"
+                  placeholder="Nhập mật khẩu..."
+                  value={passwordValue}
+                  onChange={e => setPasswordValue(e.target.value)}
                 />
                 <span
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 cursor-pointer transition-colors duration-200 hover:text-blue-600 hover:scale-110"
-                  onClick={() => setShowPassword((v) => !v)}
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 transition-colors duration-200 ${!passwordValue ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:text-blue-600 hover:scale-110"}`}
+                  onClick={() => {
+                    if (passwordValue) setShowPassword((v) => !v);
+                  }}
                 >
                   <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                 </span>
@@ -188,10 +199,15 @@ export default function RegisterForm() {
                   type={showConfirmPassword ? "text" : "password"}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none h-[42px] pr-10"
                   autoComplete="confirm-password"
+                  placeholder="Nhập lại mật khẩu..."
+                  value={confirmPasswordValue}
+                  onChange={e => setConfirmPasswordValue(e.target.value)}
                 />
                 <span
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 cursor-pointer transition-colors duration-200 hover:text-blue-600 hover:scale-110"
-                  onClick={() => setShowConfirmPassword((v) => !v)}
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 transition-colors duration-200 ${!confirmPasswordValue ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:text-blue-600 hover:scale-110"}`}
+                  onClick={() => {
+                    if (confirmPasswordValue) setShowConfirmPassword((v) => !v);
+                  }}
                 >
                   <i className={`fa-solid ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                 </span>
@@ -210,6 +226,7 @@ export default function RegisterForm() {
                   : 'bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white focus:ring-2 focus:ring-blue-400 active:scale-95 hover:scale-105 hover:shadow-lg hover:cursor-pointer'}
               `}
             >
+              <i className="fa-solid fa-clipboard-list mr-1.5"></i>
               {localLoading && (
                 <span className="w-5 h-5 border-2 border-t-2 border-t-white border-blue-500 rounded-full animate-spin inline-block"></span>
               )}

@@ -231,6 +231,15 @@
       "time": "7:00 - 8:00",
       "name": "Nguyễn Hoàng Thuỳ Linh",
       "email": "linhthuy2210@gmail.com"
+    },
+    {
+      "id": "10cf",
+      "userId": "1761215969642",
+      "class": "CrossFit",
+      "date": "2006-12-22",
+      "time": "7:00 - 8:00",
+      "name": "Đoàn Nhật Cường",
+      "email": "cuongliam2006@gmail.com"
     }
   ],
   "services": [
@@ -239,9 +248,10 @@
       "name": "Gym",
       "description": "Rèn luyện tâm trí và giảm căng thẳng",
       "imageUrl": "https://www.verywellmind.com/thmb/MQWhY7u5mTDfaO4vgDHRvnHYcaA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-938890492-becc3fc4757849bea672f148454943f9.jpg",
-      "isActive": true,
+      "isActive": false,
       "courses": [
-        "9cae"
+        "ce86",
+        "94ce"
       ]
     },
     {
@@ -251,7 +261,8 @@
       "imageUrl": "https://vitalityweightlossinstitute.com/wp-content/uploads/2025/04/What_makes_a_great_personal_trainer_-Blog-1200x800px_8338a95e-5fa3-42d8-901a-7893cea29330.jpg",
       "isActive": true,
       "courses": [
-        "ce86"
+        "d18f",
+        "0fbf"
       ]
     },
     {
@@ -261,7 +272,7 @@
       "imageUrl": "https://wp04-media.cdn.ihealthspot.com/wp-content/uploads/sites/66/2021/04/iStock-1258586742-300x200.jpg",
       "isActive": true,
       "courses": [
-        "b748"
+        "f469"
       ]
     },
     {
@@ -271,7 +282,8 @@
       "imageUrl": "https://post.healthline.com/wp-content/uploads/2022/09/mature-male-physical-therapy-1296-728-header.jpg",
       "isActive": true,
       "courses": [
-        "4f42"
+        "888c",
+        "b748"
       ]
     },
     {
@@ -281,7 +293,7 @@
       "imageUrl": "https://www.actsretirement.org/media/8709/gettyimages-674720396.png",
       "isActive": true,
       "courses": [
-        "0fbf"
+        "4f42"
       ]
     },
     {
@@ -291,7 +303,7 @@
       "imageUrl": "https://lakeshoresf.com/wp-content/uploads/2021/04/Kids-Fitness-Training-Lincoln-Park-Chicago-1.jpeg",
       "isActive": true,
       "courses": [
-        "d18f"
+        "9cae"
       ]
     }
   ]
