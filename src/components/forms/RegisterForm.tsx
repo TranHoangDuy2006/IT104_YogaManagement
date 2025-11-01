@@ -9,6 +9,7 @@ import { registerUser } from "../../slices/userSlice"
 import { useNavigate, Link } from "react-router-dom"
 import React, { useState } from "react"
 import RegisterBg from "../../assets/Login_Register_Background.jpg"
+import type { RegisterFormData } from '../../types/RegisterFormData';
 
 function Notification({ message, show }: { message: string, show: boolean }) {
   const [visible, setVisible] = React.useState(true);
@@ -21,20 +22,13 @@ function Notification({ message, show }: { message: string, show: boolean }) {
   }, [show]);
   if (!visible) return null;
   return (
-    <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50`}>
+    <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 font-[inter] select-none`}>
       <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
         <span>{message}</span>
       </div>
     </div>
   );
-}
-
-interface RegisterFormData {
-  fullName: string
-  email: string
-  password: string
-  confirmPassword: string
 }
 
 const schema = yup.object({
@@ -91,11 +85,11 @@ export default function RegisterForm() {
   })
 
   const onSubmit = async (data: RegisterFormData) => {
-    setLocalLoading(true);
-    setErrorMsg("");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    const userWithRole = { ...data, role: "user", id: "" };
-    const rs = await dispatch(registerUser(userWithRole));
+  setLocalLoading(true);
+  setErrorMsg("");
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const userWithRole = { ...data, role: "user", id: Date.now().toString() };
+  const rs = await dispatch(registerUser(userWithRole));
     setLocalLoading(false);
     if (registerUser.fulfilled.match(rs)) {
       setShowSuccess(true);

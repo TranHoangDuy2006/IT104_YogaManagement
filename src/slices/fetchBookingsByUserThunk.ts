@@ -1,7 +1,5 @@
-
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getBookingsByUser } from "../apis/api";
-
 
 export const fetchBookingsByUser = createAsyncThunk(
   "bookings/fetchByUser",

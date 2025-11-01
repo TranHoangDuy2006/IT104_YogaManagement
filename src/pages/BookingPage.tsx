@@ -24,7 +24,7 @@ function Notification({ message, show }: { message: string, show: boolean }) {
   }, [show]);
   if (!visible) return null;
   return (
-    <div className="fixed top-18 left-1/2 -translate-x-1/2 z-50">
+    <div className="fixed top-18 left-1/2 -translate-x-1/2 z-50 font-[inter] select-none">
       <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
         <span>{message}</span>
@@ -35,7 +35,6 @@ function Notification({ message, show }: { message: string, show: boolean }) {
 
 export default function BookingPage() {
   const location = useLocation();
-  // Lấy id lớp học từ hash nếu có
   const defaultClassId = location.hash ? location.hash.replace('#', '') : "";
   const [defaultClassName, setDefaultClassName] = useState("");
   const dispatch = useDispatch<AppDispatch>();
@@ -65,7 +64,7 @@ export default function BookingPage() {
   const handleCloseForm = () => {
     setShowForm(false);
     setEditBooking(null);
-  setDefaultClassName("");
+    setDefaultClassName("");
   };
 
   const handleSave = async (data: any) => {
@@ -118,17 +117,13 @@ export default function BookingPage() {
       <div className="flex-1">
       {showSuccess && <Notification message={successMsg} show={showSuccess} />}
         <Navbar showUser={false} showPracticeSchedule={false} showHomePage={true} />
-
         <div className="w-full bg-white rounded-xl shadow-md max-w-[1280px] mx-auto mt-8 p-8">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-[30.6px] font-bold">Quản lý lịch tập</h1>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 hover:scale-105 hover:cursor-pointer w-[167px] h-[40px] text-[19.6px]"
               onClick={() => {
-                // Nếu có defaultClassId, tìm tên lớp học tương ứng
                 if (defaultClassId) {
-                  // Giả sử bookings có trường class là tên lớp, nhưng cần lấy từ danh sách lớp học
-                  // Nếu có danh sách lớp học trong Redux, nên lấy từ đó. Nếu không, lấy từ bookings
                   const found = bookings.find(b => b.class === defaultClassId || b.class === defaultClassName);
                   if (found) {
                     setDefaultClassName(found.class);
@@ -140,7 +135,7 @@ export default function BookingPage() {
                 setEditBooking(null);
               }}
             >
-              <i className="fa-solid fa-plus mr-2"></i> Đặt lịch mới
+              <i className="fa-solid fa-calendar-plus mr-2"></i> Đặt lịch mới
             </button>
           </div>
 
@@ -166,7 +161,15 @@ export default function BookingPage() {
                   {currentItems.map((b: any) => (
                     <tr key={b.id} className="hover:bg-gray-100">
                       <td className="px-6 py-3 bg-white text-center">{b.class}</td>
-                      <td className="py-3 bg-white text-center">{b.date}</td>
+                      <td className="py-3 bg-white text-center">{(() => {
+                        if (!b.date) return "";
+                        const d = new Date(b.date);
+                        if (isNaN(d.getTime())) return b.date;
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const year = d.getFullYear();
+                        return `${day}-${month}-${year}`;
+                      })()}</td>
                       <td className="py-3 bg-white text-center">{b.time}</td>
                       <td className="py-3 bg-white text-center">{b.name}</td>
                       <td className="py-3 bg-white truncate max-w-[160px] whitespace-nowrap pr-6 text-center">
@@ -234,24 +237,9 @@ export default function BookingPage() {
           )}
         </div>
 
-        {showForm && (
-          <BookingModal
-            onClose={handleCloseForm}
-            onSave={handleSave}
-            bookings={bookings}
-            currentUserId={currentUserId}
-            booking={editBooking}
-            defaultClassName={defaultClassName}
-          />
-        )}
+        {showForm && <BookingModal onClose={handleCloseForm} onSave={handleSave} bookings={bookings} currentUserId={currentUserId} booking={editBooking} defaultClassName={defaultClassName} />}
 
-        {showDeleteModal && (
-          <ConfirmDeleteModal
-            isOpen={showDeleteModal}
-            onClose={handleCancelDelete}
-            onConfirm={handleConfirmDelete}
-          />
-        )}
+        {showDeleteModal && <ConfirmDeleteModal isOpen={showDeleteModal} onClose={handleCancelDelete} onConfirm={handleConfirmDelete} />}
       </div>
       <Footer />
     </div>

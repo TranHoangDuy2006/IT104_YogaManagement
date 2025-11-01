@@ -1,7 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { usePagination } from "../hooks/usePagination";
+import type { Booking } from '../types/Booking';
 import { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PieController } from "chart.js";
+import BookingModal from "../components/modals/BookingModal";
+import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
+import { fetchAllBookings } from "../slices/fetchAllBookingsThunk";
+import { updateBooking, deleteBooking } from "../slices/bookingSlice";
+import type { RootState, AppDispatch } from "../stores/userStore";
 import React from "react";
+
 function Notification({ message, show }: { message: string, show: boolean }) {
   const [visible, setVisible] = React.useState(true);
   React.useEffect(() => {
@@ -13,7 +24,7 @@ function Notification({ message, show }: { message: string, show: boolean }) {
   }, [show]);
   if (!visible) return null;
   return (
-    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50">
+    <div className="fixed top-5 left-1/2 -translate-x-[10px] z-50 font-[inter] select-none">
       <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
         <span>{message}</span>
@@ -21,28 +32,8 @@ function Notification({ message, show }: { message: string, show: boolean }) {
     </div>
   );
 }
-import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PieController } from "chart.js";
-
-import BookingModal from "../components/modals/BookingModal";
-import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
-import { fetchAllBookings } from "../slices/fetchAllBookingsThunk";
-import { updateBooking, deleteBooking } from "../slices/bookingSlice";
-import type { RootState, AppDispatch } from "../stores/userStore";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PieController);
-
-type Booking = {
-  id: number;
-  userId: number;
-  class: string;
-  date: string;
-  time: string;
-  name: string;
-  email: string;
-};
 
 function normalizeBookingId(b: any): Booking {
   return {
@@ -67,6 +58,10 @@ export default function SchedulesManagementPage() {
   const [filterDate, setFilterDate] = useState("");
   const [debouncedEmail, setDebouncedEmail] = useState("");
   const debounceRef = useRef<number | null>(null);
+
+  // Notification for edit booking
+  const [showEditSuccess, setShowEditSuccess] = useState(false);
+  const [editSuccessMsg, setEditSuccessMsg] = useState("");
 
   useEffect(() => {
     dispatch(fetchAllBookings());
@@ -96,13 +91,7 @@ export default function SchedulesManagementPage() {
   });
 
   const itemsPerPage = 5;
-  const {
-    currentPage,
-    totalPages,
-    currentItems,
-    handlePageChange,
-    setCurrentPage,
-  } = usePagination(filteredBookings, itemsPerPage);
+  const { currentPage, totalPages, currentItems, handlePageChange, setCurrentPage } = usePagination(filteredBookings, itemsPerPage);
 
   const courseStats = courses.map((course) => ({
     name: course.name,
@@ -115,7 +104,7 @@ export default function SchedulesManagementPage() {
   };
 
   const handleDelete = (booking: Booking) => {
-    setDeleteBookingId(booking.id);
+    setDeleteBookingId(typeof booking.id === 'number' ? booking.id : null);
     setDeleteModalOpen(true);
   };
 
@@ -133,6 +122,9 @@ export default function SchedulesManagementPage() {
     );
     setEditModalOpen(false);
     setSelectedBooking(null);
+    setEditSuccessMsg("Sửa lịch tập thành công!");
+    setShowEditSuccess(true);
+    setTimeout(() => setShowEditSuccess(false), 2000);
     dispatch(fetchAllBookings());
   };
 
@@ -152,7 +144,8 @@ export default function SchedulesManagementPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
-      {showDeleteSuccess && <Notification message={deleteSuccessMsg} show={showDeleteSuccess} />}
+    {showDeleteSuccess && <Notification message={deleteSuccessMsg} show={showDeleteSuccess} />}
+    {showEditSuccess && <Notification message={editSuccessMsg} show={showEditSuccess} />}
       <main className="flex-1 bg-[#f9fafb]">
       <h1 className="text-[29px] font-bold mb-4 bg-[#f9fafb]">Thống kê lịch tập</h1>
 
@@ -277,7 +270,15 @@ export default function SchedulesManagementPage() {
                 currentItems.map((item) => (
                   <tr key={item.id} className="hover:bg-gray-100">
                     <td className="px-4 py-3 border-t border-gray-200 text-center">{item.class}</td>
-                    <td className="px-4 py-3 border-t border-gray-200 text-center">{item.date}</td>
+                    <td className="px-4 py-3 border-t border-gray-200 text-center">{(() => {
+                      if (!item.date) return "";
+                      const d = new Date(item.date);
+                      if (isNaN(d.getTime())) return item.date;
+                      const day = String(d.getDate()).padStart(2, '0');
+                      const month = String(d.getMonth() + 1).padStart(2, '0');
+                      const year = d.getFullYear();
+                      return `${day}-${month}-${year}`;
+                    })()}</td>
                     <td className="px-4 py-3 border-t border-gray-200 text-center">{item.time}</td>
                     <td className="px-4 py-3 border-t border-gray-200 text-center">{item.name}</td>
                     <td className="px-4 py-3 border-t border-gray-200 text-center">{item.email}</td>
@@ -307,7 +308,6 @@ export default function SchedulesManagementPage() {
               bookings={bookings.map(normalizeBookingId)}
               onSave={(data) => {
                 if (!selectedBooking) {
-
                   axios.post("http://localhost:1904/bookings", {
                     ...data,
                     id: undefined,
@@ -317,7 +317,6 @@ export default function SchedulesManagementPage() {
                     dispatch(fetchAllBookings());
                   });
                 } else {
-
                   void handleSaveBooking(normalizeBookingId(data));
                 }
               }}
@@ -325,17 +324,11 @@ export default function SchedulesManagementPage() {
                 setEditModalOpen(false);
                 setSelectedBooking(null);
               }}
-              currentUserId={selectedBooking ? selectedBooking.userId : 0}
+              currentUserId={selectedBooking ? String(selectedBooking.userId) : ""}
             />
           )}
 
-          {deleteModalOpen && (
-            <ConfirmDeleteModal
-              isOpen={deleteModalOpen}
-              onClose={() => setDeleteModalOpen(false)}
-              onConfirm={handleConfirmDelete}
-            />
-          )}
+          {deleteModalOpen && <ConfirmDeleteModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} onConfirm={handleConfirmDelete} />}
 
           <div className="flex justify-center items-center py-4">
             <button

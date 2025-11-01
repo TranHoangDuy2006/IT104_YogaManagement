@@ -1,16 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Booking } from "../../slices/bookingSlice";
 import { useState, useEffect } from "react";
 import '../Animations.css';
 import { getCourses } from "../../apis/api";
-import type { Booking } from "../../slices/bookingSlice";
-import type { User } from "../../types/User";
-
-interface AddScheduleForUserModalProps {
-  users: User[];
-  bookings: Booking[];
-  onSave: (data: Booking) => void;
-  onClose: () => void;
-}
+import type { AddScheduleForUserModalProps } from '../../types/AddScheduleForUserModalProps';
 
 const timeOptions = [
   { value: "", label: "Chọn khung giờ" },
@@ -65,13 +58,13 @@ export default function AddScheduleForUserModal({ users, bookings, onSave, onClo
     }
     const isDuplicate = bookings.some(
       (b) =>
-        b.userId === Number(selectedUserId) &&
+        b.userId === selectedUserId &&
         b.class === classType &&
         b.date === date &&
         b.time === time
     );
     if (isDuplicate) {
-      setError("Lịch này đã tồn tại!");
+      setError("Lịch tập này đã tồn tại!");
       return;
     }
     const user = users.find(u => u.id === selectedUserId);
@@ -80,7 +73,7 @@ export default function AddScheduleForUserModal({ users, bookings, onSave, onClo
       return;
     }
     onSave({
-      userId: Number(user.id),
+      userId: user.id,
       class: classType,
       date,
       time,

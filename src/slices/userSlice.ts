@@ -35,7 +35,6 @@ const initialState: UserState = {
 export const registerUser = createAsyncThunk<User, User, { rejectValue: string }>(
   "user/register",
   async (user, { rejectWithValue }) => {
-    // Kiểm tra email đã tồn tại
     const check = await axios.get<User[]>("http://localhost:1904/users", { params: { email: user.email } });
     if (check.data.length > 0) {
       return rejectWithValue("Email đã tồn tại!");
@@ -49,7 +48,6 @@ export const loginUser = createAsyncThunk<User, LoginCredentials, { rejectValue:
   "user/loginUser",
   async (credentials, { rejectWithValue }) => {
     try {
-      // Kiểm tra email có tồn tại không
       const emailRes = await axios.get<User[]>(
         "http://localhost:1904/users",
         { params: { email: credentials.email } }
@@ -57,7 +55,6 @@ export const loginUser = createAsyncThunk<User, LoginCredentials, { rejectValue:
       if (emailRes.data.length === 0) {
         return rejectWithValue("Email không tồn tại!");
       }
-      // Kiểm tra mật khẩu
       const response = await axios.get<User[]>(
         "http://localhost:1904/users",
         { params: { email: credentials.email, password: credentials.password } }

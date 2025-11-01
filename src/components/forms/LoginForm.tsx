@@ -9,6 +9,7 @@ import { useNavigate, Link } from "react-router-dom";
 import type { AppDispatch, RootState } from "../../stores/userStore"; 
 import { loginUser } from "../../slices/userSlice";
 import LoginBg from "../../assets/Login_Register_Background.jpg";
+import type { LoginFormData } from '../../types/LoginFormData';
 
 function Notification({ message, show }: { message: string, show: boolean }) {
   const [visible, setVisible] = useState(true);
@@ -21,18 +22,13 @@ function Notification({ message, show }: { message: string, show: boolean }) {
   }, [show]);
   if (!visible) return null;
   return (
-    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 font-[inter] select-none">
       <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
         <span>{message}</span>
       </div>
     </div>
   );
-}
-
-interface LoginFormData {
-  email: string;
-  password: string;
 }
 
 const schema = yup.object({
@@ -43,18 +39,18 @@ const schema = yup.object({
 export default function LoginForm() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [showAlreadyLoggedIn, setShowAlreadyLoggedIn] = useState(false);
   React.useEffect(() => {
     if (localStorage.getItem('currentUser')) {
-      localStorage.removeItem('currentUser');
+      setShowAlreadyLoggedIn(true);
+      setTimeout(() => {
+        setShowAlreadyLoggedIn(false);
+        navigate("/");
+      }, 2500);
     }
-  }, []);
+  }, [navigate]);
   const { error } = useSelector((state: RootState) => state.user);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<LoginFormData>({ resolver: yupResolver(schema) });
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<LoginFormData>({ resolver: yupResolver(schema) });
 
   let emailError = errors.email?.message || "";
   let passwordError = errors.password?.message || "";
@@ -62,13 +58,7 @@ export default function LoginForm() {
   const [passwordFocused, setPasswordFocused] = useState(false);
   if (error) {
     const err = error.toLowerCase();
-    if (
-      err.includes("email") ||
-      err.includes("địa chỉ") ||
-      err.includes("không tìm thấy") ||
-      err.includes("tồn tại") ||
-      err.includes("hợp lệ")
-    ) {
+    if (["email", "địa chỉ", "không tìm thấy", "tồn tại", "hợp lệ"].some(key => err.includes(key))) {
       emailError = error;
     } else if (err.includes("mật khẩu") || err.includes("password")) {
       passwordError = error;
@@ -93,7 +83,6 @@ export default function LoginForm() {
   reset();
       setTimeout(() => {
         setShowSuccess(false);
-
         const user = result.payload as any;
         if (user && user.role === "admin") {
           navigate("/admin");
@@ -115,12 +104,15 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center font-[inter] user-select-none overflow-hidden">
+    <div className="relative min-h-screen w-full flex items-center justify-center font-[inter] select-none overflow-hidden">
       <img src={LoginBg} alt="Login Background" className="absolute inset-0 w-full h-full object-cover z-0" />
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 via-white/30 to-purple-900/40 z-10" />
 
       {showSuccess && (
         <Notification message="Đăng nhập thành công!" show={showSuccess} />
+      )}
+      {showAlreadyLoggedIn && (
+        <Notification message="Bạn đã đăng nhập rồi, bạn sẽ được điều hướng về trang chủ" show={showAlreadyLoggedIn} />
       )}
 
       <div className="relative z-20 w-full max-w-md">
@@ -154,8 +146,10 @@ export default function LoginForm() {
                   onBlur={() => setPasswordFocused(false)}
                 />
                 <span
-                  className={`absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 transition-colors duration-200 cursor-pointer hover:text-blue-600 hover:scale-110`}
-                  onClick={() => setShowPassword((v) => !v)}
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 transition-colors duration-200 ${localLoading ? "pointer-events-none opacity-50" : "cursor-pointer hover:text-blue-600 hover:scale-110"}`}
+                  onClick={() => {
+                    if (!localLoading) setShowPassword((v) => !v);
+                  }}
                 >
                   <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                 </span>

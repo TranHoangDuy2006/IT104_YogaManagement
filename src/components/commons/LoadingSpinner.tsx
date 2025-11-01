@@ -1,7 +1,7 @@
 import React from "react";
 
 const LoadingSpinner: React.FC = () => (
-  <div role="status" className="fixed inset-0 flex flex-col items-center justify-center z-50 bg-transparent">
+  <div role="status" className="fixed inset-0 flex flex-col items-center justify-center z-50 bg-transparent font-[inter] select-none">
     <svg
       aria-hidden="true"
       className="w-10 h-10 text-gray-200 animate-spin fill-blue-600 dark:text-gray-600"

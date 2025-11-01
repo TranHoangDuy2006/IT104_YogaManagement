@@ -21,11 +21,5 @@ export function usePagination<T>(items: T[], itemsPerPage: number) {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
-  return {
-    currentPage,
-    totalPages,
-    currentItems,
-    handlePageChange,
-    setCurrentPage,
-  };
+  return { currentPage, totalPages, currentItems, handlePageChange, setCurrentPage };
 }

@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../stores/userStore";
 import type { User } from "../../types/User";
+import "../Animations.css";
 
 const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
 	const userState = useSelector((state: RootState) => state.user);
@@ -41,7 +42,7 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
 
 	if (!currentUser || (window.location.pathname.startsWith('/admin') && currentUser.role !== 'admin')) {
 		return (
-			<div className="w-full h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100 relative">
+			<div className="w-full h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100 relative font-[inter] select-none">
 				{showNoAccess && (
 					<div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 bg-red-500 text-white rounded-lg shadow font-semibold text-lg animate-fade-in">
 						<i className="fa-solid fa-circle-exclamation mr-2"></i>Bạn không có quyền truy cập
@@ -59,12 +60,6 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
 					</div>
 					<div className="text-base text-gray-500 italic">Vui lòng chờ trong giây lát</div>
 				</div>
-				<style>{`
-					@keyframes fade-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-					.animate-fade-in { animation: fade-in 0.7s ease; }
-					@keyframes spin-slow { to { transform: rotate(360deg); } }
-					.animate-spin-slow { animation: spin-slow 1.2s linear infinite; }
-				`}</style>
 			</div>
 		);
 	}

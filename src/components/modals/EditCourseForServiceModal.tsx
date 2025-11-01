@@ -1,15 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import '../Animations.css'
-import type { Course } from '../../types/Course';
-
-interface EditCoursesForServiceModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (selectedCourseIds: string[]) => void;
-  allCourses: Course[];
-  selectedCourseIds: string[];
-}
+import type { EditCoursesForServiceModalProps } from '../../types/EditCoursesForServiceModalProps';
 
 const EditCoursesForServiceModal: React.FC<EditCoursesForServiceModalProps> = ({ isOpen, onClose, onSave, allCourses, selectedCourseIds }) => {
   const [selected, setSelected] = useState<string[]>(selectedCourseIds);

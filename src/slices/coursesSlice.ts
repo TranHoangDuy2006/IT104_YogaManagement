@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { Course } from "../types/Course";
 import axios from "axios";
 
-const API_BASE = "http://localhost:1904";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export const fetchCourses = createAsyncThunk<Course[]>(
   "courses/fetchAll",

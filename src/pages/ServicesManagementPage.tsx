@@ -12,8 +12,8 @@ import EditCoursesForServiceModal from "../components/modals/EditCourseForServic
 function ServicesManagementPage() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
-    const dispatch: any = useDispatch();
-    const services = useSelector((state: any) => state.services.data) as Service[];
+  const dispatch: any = useDispatch();
+  const services = useSelector((state: any) => state.services.data) as Service[];
   const [courses, setCourses] = useState<Course[]>([]);
   const [editService, setEditService] = useState<Service | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,13 +42,13 @@ function ServicesManagementPage() {
       await dispatch(updateService({ id: editService.id, service }));
       setEditService(null);
       setIsModalOpen(false);
-      setSuccessMsg("Sửa dịch vụ thành công");
+      setSuccessMsg("Sửa dịch vụ thành công!");
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 2000);
     } else {
       await dispatch(addService(service));
       setIsModalOpen(false);
-      setSuccessMsg("Thêm dịch vụ thành công");
+      setSuccessMsg("Thêm dịch vụ thành công!");
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 2000);
     }
@@ -57,7 +57,7 @@ function ServicesManagementPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
       {showSuccess && (
-        <div className="fixed top-6 left-1/2 translate-x-1/2.5 z-50 animate-fade-in">
+        <div className="fixed top-6 left-1/2 translate-x-[10px] z-50 animate-fade-in">
           <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
             <i className="fa-solid fa-circle-check text-xl mr-2"></i>
             <span>{successMsg}</span>
@@ -72,7 +72,7 @@ function ServicesManagementPage() {
             className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-5 py-2 shadow transition-all w-[220px] h-[40px] text-[17px] font-medium transform hover:scale-105 hover:shadow-lg hover:-translate-y-1 duration-200 hover:cursor-pointer"
             onClick={() => setIsModalOpen(true)}
           >
-            <i className="fa fa-plus mr-2"></i> Thêm dịch vụ mới
+            <i className="fa fa-circle-plus mr-2"></i> Thêm dịch vụ mới
           </button>
         </div>
 
@@ -203,6 +203,9 @@ function ServicesManagementPage() {
                 onConfirm={async () => {
                   if (serviceToDelete !== null) {
                     await dispatch(deleteService(serviceToDelete));
+                    setSuccessMsg("Xóa dịch vụ thành công!");
+                    setShowSuccess(true);
+                    setTimeout(() => setShowSuccess(false), 2000);
                   }
                   setIsDeleteModalOpen(false);
                   setServiceToDelete(null);
@@ -212,15 +215,7 @@ function ServicesManagementPage() {
           </table>
         </div>
 
-        <AddServiceModal
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setEditService(null);
-          }}
-          onSave={handleAddService}
-          service={editService}
-        />
+        <AddServiceModal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); setEditService(null); }} onSave={handleAddService} service={editService} />
 
         <EditCoursesForServiceModal
           isOpen={isEditCoursesModalOpen}

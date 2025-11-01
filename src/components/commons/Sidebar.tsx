@@ -1,10 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import '../Animations.css';
-
-interface SidebarProps {
-  setShowLogoutMsg?: (show: boolean) => void;
-}
+import type { SidebarProps } from '../../types/SidebarProps';
 
 export default function Sidebar({ setShowLogoutMsg }: SidebarProps) {
   const navigate = useNavigate();
@@ -13,7 +10,7 @@ export default function Sidebar({ setShowLogoutMsg }: SidebarProps) {
   const handleNavigateWithDelay = (path: string) => {
     setTimeout(() => {
       navigate(path);
-    }, 2000);
+    }, 500);
   };
 
   const handleLogout = () => {

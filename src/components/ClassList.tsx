@@ -5,10 +5,31 @@ import type { Course } from "../types/Course";
 import type { Service } from "../types/Service";
 import { useSortedCourses } from "../hooks/useSortedCourses";
 
+function Notification({ message, show }: { message: string, show: boolean }) {
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    if (!show) {
+      setTimeout(() => setVisible(false), 400);
+    } else {
+      setVisible(true);
+    }
+  }, [show]);
+  if (!visible) return null;
+  return (
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 font-[inter] select-none">
+      <div className="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-fade-in">
+        <i className="fa-solid fa-circle-exclamation text-xl mr-2"></i>
+        <span>{message}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function ClassList() {
   const navigate = useNavigate();
   const [courses, setCourses] = useState<Course[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+  const [showLoginNotify, setShowLoginNotify] = useState(false);
 
   useEffect(() => {
     getCourses().then(res => setCourses(res.data));
@@ -25,12 +46,13 @@ export default function ClassList() {
   const handleNavigateWithDelay = (id: string | number) => {
     const currentUser = localStorage.getItem("currentUser");
     if (!currentUser) {
+      setShowLoginNotify(true);
       setTimeout(() => {
+        setShowLoginNotify(false);
         navigate("/login");
-      }, 2000); 
+      }, 2500);
       return;
     }
-
     const idStr = typeof id === 'number' ? String(id) : id;
     setTimeout(() => {
       navigate(`/bookings#${idStr}`);
@@ -39,6 +61,7 @@ export default function ClassList() {
 
   return (
     <section className="w-full ml-auto mr-auto px-4 mb-16">
+      {showLoginNotify && <Notification message="Vui lòng đăng nhập để tiếp tục" show={showLoginNotify} />}
       <h2 className="pt-16 text-3xl md:text-4xl font-bold text-slate-800 text-center mx-auto mb-12">
         Các lớp học phổ biến
       </h2>
@@ -58,6 +81,7 @@ export default function ClassList() {
                 src={c.image}
                 alt={c.name}
                 className="w-full h-36 object-cover rounded-t-xl"
+                draggable={false}
               />
               <div className="p-4 flex flex-col flex-1">
                 <h3 className="text-black text-xl md:text-2xl font-bold group-hover:text-blue-700 transition-colors duration-300">

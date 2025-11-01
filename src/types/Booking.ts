@@ -1,6 +1,6 @@
 export interface Booking {
   id?: number;
-  userId: number;
+  userId: string;
   class: string;
   date: string;
   time: string;

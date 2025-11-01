@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import '../Animations.css';
 
-interface ConfirmDeleteModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
+import type { ConfirmDeleteModalProps } from '../../types/ConfirmDeleteModalProps';
+
+interface ConfirmDeleteModalPropsCustom extends ConfirmDeleteModalProps {
+  message?: string;
 }
 
-const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose, onConfirm }) => {
+const ConfirmDeleteModal: React.FC<ConfirmDeleteModalPropsCustom> = ({ isOpen, onClose, onConfirm, message }) => {
   const [visible, setVisible] = useState(isOpen);
   const [closing, setClosing] = useState(false);
 
@@ -66,7 +66,7 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose
           <div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Xác nhận xoá</h2>
             <p className="text-lg text-gray-700">
-              Bạn có chắc chắn muốn xoá dịch vụ này? Hành động này không thể hoàn tác.
+              {message || "Bạn có chắc chắn muốn xoá dịch vụ này? Hành động này không thể hoàn tác."}
             </p>
           </div>
         </div>

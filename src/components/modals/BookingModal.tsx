@@ -2,16 +2,8 @@ import { useState, useEffect } from "react";
 import '../Animations.css';
 import { getCourses } from "../../apis/api";
 import { getActiveServicesWithCourses } from "../../apis/activeServiceApi";
-import type { Booking } from "../../slices/bookingSlice";
 
-interface BookingModalProps {
-  booking?: Booking;
-  bookings: Booking[];
-  onSave: (data: Booking) => void;
-  onClose: () => void;
-  currentUserId: number;
-  defaultClassName?: string;
-}
+import type { BookingModalProps } from '../../types/BookingModalProps';
 
 const timeOptions = [
   { value: "", label: "Chọn khung giờ" },
@@ -91,7 +83,7 @@ export default function BookingModal({ booking, bookings, onSave, onClose, curre
     );
 
     if (isDuplicate) {
-      setError("Lịch này đã tồn tại!");
+      setError("Lịch tập này đã tồn tại!");
       return;
     }
 

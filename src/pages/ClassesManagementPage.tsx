@@ -25,13 +25,13 @@ function ClassesManagementPage() {
       await dispatch(updateCourse({ id: editCourse.id, course }));
       setEditCourse(null);
       setIsModalOpen(false);
-      setSuccessMsg("Sửa lớp học thành công");
+      setSuccessMsg("Sửa lớp học thành công!");
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 2000);
     } else {
       await dispatch(addCourse(course));
       setIsModalOpen(false);
-      setSuccessMsg("Thêm lớp học thành công");
+      setSuccessMsg("Thêm lớp học thành công!");
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 2000);
     }
@@ -55,7 +55,7 @@ function ClassesManagementPage() {
             className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-5 py-2 shadow transition-all w-[220px] h-[40px] text-[17px] font-medium transform hover:scale-105 hover:shadow-lg hover:-translate-y-1 duration-200 hover:cursor-pointer"
             onClick={() => setIsModalOpen(true)}
           >
-            <i className="fa fa-plus mr-2"></i> Thêm lớp học mới
+            <i className="fa fa-circle-plus mr-2"></i> Thêm lớp học mới
           </button>
         </div>
 
@@ -113,20 +113,13 @@ function ClassesManagementPage() {
                   setIsDeleteModalOpen(false);
                   setCourseToDelete(null);
                 }}
+                message="Bạn có chắc chắn muốn xoá lớp học này? Hành động này không thể hoàn tác."
               />
             </tbody>
           </table>
         </div>
 
-        <AddCourseModal
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setEditCourse(null);
-          }}
-          onSave={handleAddCourse}
-          course={editCourse}
-        />
+        <AddCourseModal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); setEditCourse(null); }} onSave={handleAddCourse} course={editCourse} />
       </main>
     </div>
   );

@@ -25,7 +25,7 @@ function Notification({ message, show }: { message: string, show: boolean }) {
   }, [show]);
   if (!visible) return null;
   return (
-    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 font-[inter] select-none">
       <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
         <svg
           className="w-5 h-5 text-white"
@@ -45,7 +45,6 @@ function Notification({ message, show }: { message: string, show: boolean }) {
 export default function UserManagementPage() {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
-
   const [users, setUsers] = useState<User[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
@@ -174,7 +173,7 @@ export default function UserManagementPage() {
                         <td className="px-4 py-2">
                           <div className="flex gap-3 justify-center align-middle">
                             <button
-                              className="px-5 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-500 hover:text-white hover:cursor-pointer flex items-center gap-2"
+                              className="px-5 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-500 hover:text-white hover:scale-105 hover:shadow-lg transition-all duration-200 hover:cursor-pointer flex items-center gap-2"
                               onClick={() => {
                                 setEditUser(u);
                                 setEditModalOpen(true);
@@ -184,7 +183,7 @@ export default function UserManagementPage() {
                             </button>
 
                             <button
-                              className="px-5 py-2 rounded-lg bg-red-100 text-red-600 font-semibold hover:bg-red-500 hover:text-white hover:cursor-pointer flex items-center gap-2"
+                              className="px-5 py-2 rounded-lg bg-red-100 text-red-600 font-semibold hover:bg-red-500 hover:text-white hover:scale-105 hover:shadow-lg transition-all duration-200 hover:cursor-pointer flex items-center gap-2"
                               onClick={() => {
                                 setUserToDelete(u);
                                 setDeleteModalOpen(true);
@@ -196,8 +195,8 @@ export default function UserManagementPage() {
                             <button
                               className={`px-5 py-2 rounded-lg font-semibold flex items-center gap-2 ${
                                 expandedUserId === u.id
-                                  ? "bg-gray-200 text-gray-700 hover:bg-purple-400 hover:text-white hover:cursor-pointer"
-                                  : "bg-blue-100 text-blue-700 hover:bg-purple-500 hover:text-white hover:cursor-pointer"
+                                  ? "bg-gray-200 text-gray-700 hover:bg-purple-400 hover:text-white hover:scale-105 hover:shadow-lg transition-all duration-200 hover:cursor-pointer"
+                                  : "bg-blue-100 text-blue-700 hover:bg-purple-500 hover:text-white hover:scale-105 hover:shadow-lg transition-all duration-200 hover:cursor-pointer"
                               }`}
                               onClick={async () => {
                                 const id = u.id;
@@ -255,7 +254,15 @@ export default function UserManagementPage() {
                                     <tbody>
                                       {(bookingsByUser[u.id] || []).map((b) => (
                                         <tr key={b.id} className="hover:bg-blue-100">
-                                          <td className="px-3 py-2 text-gray-700 text-center">{b.date}</td>
+                                          <td className="px-3 py-2 text-gray-700 text-center">{(() => {
+                                            if (!b.date) return "";
+                                            const d = new Date(b.date);
+                                            if (isNaN(d.getTime())) return b.date;
+                                            const day = String(d.getDate()).padStart(2, '0');
+                                            const month = String(d.getMonth() + 1).padStart(2, '0');
+                                            const year = d.getFullYear();
+                                            return `${day}-${month}-${year}`;
+                                          })()}</td>
                                           <td className="px-3 py-2 text-gray-700 text-center">{b.time}</td>
                                           <td className="px-3 py-2 text-gray-700 text-center">{b.class}</td>
                                           <td className="px-3 py-2 text-gray-700 text-center">{b.name}</td>
@@ -289,12 +296,13 @@ export default function UserManagementPage() {
                     const bookings = bookingsRes.data;
                     await Promise.all(bookings.map((b) => deleteBooking(Number(b.id))));
                   } catch (e) {
-                    console.error("Lỗi khi xoá bookings của người dùng!", e);
+                    console.error("Lỗi khi xoá lịch tập của người dùng!", e);
                   }
 
                   setDeleteModalOpen(false);
                   setUserToDelete(null);
                 }}
+                message="Bạn có chắc chắn muốn xoá người dùng này không? Hành động này không thể hoàn tác."
               />
             )}
 
@@ -309,7 +317,7 @@ export default function UserManagementPage() {
                   setUsers(users.map((u) => (u.id === user.id ? user : u)));
                   setSuccessMsg("Cập nhật thông tin người dùng thành công!");
                   setShowSuccess(true);
-                  setTimeout(() => setShowSuccess(false), 1800);
+                  setTimeout(() => setShowSuccess(false), 2000);
                   setEditModalOpen(false);
                 }}
               />

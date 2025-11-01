@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { Service } from "../types/Service";
 import axios from "axios";
 
-const API_BASE = "http://localhost:1904";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export const fetchServices = createAsyncThunk<Service[]>(
   "services/fetchAll",

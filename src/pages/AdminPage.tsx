@@ -22,7 +22,7 @@ export default function AdminPage() {
       <main className="flex-1 p-8 overflow-y-auto max-h-screen">
         {showLogoutMsg && (
           <div className="fixed top-5 left-[55%] -translate-x-1/2 z-[9999] animate-fade-in">
-            <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 font-[inter] select-none">
               <i className="fa-solid fa-circle-check text-xl mr-2"></i>
               <span>Đã đăng xuất</span>
             </div>

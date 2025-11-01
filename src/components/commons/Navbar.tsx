@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import type { RootState } from "../../stores/userStore"
+import type { UserState } from "../../types/User"
 import { setUserFromLocalStorage } from "../../slices/userSlice"
 
 export default function Navbar({ showUser, showPracticeSchedule, showHomePage }: { showUser?: boolean; showPracticeSchedule?: boolean; showHomePage?: boolean }) {
@@ -13,7 +14,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
 
   const dispatch = useDispatch();
 
-  const user = useAppSelector((state: RootState) => state.user.data);
+  const user = useAppSelector((state: RootState) => (state.user as UserState).data);
   const userName = user?.fullName;
   const userRole = user?.role;
   const isLoggedIn = Boolean(userName);
@@ -24,7 +25,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
       try {
         dispatch(setUserFromLocalStorage(JSON.parse(userData)));
       } catch (e) {
-        console.error("Error parsing user data from localStorage:", e);
+        console.error("Error parsing user data from localstorage:", e);
       }
     }
   }, [dispatch]);
@@ -53,7 +54,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
   };
 
   return (
-  <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-[#1f2630] text-white h-14 select-none shadow">
+  <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-[#1f2630] text-white h-14 font-[inter] select-none shadow">
       {showLogoutMsg && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[9999] animate-fade-in">
           <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
@@ -89,14 +90,18 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
         {showUser && isLoggedIn && (
           <span className="ml-4 mt-0.5 text-gray-200 group">
             {userRole === 'admin' ? (
-              <i className="fa-solid fa-user-secret mr-2.5"></i>
+              <>
+                <i className="fa-solid fa-user-secret mr-2.5"></i>
+                <span>Xin chào, ADMIN </span>
+                <span className="font-bold text-red-500 transition-colors duration-200 group-hover:text-yellow-300">{userName}</span>
+              </>
             ) : (
-              <i className="fa-regular fa-user mr-2.5"></i>
+              <>
+                <i className="fa-regular fa-user mr-2.5"></i>
+                <span>Xin chào, </span>
+                <span className="font-bold text-yellow-400 transition-colors duration-200 group-hover:text-yellow-300">{userName}</span>
+              </>
             )}
-            <span>Xin chào, </span>
-            <span className={`font-bold transition-colors duration-200 group-hover:text-yellow-300 ${userRole === 'admin' ? 'text-red-500' : 'text-yellow-400'}`}>
-              {userName}
-            </span>
           </span>
         )}
 

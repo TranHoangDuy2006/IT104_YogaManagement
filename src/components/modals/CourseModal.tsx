@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-import type { Course } from "../../types/Course";
 
-interface AddCourseModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (course: Omit<Course, "id">) => void;
-  course?: Course | null;
-}
+import type { AddCourseModalProps } from '../../types/AddCourseModalProps';
 
 const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave, course }) => {
   const [name, setName] = useState(course?.name || "");
@@ -17,10 +11,18 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave
     setName(course?.name || "");
     setDescription(course?.description || "");
     setImage(course?.image || "");
+    setErrorMsg("");
   }, [course, isOpen]);
+
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name.trim() || !description.trim() || !image.trim()) {
+      setErrorMsg("Vui lòng điền đầy đủ thông tin lớp học!");
+      return;
+    }
+    setErrorMsg("");
     onSave({ name, description, image });
   };
 
@@ -39,7 +41,6 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="Nhập tên lớp học..."
-            required
           />
         </div>
         <div className="mb-4">
@@ -49,7 +50,6 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave
             value={description}
             onChange={e => setDescription(e.target.value)}
             placeholder="Nhập mô tả lớp học..."
-            required
           />
         </div>
         <div className="mb-6">
@@ -60,9 +60,11 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave
             value={image}
             onChange={e => setImage(e.target.value)}
             placeholder="Nhập URL hình ảnh lớp học..."
-            required
           />
         </div>
+        {errorMsg && (
+          <div className="mb-4 text-red-500 font-semibold text-center animate-fade-in">{errorMsg}</div>
+        )}
         <div className="flex justify-end gap-4">
           <button type="button" className="px-6 py-2 rounded-lg bg-gray-400 text-white font-semibold hover:bg-gray-500 hover:cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-gray-300" onClick={onClose}>
             <i className="fas fa-times mr-1"></i> Hủy
