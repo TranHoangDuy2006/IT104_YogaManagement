@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import '../Animations.css';
-
 import type { EditUserModalProps } from '../../types/EditUserModalProps';
+import { validateEditUser } from '../../ultis/validateEditUser';
 
 const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, onSubmit, editUser, setEditUser }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -32,22 +32,11 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, onSubmit
 
   const [errorMsg, setErrorMsg] = useState("");
 
-  function validateEmail(email: string) {
-    return /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/.test(email);
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editUser.fullName.trim()) {
-      setErrorMsg("Họ và tên không được để trống!");
-      return;
-    }
-    if (!editUser.email.trim()) {
-      setErrorMsg("Email không được để trống!");
-      return;
-    }
-    if (!validateEmail(editUser.email.trim())) {
-      setErrorMsg("Email không hợp lệ!");
+    const error = validateEditUser(editUser);
+    if (error) {
+      setErrorMsg(error);
       return;
     }
     setErrorMsg("");

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "../Animations.css";
 import type { AddServiceModalProps } from "../../types/AddServiceModalProps";
+import { validateServiceInput } from '../../ultis/validateService';
 
 const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSave, service }) => {
   const [visible, setVisible] = useState(isOpen);
@@ -51,8 +52,9 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSa
   if (!visible) return null;
 
   const handleSave = () => {
-    if (!name.trim() || !description.trim() || !imageUrl.trim()) {
-      setErrorMsg("Vui lòng điền đầy đủ thông tin dịch vụ!");
+    const error = validateServiceInput({ name, description, imageUrl });
+    if (error) {
+      setErrorMsg(error);
       return;
     }
     setErrorMsg("");

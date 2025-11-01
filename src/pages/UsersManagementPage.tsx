@@ -5,6 +5,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { getUsers, getBookingsByUser, deleteBooking } from "../apis/api";
 import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
 import AddUserModal from "../components/modals/AddUserModal";
+import { validateNewUser } from "../ultis/validateUser";
 import EditUserModal from "../components/modals/EditUserModal";
 import AddScheduleForUserModal from "../components/modals/AddScheduleForUserModal";
 import type { AppDispatch } from "../stores/userStore";
@@ -48,6 +49,7 @@ export default function UserManagementPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [expandedUserId, setExpandedUserId] = useState<string | null>(null);
   const [bookingsByUser, setBookingsByUser] = useState<Record<string, Booking[]>>({});
   const [loadingBookingsId, setLoadingBookingsId] = useState<string | null>(null);
@@ -118,6 +120,17 @@ export default function UserManagementPage() {
                 newUser={newUser}
                 setNewUser={setNewUser}
                 onSubmit={async (user) => {
+                  const error = validateNewUser({
+                    fullName: user.fullName,
+                    email: user.email,
+                    password: user.password,
+                    confirmPassword: user.confirmPassword,
+                  });
+                  if (error) {
+                    setErrorMsg(error);
+                    setTimeout(() => setErrorMsg("") , 2000);
+                    return;
+                  }
                   await dispatch(addUser(user));
                   setUsers([...users, user]);
                   setSuccessMsg("Thêm người dùng thành công!");
@@ -151,6 +164,9 @@ export default function UserManagementPage() {
               )}
 
               {showSuccess && <Notification message={successMsg} show={showSuccess} />}
+              {errorMsg && (
+                <Notification message={errorMsg} show={true} />
+              )}
 
               <table className="min-w-full">
                 <thead>

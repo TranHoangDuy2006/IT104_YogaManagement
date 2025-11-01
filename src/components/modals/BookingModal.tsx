@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import '../Animations.css';
 import { getCourses } from "../../apis/api";
 import { getActiveServicesWithCourses } from "../../apis/activeServiceApi";
+import { validateBookingInput } from '../../ultis/validateBooking';
 
 import type { BookingModalProps } from '../../types/BookingModalProps';
 
@@ -68,8 +69,9 @@ export default function BookingModal({ booking, bookings, onSave, onClose, curre
   const handleSave = () => {
     setError("");
 
-    if (!classType || !date || !time) {
-      setError("Vui lòng nhập đầy đủ thông tin!");
+    const errorMsg = validateBookingInput({ class: classType, date, time });
+    if (errorMsg) {
+      setError(errorMsg);
       return;
     }
 

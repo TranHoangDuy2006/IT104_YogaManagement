@@ -6,12 +6,14 @@ import type { Service } from "../types/Service";
 import type { Course } from "../types/Course";
 import { getCourses } from "../apis/api";
 import AddServiceModal from "../components/modals/ServiceModal";
+import { validateServiceInput } from "../ultis/validateService";
 import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
 import EditCoursesForServiceModal from "../components/modals/EditCourseForServiceModal";
 
 function ServicesManagementPage() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const dispatch: any = useDispatch();
   const services = useSelector((state: any) => state.services.data) as Service[];
   const [courses, setCourses] = useState<Course[]>([]);
@@ -38,6 +40,16 @@ function ServicesManagementPage() {
   }, [dispatch]);
 
   const handleAddService = async (service: Omit<Service, "id">) => {
+    const error = validateServiceInput({
+      name: service.name,
+      description: service.description,
+      imageUrl: service.imageUrl || "",
+    });
+    if (error) {
+      setErrorMsg(error);
+      setTimeout(() => setErrorMsg("") , 2000);
+      return;
+    }
     if (editService) {
       await dispatch(updateService({ id: editService.id, service }));
       setEditService(null);
@@ -61,6 +73,14 @@ function ServicesManagementPage() {
           <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
             <i className="fa-solid fa-circle-check text-xl mr-2"></i>
             <span>{successMsg}</span>
+          </div>
+        </div>
+      )}
+      {errorMsg && (
+        <div className="fixed top-16 left-1/2 translate-x-[10px] z-50 animate-fade-in">
+          <div className="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <i className="fa-solid fa-circle-exclamation text-xl mr-2"></i>
+            <span>{errorMsg}</span>
           </div>
         </div>
       )}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-
 import type { AddCourseModalProps } from '../../types/AddCourseModalProps';
+import { validateCourseInput } from '../../ultis/validateCourse';
 
 const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave, course }) => {
   const [name, setName] = useState(course?.name || "");
@@ -18,8 +18,9 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !description.trim() || !image.trim()) {
-      setErrorMsg("Vui lòng điền đầy đủ thông tin lớp học!");
+    const error = validateCourseInput({ name, description, image });
+    if (error) {
+      setErrorMsg(error);
       return;
     }
     setErrorMsg("");

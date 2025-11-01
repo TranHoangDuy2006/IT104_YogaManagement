@@ -7,6 +7,7 @@ import axios from "axios";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PieController } from "chart.js";
 import BookingModal from "../components/modals/BookingModal";
+import { validateBookingInput } from "../ultis/validateBooking";
 import ConfirmDeleteModal from "../components/modals/ConfirmDeleteModal";
 import { fetchAllBookings } from "../slices/fetchAllBookingsThunk";
 import { updateBooking, deleteBooking } from "../slices/bookingSlice";
@@ -59,9 +60,9 @@ export default function SchedulesManagementPage() {
   const [debouncedEmail, setDebouncedEmail] = useState("");
   const debounceRef = useRef<number | null>(null);
 
-  // Notification for edit booking
   const [showEditSuccess, setShowEditSuccess] = useState(false);
   const [editSuccessMsg, setEditSuccessMsg] = useState("");
+  const [editErrorMsg, setEditErrorMsg] = useState("");
 
   useEffect(() => {
     dispatch(fetchAllBookings());
@@ -110,6 +111,16 @@ export default function SchedulesManagementPage() {
 
   const handleSaveBooking = async (data: Booking) => {
     if (!selectedBooking) return;
+    const error = validateBookingInput({
+      class: data.class,
+      date: data.date,
+      time: data.time,
+    });
+    if (error) {
+      setEditErrorMsg(error);
+  setTimeout(() => setEditErrorMsg("") , 2000);
+      return;
+    }
     await dispatch(
       updateBooking({
         ...selectedBooking,
@@ -303,29 +314,44 @@ export default function SchedulesManagementPage() {
           </table>
 
           {editModalOpen && (
-            <BookingModal
-              booking={selectedBooking ? normalizeBookingId(selectedBooking) : undefined}
-              bookings={bookings.map(normalizeBookingId)}
-              onSave={(data) => {
-                if (!selectedBooking) {
-                  axios.post("http://localhost:1904/bookings", {
-                    ...data,
-                    id: undefined,
-                  }).then(() => {
-                    setEditModalOpen(false);
-                    setSelectedBooking(null);
-                    dispatch(fetchAllBookings());
-                  });
-                } else {
-                  void handleSaveBooking(normalizeBookingId(data));
-                }
-              }}
-              onClose={() => {
-                setEditModalOpen(false);
-                setSelectedBooking(null);
-              }}
-              currentUserId={selectedBooking ? String(selectedBooking.userId) : ""}
-            />
+            <>
+              {editErrorMsg && (
+                <Notification message={editErrorMsg} show={true} />
+              )}
+              <BookingModal
+                booking={selectedBooking ? normalizeBookingId(selectedBooking) : undefined}
+                bookings={bookings.map(normalizeBookingId)}
+                onSave={(data) => {
+                  if (!selectedBooking) {
+                    const error = validateBookingInput({
+                      class: data.class,
+                      date: data.date,
+                      time: data.time,
+                    });
+                    if (error) {
+                      setEditErrorMsg(error);
+                      setTimeout(() => setEditErrorMsg("") , 2000);
+                      return;
+                    }
+                    axios.post("http://localhost:1904/bookings", {
+                      ...data,
+                      id: undefined,
+                    }).then(() => {
+                      setEditModalOpen(false);
+                      setSelectedBooking(null);
+                      dispatch(fetchAllBookings());
+                    });
+                  } else {
+                    void handleSaveBooking(normalizeBookingId(data));
+                  }
+                }}
+                onClose={() => {
+                  setEditModalOpen(false);
+                  setSelectedBooking(null);
+                }}
+                currentUserId={selectedBooking ? String(selectedBooking.userId) : ""}
+              />
+            </>
           )}
 
           {deleteModalOpen && <ConfirmDeleteModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} onConfirm={handleConfirmDelete} />}

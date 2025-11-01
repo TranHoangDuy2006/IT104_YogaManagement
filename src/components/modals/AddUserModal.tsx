@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "../Animations.css";
 import type { AddUserModalProps } from "../../types/AddUserModalProps";
+import { validateNewUser } from "../../ultis/validateUser";
 
 const AddUserModal: React.FC<AddUserModalProps> = ({
   isOpen,
@@ -29,6 +30,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
     if (isOpen) {
       setVisible(true);
       setClosing(false);
+      setNewUser(initialUser);
     } else if (visible) {
       setClosing(true);
       const timer = setTimeout(() => setVisible(false), 300);
@@ -52,26 +54,11 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
 
   if (!visible) return null;
 
-  function validateEmail(email: string) {
-    return /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/.test(email);
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newUser.fullName.trim() || !newUser.email.trim() || !newUser.password.trim() || !newUser.confirmPassword.trim()) {
-      setErrorMsg("Vui lòng điền đầy đủ thông tin!");
-      return;
-    }
-    if (newUser.password.length < 8) {
-      setErrorMsg("Mật khẩu phải có ít nhất 8 kí tự!");
-      return;
-    }
-    if (!validateEmail(newUser.email.trim())) {
-      setErrorMsg("Email không hợp lệ!");
-      return;
-    }
-    if (newUser.password !== newUser.confirmPassword) {
-      setErrorMsg("Mật khẩu xác nhận không khớp!");
+    const error = validateNewUser(newUser);
+    if (error) {
+      setErrorMsg(error);
       return;
     }
     setErrorMsg("");
