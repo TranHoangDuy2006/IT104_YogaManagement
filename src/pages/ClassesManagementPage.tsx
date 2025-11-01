@@ -63,10 +63,10 @@ function ClassesManagementPage() {
           <table className="w-full">
             <thead>
               <tr className="text-black font-semibold text-base">
-                <th className="px-3 py-3 text-center text-[19px]">Tên lớp học</th>
-                <th className="px-6 py-3 text-center text-[19px]">Mô tả</th>
-                <th className="px-6 py-3 text-center text-[19px]">Hình ảnh</th>
-                <th className="px-6 py-3 text-center text-[19px]">Thao tác</th>
+                <th className="px-3 py-3 text-center text-[19px] bg-gray-200">Tên lớp học</th>
+                <th className="px-6 py-3 text-center text-[19px] bg-gray-200">Mô tả</th>
+                <th className="px-6 py-3 text-center text-[19px] bg-gray-200">Hình ảnh</th>
+                <th className="px-6 py-3 text-center text-[19px] bg-gray-200">Thao tác</th>
               </tr>
             </thead>
             <tbody>

@@ -152,7 +152,7 @@ export default function BookingPage() {
                     <th className="px-6 py-4 text-center">Lớp học</th>
                     <th className="py-4 text-center">Ngày tập</th>
                     <th className="py-4 text-center">Khung giờ</th>
-                    <th className="py-4 text-center">Họ tên</th>
+                    <th className="py-4 text-center">Họ và tên</th>
                     <th className="py-4 text-center">Email</th>
                     <th className="py-4 text-center">Thao tác</th>
                   </tr>

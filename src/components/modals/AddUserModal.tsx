@@ -62,6 +62,10 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
       setErrorMsg("Vui lòng điền đầy đủ thông tin!");
       return;
     }
+    if (newUser.password.length < 8) {
+      setErrorMsg("Mật khẩu phải có ít nhất 8 kí tự!");
+      return;
+    }
     if (!validateEmail(newUser.email.trim())) {
       setErrorMsg("Email không hợp lệ!");
       return;

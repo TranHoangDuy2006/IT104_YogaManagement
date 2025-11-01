@@ -47,14 +47,6 @@
       "password": "baotran123456",
       "confirmPassword": "baotran123456",
       "role": "user"
-    },
-    {
-      "id": "1761919556048",
-      "fullName": "Đinh Đắc Lộc",
-      "email": "locdinh2006@g",
-      "password": "loc123456",
-      "confirmPassword": "loc12345",
-      "role": "user"
     }
   ],
   "courses": [
@@ -314,7 +306,7 @@
     },
     {
       "id": "b68b",
-      "userId": "1761919556048",
+      "userId": null,
       "class": "BodyPump",
       "date": "2025-12-22",
       "time": "18:00 - 19:00",

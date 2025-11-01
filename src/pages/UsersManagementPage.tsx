@@ -25,7 +25,7 @@ function Notification({ message, show }: { message: string, show: boolean }) {
   }, [show]);
   if (!visible) return null;
   return (
-    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 font-[inter] select-none">
+    <div className="fixed top-6 left-1/2 -translate-x-[60px] z-50 font-[inter] select-none">
       <div className={`bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${show ? 'animate-fade-in' : 'animate-fade-out'}`}>
         <svg
           className="w-5 h-5 text-white"
@@ -155,10 +155,10 @@ export default function UserManagementPage() {
               <table className="min-w-full">
                 <thead>
                   <tr>
-                    <th className="px-4 py-2 text-center">Họ tên</th>
-                    <th className="px-4 py-2 text-center">Email</th>
-                    <th className="px-4 py-2 text-center">Vai trò</th>
-                    <th className="px-4 py-2 text-center">Thao tác</th>
+                    <th className="px-6 py-3 text-center bg-gray-200 rounded-tl-lg text-lg">Họ và tên</th>
+                    <th className="px-6 py-3 text-center bg-gray-200 text-lg">Email</th>
+                    <th className="px-6 py-3 text-center bg-gray-200 text-lg">Vai trò</th>
+                    <th className="px-6 py-3 text-center bg-gray-200 rounded-tr-lg text-lg">Thao tác</th>
                   </tr>
                 </thead>
 
@@ -284,26 +284,30 @@ export default function UserManagementPage() {
             </div>
 
             {deleteModalOpen && userToDelete && (
-              <ConfirmDeleteModal
-                isOpen={deleteModalOpen}
-                onClose={() => setDeleteModalOpen(false)}
-                onConfirm={async () => {
-                  await dispatch(deleteUser(userToDelete.id));
-                  setUsers(users.filter((u) => u.id !== userToDelete.id));
+                <ConfirmDeleteModal
+                  isOpen={deleteModalOpen}
+                  onClose={() => setDeleteModalOpen(false)}
+                  onConfirm={async () => {
+                    await dispatch(deleteUser(userToDelete.id));
+                    setUsers(users.filter((u) => u.id !== userToDelete.id));
 
-                  try {
-                    const bookingsRes = await getBookingsByUser(userToDelete.id);
-                    const bookings = bookingsRes.data;
-                    await Promise.all(bookings.map((b) => deleteBooking(Number(b.id))));
-                  } catch (e) {
-                    console.error("Lỗi khi xoá lịch tập của người dùng!", e);
-                  }
+                    try {
+                      const bookingsRes = await getBookingsByUser(userToDelete.id);
+                      const bookings = bookingsRes.data;
+                      await Promise.all(bookings.map((b) => deleteBooking(Number(b.id))));
+                    } catch (e) {
+                      console.error("Lỗi khi xoá lịch tập của người dùng!", e);
+                    }
 
-                  setDeleteModalOpen(false);
-                  setUserToDelete(null);
-                }}
-                message="Bạn có chắc chắn muốn xoá người dùng này không? Hành động này không thể hoàn tác."
-              />
+                    setSuccessMsg("Đã xoá người dùng thành công!");
+                    setShowSuccess(true);
+                    setTimeout(() => setShowSuccess(false), 1800);
+
+                    setDeleteModalOpen(false);
+                    setUserToDelete(null);
+                  }}
+                  message="Bạn có chắc chắn muốn xoá người dùng này không? Hành động này không thể hoàn tác."
+                />
             )}
 
             {editModalOpen && editUser && (

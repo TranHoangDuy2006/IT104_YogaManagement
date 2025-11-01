@@ -87,15 +87,7 @@ export default function BookingModal({ booking, bookings, onSave, onClose, curre
       return;
     }
 
-    onSave({
-      ...booking,
-      userId: currentUserId,
-      class: classType,
-      date,
-      time,
-      name: booking?.name ?? "",
-      email: booking?.email ?? "",
-    });
+    onSave({ ...booking, userId: currentUserId, class: classType, date, time, name: booking?.name ?? "", email: booking?.email ?? "" });
     
     handleClose();
   };

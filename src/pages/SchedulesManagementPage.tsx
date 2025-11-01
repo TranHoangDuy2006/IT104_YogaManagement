@@ -249,7 +249,7 @@ export default function SchedulesManagementPage() {
           <table className="min-w-full">
             <thead>
               <tr>
-                {["Lớp học", "Ngày tập", "Khung giờ", "Họ tên", "Email", "Thao tác"].map(
+                {["Lớp học", "Ngày tập", "Khung giờ", "Họ và tên", "Email", "Thao tác"].map(
                   (head) => (
                     <th
                       key={head}
