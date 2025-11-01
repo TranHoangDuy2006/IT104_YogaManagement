@@ -45,7 +45,7 @@ export default function AdminPage() {
               <ul className="list-none w-full max-w-xl mb-6 flex flex-col gap-3">
                 <li className="flex flex-row items-center justify-between gap-4 p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition min-w-[400px]">
                   <div className="flex items-center gap-3">
-                    <span className="text-blue-400"><i className="fa-solid fa-calendar-check" /></span>
+                    <span className="text-blue-400"><i className="fa-solid fa-calendar-days" /></span>
                     <span className="font-semibold text-blue-700">Quản lý lịch</span>
                   </div>
                   <span className="text-gray-500 text-right">Quản lý lịch học, lịch đặt chỗ.</span>
@@ -56,6 +56,13 @@ export default function AdminPage() {
                     <span className="font-semibold text-blue-700">Quản lý người dùng</span>
                   </div>
                   <span className="text-gray-500 text-right">Thêm, sửa, xóa tài khoản người dùng.</span>
+                </li>
+                <li className="flex flex-row items-center justify-between gap-4 p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition min-w-[400px]">
+                  <div className="flex items-center gap-3">
+                    <span className="text-blue-400"><i className="fa-solid fa-users-class" /></span>
+                    <span className="font-semibold text-blue-700">Quản lý lớp học</span>
+                  </div>
+                  <span className="text-gray-500 text-right">Thêm, sửa, xóa các lớp yoga.</span>
                 </li>
                 <li className="flex flex-row items-center justify-between gap-4 p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition min-w-[400px]">
                   <div className="flex items-center gap-3">

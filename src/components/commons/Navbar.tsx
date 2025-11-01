@@ -77,7 +77,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
         )}
 
         {showPracticeSchedule && isLoggedIn && userRole !== 'admin' && (
-          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/bookings")}> <i className="fa-solid fa-calendar-days mr-2.5"></i>Lịch đã đặt</button>
+          <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/bookings")}> <i className="fa-solid fa-calendar-check mr-2.5"></i>Lịch đã đặt</button>
         )}
         {showPracticeSchedule && isLoggedIn && userRole === 'admin' && (
           <button className="navbar-link hover:cursor-pointer" onClick={() => handleNavigate("/admin/schedules-management")}> <i className="fa-solid fa-calendar-days mr-2.5"></i>Quản lí lịch</button>
@@ -142,7 +142,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
               className="navbar-link flex items-center"
               onClick={() => { setOpen(false); navigate("/bookings"); }}
             >
-              <i className="fa-solid fa-calendar-days mr-2.5"></i>Lịch đã đặt
+              <i className="fa-solid fa-calendar-check mr-2.5"></i>Lịch đã đặt
             </a>
           )}
           {showPracticeSchedule && isLoggedIn && userRole === 'admin' && (
@@ -168,7 +168,7 @@ export default function Navbar({ showUser, showPracticeSchedule, showHomePage }:
             <span className="mt-2 text-sm text-gray-200 group flex items-center">
               <i className="fa-regular fa-user mr-2.5"></i>
               <span>Xin chào, </span>
-              <span className={`font-bold transition-colors duration-200 group-hover:text-yellow-300 ${userRole === 'admin' ? 'text-red-500' : 'text-yellow-400'}`}>
+              <span className={`font-bold transition-colors duration-200 group-hover:text-yellow-300 ml-1 ${userRole === 'admin' ? 'text-red-500' : 'text-yellow-400'}`}>
                 {userName}
               </span>
             </span>

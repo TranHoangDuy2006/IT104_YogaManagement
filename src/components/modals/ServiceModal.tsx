@@ -3,12 +3,7 @@ import React, { useEffect, useState } from "react";
 import "../Animations.css";
 import type { AddServiceModalProps } from "../../types/AddServiceModalProps";
 
-const AddServiceModal: React.FC<AddServiceModalProps> = ({
-  isOpen,
-  onClose,
-  onSave,
-  service,
-}) => {
+const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSave, service }) => {
   const [visible, setVisible] = useState(isOpen);
   const [closing, setClosing] = useState(false);
 
