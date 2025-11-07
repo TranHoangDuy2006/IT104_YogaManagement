@@ -4,9 +4,11 @@
       "id": "a9d1",
       "fullName": "Trần Hoàng Duy",
       "email": "duyhoangtran2006@gmail.com",
-      "password": "adminpage123",
-      "confirmPassword": "adminpage123",
-      "role": "admin"
+      "password": "Duy1tran!?",
+      "confirmPassword": "Duy1tran!?",
+      "role": "admin",
+      "description": "Trần Hoàng Duy đẹp trai nhất quả đất và có tài năng không ai sánh bằng!",
+      "avatarUrl": "https://res.cloudinary.com/virusbetatester/image/upload/v1762326589/b6gyrs1hjcrujloqx3u6.jpg"
     },
     {
       "id": "1761066434315",
@@ -14,7 +16,8 @@
       "email": "LilianaNuThanF1@gmail.com",
       "password": "TrucDan1904",
       "confirmPassword": "TrucDan1904",
-      "role": "user"
+      "role": "user",
+      "description": ""
     },
     {
       "id": "1761103316978",
@@ -22,7 +25,8 @@
       "email": "huygunpow1609@gmail.com",
       "password": "huy123456",
       "confirmPassword": "huy123456",
-      "role": "user"
+      "role": "user",
+      "description": ""
     },
     {
       "id": "363c",
@@ -30,7 +34,9 @@
       "email": "ductranminh2006@gmail.com",
       "password": "minhduc2006",
       "confirmPassword": "minhduc2006",
-      "role": "user"
+      "role": "user",
+      "description": "Anh là Trần Minh Đức đẹp trai nhất quả đất này!",
+      "avatarUrl": ""
     },
     {
       "id": "1761215969642",
@@ -38,7 +44,8 @@
       "email": "cuongliam2006@gmail.com",
       "password": "cuong123456",
       "confirmPassword": "cuong123456",
-      "role": "user"
+      "role": "user",
+      "description": ""
     },
     {
       "id": "1761916519148",
@@ -46,7 +53,26 @@
       "email": "baotran2006@gmail.com",
       "password": "baotran123456",
       "confirmPassword": "baotran123456",
+      "role": "user",
+      "description": ""
+    },
+    {
+      "id": "1762277369942",
+      "fullName": "abc",
+      "email": "abc@gmail.com",
+      "password": "12345678",
+      "confirmPassword": "12345678",
       "role": "user"
+    },
+    {
+      "id": "1762418049746",
+      "email": "liliananuthanf1@gmail.com",
+      "fullName": "Hoàng Duy 🕊️",
+      "password": "",
+      "avatarUrl": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1379367253811035&height=200&width=200&ext=1765010063&hash=AT8WpVjw-5WjIOVMOWMynVzk",
+      "role": "user",
+      "provider": "facebook",
+      "providerId": "1379367253811035"
     }
   ],
   "courses": [

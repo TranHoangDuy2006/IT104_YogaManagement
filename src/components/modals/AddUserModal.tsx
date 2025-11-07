@@ -56,7 +56,12 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const error = validateNewUser(newUser);
+    const error = validateNewUser({
+      fullName: newUser.fullName,
+      email: newUser.email,
+      password: newUser.password,
+      confirmPassword: newUser.confirmPassword ?? "",
+    });
     if (error) {
       setErrorMsg(error);
       return;
@@ -123,16 +128,14 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
                 }
                 placeholder="Nhập mật khẩu..."
                 autoComplete="new-password"
-                className="border border-gray-300 rounded-xl px-4 py-2 pr-12 w-full text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                style={{ paddingRight: "2.5rem" }}
+                className="border border-gray-300 rounded-xl px-4 py-2 pr-10 w-full text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               />
               <span
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 hover:text-blue-500 cursor-pointer flex items-center"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 hover:text-blue-500 cursor-pointer flex items-center h-full"
                 onClick={() => setShowPassword((prev) => !prev)}
                 tabIndex={0}
                 role="button"
                 aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                style={{ height: "100%" }}
               >
                 <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
               </span>
@@ -152,16 +155,14 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
                 }
                 placeholder="Xác nhận mật khẩu..."
                 autoComplete="new-password"
-                className="border border-gray-300 rounded-xl px-4 py-2 pr-12 w-full text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                style={{ paddingRight: "2.5rem" }}
+                className="border border-gray-300 rounded-xl px-4 py-2 pr-10 w-full text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               />
               <span
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 hover:text-blue-500 cursor-pointer flex items-center"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-500 hover:text-blue-500 cursor-pointer flex items-center h-full"
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
                 tabIndex={0}
                 role="button"
                 aria-label={showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                style={{ height: "100%" }}
               >
                 <i className={`fa-solid ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
               </span>

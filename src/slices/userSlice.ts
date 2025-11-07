@@ -70,6 +70,39 @@ export const loginUser = createAsyncThunk<User, LoginCredentials, { rejectValue:
   }
 );
 
+export const facebookLogin = createAsyncThunk<
+  User,
+  { email: string; fullName: string; avatar?: string; facebookId: string },
+  { rejectValue: string }
+>(
+  "user/facebookLogin",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const existing = await axios.get<User[]>(
+        "http://localhost:1904/users",
+        { params: { email: payload.email } }
+      );
+      if (existing.data.length > 0) {
+        return existing.data[0];
+      }
+      const newUser: User = {
+        id: Date.now().toString(),
+        email: payload.email,
+        fullName: payload.fullName,
+        password: "",
+        avatarUrl: payload.avatar,
+        role: "user",
+        provider: "facebook",
+        providerId: payload.facebookId,
+      } as unknown as User;
+      const response = await axios.post<User>("http://localhost:1904/users", newUser);
+      return response.data;
+    } catch {
+      return rejectWithValue("Không thể đăng nhập Facebook lúc này!");
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -96,6 +129,21 @@ const userSlice = createSlice({
         state.loading = false;
         state.data = null;
         state.error = action.payload || "Sai email hoặc mật khẩu!";
+      })
+      .addCase(facebookLogin.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(facebookLogin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload;
+        state.error = null;
+        localStorage.setItem("currentUser", JSON.stringify(action.payload));
+      })
+      .addCase(facebookLogin.rejected, (state, action) => {
+        state.loading = false;
+        state.data = null;
+        state.error = action.payload || "Đăng nhập Facebook thất bại!";
       });
   }
 });

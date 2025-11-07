@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, Fragment } from "react";
+import { usePagination } from "../hooks/usePagination";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchServices, addService, updateService, deleteService } from "../slices/servicesSlice";
 import type { Service } from "../types/Service";
@@ -66,6 +67,9 @@ function ServicesManagementPage() {
     }
   };
 
+  const itemsPerPage = 5;
+  const { currentPage, totalPages, currentItems, handlePageChange } = usePagination(services, itemsPerPage);
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-row font-[inter] select-none">
       {showSuccess && (
@@ -100,6 +104,7 @@ function ServicesManagementPage() {
           <table className="w-full">
             <thead>
               <tr className="text-black font-semibold text-base">
+                <th className="px-3 py-3 text-center text-[19px] bg-gray-200">STT</th>
                 <th className="px-3 py-3 text-center text-[19px] bg-gray-200">Tên dịch vụ</th>
                 <th className="px-6 py-3 text-center text-[19px] bg-gray-200">Mô tả</th>
                 <th className="px-6 py-3 text-center text-[19px] bg-gray-200">Hình ảnh</th>
@@ -107,7 +112,7 @@ function ServicesManagementPage() {
               </tr>
             </thead>
             <tbody>
-              {services.map((service) => {
+              {currentItems.map((service, idx) => {
                 const serviceCourses = service.courses
                   ? courses.filter((c) => service.courses?.includes(c.id))
                   : [];
@@ -117,6 +122,7 @@ function ServicesManagementPage() {
                 return (
                   <Fragment key={service.id}>
                     <tr className={`border-t border-gray-200 hover:bg-gray-50 transition`}>
+                      <td className={`px-3 py-4 text-[17px] text-center font-semibold ${service.isActive === false ? 'opacity-50' : ''}`}>{(currentPage - 1) * itemsPerPage + idx + 1}</td>
                       <td className={`px-3 py-4 text-[17px] text-center ${service.isActive === false ? 'opacity-50' : ''}`}>
                         {service.name}
                       </td>
@@ -180,7 +186,7 @@ function ServicesManagementPage() {
 
                     {isOpen && (
                       <tr>
-                        <td colSpan={4} className="bg-gray-50 px-6 py-2">
+                        <td colSpan={5} className="bg-gray-50 px-6 py-2">
                           <div className="font-semibold text-blue-700 mb-2">
                             Các khoá học thuộc dịch vụ này:
                           </div>
@@ -233,6 +239,46 @@ function ServicesManagementPage() {
               />
             </tbody>
           </table>
+        </div>
+
+        <div className="flex justify-center items-center py-4">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            className={`px-3 py-1 rounded-l-lg bg-gray-100 w-[50px] h-[50px] ${
+              totalPages === 0 || currentPage === 1
+                ? "cursor-not-allowed opacity-50"
+                : "hover:bg-gray-200"
+            }`}
+            disabled={totalPages === 0 || currentPage === 1}
+          >
+            ‹
+          </button>
+
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => handlePageChange(i + 1)}
+              className={`px-3 py-1 w-[50px] h-[50px] transition-all rounded-none hover:cursor-pointer ${
+                currentPage === i + 1
+                  ? "bg-blue-500 text-white scale-105 shadow-lg"
+                  : "bg-white hover:bg-gray-100"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            className={`px-3 py-1 rounded-r-lg bg-gray-100 w-[50px] h-[50px] ${
+              totalPages === 0 || currentPage === totalPages
+                ? "cursor-not-allowed opacity-50"
+                : "hover:bg-gray-200"
+            }`}
+            disabled={totalPages === 0 || currentPage === totalPages}
+          >
+            ›
+          </button>
         </div>
 
         <AddServiceModal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); setEditService(null); }} onSave={handleAddService} service={editService} />

@@ -36,6 +36,8 @@ export default function ClassList() {
     getServices().then(res => setServices(res.data));
   }, []);
 
+  const isLogged = localStorage.getItem("currentUser")
+
   const activeCourseIds = services
     .filter(s => s.isActive)
     .flatMap(s => s.courses || []);
@@ -88,12 +90,14 @@ export default function ClassList() {
                   {c.name}
                 </h3>
                 <p className="text-gray-700 text-base mt-2 mb-4 line-clamp-2">{c.description}</p>
-                <button
+               <button
                   className="mt-auto bg-[#2b71ff] hover:bg-[#205ae0] hover:cursor-pointer text-white px-4 py-2 rounded text-base md:text-lg font-medium transition-all duration-200 ease-in-out shadow focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 hover:scale-105 hover:shadow-lg self-start"
                   onClick={() => handleNavigateWithDelay(c.id)}
                 >
-                  <i className="fa-solid fa-calendar-plus mr-2.5"></i>Đặt lịch
+                  <i className="fa-solid fa-calendar-plus mr-2.5"></i>
+                  {isLogged ? "Đặt lịch" : "Đăng nhập để đặt lịch"}
                 </button>
+                
               </div>
             </article>
           ))

@@ -12,6 +12,7 @@ const ServicesManagementPage = lazy(() => import("./pages/ServicesManagementPage
 const SchedulesManagementPage = lazy(() => import("./pages/SchedulesManagementPage"));
 const UsersManagementPage = lazy(() => import("./pages/UsersManagementPage"));
 const ClassesManagementPage = lazy(() => import("./pages/ClassesManagementPage"));
+const UserProfilePage = lazy(() => import("./pages/UserProfilePage"));
 const NotFound = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="classes-management" element={<ClassesManagementPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
+        <Route path="/profile" element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>} />
         <Route path="/bookings" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
       </Routes>
     </Suspense>

@@ -2,6 +2,7 @@
 import { usePagination } from "../hooks/usePagination";
 import type { Booking } from '../types/Booking';
 import { useState, useEffect, useRef } from "react";
+import type { Course } from "../types/Course";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Pie } from "react-chartjs-2";
@@ -48,7 +49,7 @@ export default function SchedulesManagementPage() {
   const bookings =
     (useSelector((state: RootState) => state.bookingsAll?.data) as Booking[]) || [];
 
-  const [courses, setCourses] = useState<Array<{ id: string; name: string }>>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -57,6 +58,7 @@ export default function SchedulesManagementPage() {
   const [filterClass, setFilterClass] = useState("");
   const [filterEmail, setFilterEmail] = useState("");
   const [filterDate, setFilterDate] = useState("");
+  const [filterTime, setFilterTime] = useState("");
   const [debouncedEmail, setDebouncedEmail] = useState("");
   const debounceRef = useRef<number | null>(null);
 
@@ -88,7 +90,8 @@ export default function SchedulesManagementPage() {
       ? b.email.toLowerCase().includes(debouncedEmail.toLowerCase())
       : true;
     const matchDate = filterDate ? b.date === filterDate : true;
-    return matchClass && matchEmail && matchDate;
+    const matchTime = filterTime ? b.time === filterTime : true;
+    return matchClass && matchEmail && matchDate && matchTime;
   });
 
   const itemsPerPage = 5;
@@ -160,12 +163,7 @@ export default function SchedulesManagementPage() {
       <main className="flex-1 bg-[#f9fafb]">
       <h1 className="text-[29px] font-bold mb-4 bg-[#f9fafb]">Thống kê lịch tập</h1>
 
-        <div
-          className="grid gap-4 mb-6 overflow-x-auto pb-2 top-[56px] z-20"
-          style={{
-            gridTemplateColumns: `repeat(3, minmax(220px, 1fr))`,
-          }}
-        >
+        <div className="grid gap-4 mb-6 overflow-x-auto pb-2 top-[56px] z-20 [grid-template-columns:repeat(3,minmax(220px,1fr))]">
           {(() => {
             const colorClasses = ["text-blue-600","text-green-600","text-purple-600","text-red-600","text-yellow-500","text-pink-500","text-orange-500","text-teal-600","text-indigo-600","text-gray-700"];
             return courseStats.map((c, idx) => (
@@ -174,6 +172,7 @@ export default function SchedulesManagementPage() {
                 className="bg-white rounded-lg shadow p-6 flex flex-col items-start min-w-[220px]"
               >
                 <span className="text-[20px] font-semibold mb-2">
+                  <i className="fa-solid fa-calendar-days mr-2"></i>
                   Tổng số lịch {c.name}
                 </span>
                 <span
@@ -210,7 +209,7 @@ export default function SchedulesManagementPage() {
           </div>
         </div>
 
-        <form className="bg-white p-6 rounded-lg shadow mb-6 grid grid-cols-3 gap-4">
+        <form className="bg-white p-6 rounded-lg shadow mb-6 grid grid-cols-4 gap-4">
           <div>
             <label className="block mb-2 font-medium">Lớp học</label>
             <select
@@ -254,13 +253,32 @@ export default function SchedulesManagementPage() {
               }}
             />
           </div>
+          <div>
+            <label className="block mb-2 font-medium">Khung giờ</label>
+            <select
+              className="w-full h-[45px] border-3 border-gray-300 rounded-lg px-3 py-2 focus:border-blue-500 focus:outline-none hover:cursor-pointer"
+              value={filterTime}
+              onChange={(e) => {
+                setFilterTime(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
+              <option value="">Tất cả</option>
+              {[...new Set(bookings.map(b => b.time))].filter(Boolean).map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+          </div>
         </form>
 
         <div className="overflow-x-auto bg-white rounded-lg shadow">
           <table className="min-w-full">
             <thead>
               <tr>
-                {["Lớp học", "Ngày tập", "Khung giờ", "Họ và tên", "Email", "Thao tác"].map(
+                <th className="px-4 py-3 font-semibold bg-gray-100 text-center">STT</th>
+                <th className="px-4 py-3 font-semibold bg-gray-100 text-center">Lớp học</th>
+                <th className="px-4 py-3 font-semibold bg-gray-100 text-center">Ảnh lớp học</th>
+                {['Ngày tập', 'Khung giờ', 'Họ và tên', 'Email', 'Thao tác'].map(
                   (head) => (
                     <th
                       key={head}
@@ -275,40 +293,51 @@ export default function SchedulesManagementPage() {
             <tbody>
               {currentItems.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-8 text-gray-500 text-lg font-semibold">Không tìm thấy lịch tập</td>
+                  <td colSpan={8} className="text-center w-full px-4 py-16 text-gray-500 text-lg font-semibold">Không tìm thấy lịch tập</td>
                 </tr>
               ) : (
-                currentItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-100">
-                    <td className="px-4 py-3 border-t border-gray-200 text-center">{item.class}</td>
-                    <td className="px-4 py-3 border-t border-gray-200 text-center">{(() => {
-                      if (!item.date) return "";
-                      const d = new Date(item.date);
-                      if (isNaN(d.getTime())) return item.date;
-                      const day = String(d.getDate()).padStart(2, '0');
-                      const month = String(d.getMonth() + 1).padStart(2, '0');
-                      const year = d.getFullYear();
-                      return `${day}-${month}-${year}`;
-                    })()}</td>
-                    <td className="px-4 py-3 border-t border-gray-200 text-center">{item.time}</td>
-                    <td className="px-4 py-3 border-t border-gray-200 text-center">{item.name}</td>
-                    <td className="px-4 py-3 border-t border-gray-200 text-center">{item.email}</td>
-                    <td className="px-4 py-3 border-t border-gray-200 text-center">
-                      <button
-                        className="mr-3 px-4 py-1 rounded-lg bg-blue-100 text-blue-600 font-semibold hover:bg-blue-500 hover:text-white hover:cursor-pointer transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
-                        onClick={() => handleEdit(item)}
-                      >
-                        <i className="fa-solid fa-pen-to-square mr-1"></i> Sửa
-                      </button>
-                      <button
-                        className="px-4 py-1 rounded-lg bg-red-100 text-red-600 font-semibold hover:bg-red-500 hover:text-white hover:cursor-pointer transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
-                        onClick={() => handleDelete(item)}
-                      >
-                        <i className="fa-solid fa-trash mr-1"></i> Xóa
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                currentItems.map((item, idx) => {
+                  const course = courses.find(c => c.name === item.class);
+                  return (
+                    <tr key={item.id} className="hover:bg-gray-100">
+                      <td className="px-4 py-3 border-t border-gray-200 text-center font-semibold">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                      <td className="px-4 py-3 border-t border-gray-200 text-center">{item.class}</td>
+                      <td className="px-4 py-3 border-t border-gray-200 text-center">
+                        {course && course.image ? (
+                          <img src={course.image} alt={course.name} className="w-14 h-14 object-cover rounded shadow mx-auto" />
+                        ) : (
+                          <span className="text-gray-400 italic">Không có ảnh</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 border-t border-gray-200 text-center">{(() => {
+                        if (!item.date) return "";
+                        const d = new Date(item.date);
+                        if (isNaN(d.getTime())) return item.date;
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const year = d.getFullYear();
+                        return `${day}-${month}-${year}`;
+                      })()}</td>
+                      <td className="px-4 py-3 border-t border-gray-200 text-center">{item.time}</td>
+                      <td className="px-4 py-3 border-t border-gray-200 text-center">{item.name}</td>
+                      <td className="px-4 py-3 border-t border-gray-200 text-center">{item.email}</td>
+                      <td className="px-4 py-3 border-t border-gray-200 text-center">
+                        <button
+                          className="mr-3 px-4 py-1 rounded-lg bg-blue-100 text-blue-600 font-semibold hover:bg-blue-500 hover:text-white hover:cursor-pointer transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
+                          onClick={() => handleEdit(item)}
+                        >
+                          <i className="fa-solid fa-pen-to-square mr-1"></i> Sửa
+                        </button>
+                        <button
+                          className="px-4 py-1 rounded-lg bg-red-100 text-red-600 font-semibold hover:bg-red-500 hover:text-white hover:cursor-pointer transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
+                          onClick={() => handleDelete(item)}
+                        >
+                          <i className="fa-solid fa-trash mr-1"></i> Xóa
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

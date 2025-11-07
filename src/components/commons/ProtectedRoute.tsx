@@ -58,13 +58,13 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
 					<div className="text-xl font-bold text-blue-700 tracking-wide animate-pulse">
 						{showNoAccess ? "Bạn sẽ được điều hướng về trang đăng nhập" : "Đang kiểm tra quyền truy cập..."}
 					</div>
-					<div className="text-base text-gray-500 italic">Vui lòng chờ trong giây lát</div>
+					<div className="text-base text-gray-500 italic">Vui lòng chờ trong giây lát!</div>
 				</div>
 			</div>
 		);
 	}
 
-	if (currentUser.role === 'admin' && window.location.pathname.startsWith('/admin')) {
+	if (currentUser.role === 'admin' && (window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/profile') || window.location.pathname.startsWith('/bookings'))) {
 		return children;
 	}
 

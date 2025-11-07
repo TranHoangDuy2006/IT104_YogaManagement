@@ -6,6 +6,9 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave
   const [name, setName] = useState(course?.name || "");
   const [description, setDescription] = useState(course?.description || "");
   const [image, setImage] = useState(course?.image || "");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [show, setShow] = useState(isOpen);
+  const [animateOut, setAnimateOut] = useState(false);
 
   React.useEffect(() => {
     setName(course?.name || "");
@@ -14,7 +17,18 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave
     setErrorMsg("");
   }, [course, isOpen]);
 
-  const [errorMsg, setErrorMsg] = useState("");
+  React.useEffect(() => {
+    if (isOpen) {
+      setShow(true);
+      setAnimateOut(false);
+    } else if (show) {
+      setAnimateOut(true);
+      setTimeout(() => {
+        setShow(false);
+        setAnimateOut(false);
+  }, 350);
+    }
+  }, [isOpen, show]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,12 +41,21 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave
     onSave({ name, description, image });
   };
 
-  if (!isOpen) return null;
+  const handleClose = () => {
+    setAnimateOut(true);
+    setTimeout(() => {
+      setShow(false);
+      setAnimateOut(false);
+      onClose();
+    }, 350);
+  };
+
+  if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center font-[inter] select-none animate-fade-in">
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px] transition-all duration-300 opacity-100"></div>
-      <form onSubmit={handleSubmit} className="relative bg-white rounded-xl shadow-xl p-8 w-[600px] max-w-full transform scale-100 opacity-100 transition-all duration-300">
+    <div className={`fixed inset-0 z-50 flex items-center justify-center font-[inter] select-none ${animateOut ? 'animate-fade-out' : 'animate-fade-in'}`}>
+      <div className={`absolute inset-0 bg-black/20 backdrop-blur-[1px] transition-all duration-300 ${animateOut ? 'opacity-0' : 'opacity-100'}`}></div>
+      <form onSubmit={handleSubmit} className={`relative bg-white rounded-xl shadow-xl p-8 w-[600px] max-w-full transform transition-all duration-300 ${animateOut ? 'scale-95 opacity-0' : 'scale-100 opacity-100'}`}>
         <h2 className="text-2xl font-bold mb-6">{course ? "Sửa lớp học" : "Thêm lớp học mới"}</h2>
         <div className="mb-4">
           <label className="block font-semibold mb-2 text-gray-700">Tên lớp học</label>
@@ -67,7 +90,7 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose, onSave
           <div className="mb-4 text-red-500 font-semibold text-center animate-fade-in">{errorMsg}</div>
         )}
         <div className="flex justify-end gap-4">
-          <button type="button" className="px-6 py-2 rounded-lg bg-gray-400 text-white font-semibold hover:bg-gray-500 hover:cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-gray-300" onClick={onClose}>
+          <button type="button" className="px-6 py-2 rounded-lg bg-gray-400 text-white font-semibold hover:bg-gray-500 hover:cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-gray-300" onClick={handleClose}>
             <i className="fas fa-times mr-1"></i> Hủy
           </button>
           <button type="submit" className="px-6 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600 hover:cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-blue-300">
