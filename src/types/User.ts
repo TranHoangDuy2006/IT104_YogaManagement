@@ -4,7 +4,9 @@ export interface User {
   email: string;
   password: string;
   role: string;
-  confirmPassword: string;
+  confirmPassword?: string;
+  description?: string;
+  avatarUrl?: string;
 }
 
 export interface UserState {

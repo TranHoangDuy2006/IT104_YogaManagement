@@ -72,7 +72,7 @@ export default function AdminPage() {
                   <span className="text-gray-500 text-right">Xem, chỉnh sửa các dịch vụ yoga.</span>
                 </li>
               </ul>
-            <p className="text-base text-gray-600 italic underline">Chọn chức năng ở Sidebar để bắt đầu quản lý hệ thống Yoga!</p>
+            <p className="text-base text-gray-600 italic underline">Chọn chức năng ở Sidebar bên trái để bắt đầu quản lý hệ thống Yoga!</p>
           </div>
         ) : (
           <Outlet />

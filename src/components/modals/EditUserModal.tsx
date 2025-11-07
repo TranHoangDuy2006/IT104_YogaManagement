@@ -93,16 +93,16 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, onSubmit
           <div className="flex justify-end gap-4 mt-6">
             <button
               type="button"
-              className="px-6 py-3 rounded-xl bg-gray-400 text-white text-lg font-semibold hover:bg-gray-500 hover:cursor-pointer"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-gray-400 to-gray-500 text-white text-lg font-semibold shadow-md transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:from-gray-500 hover:to-gray-600 hover:bg-gradient-to-r hover:text-pink-200 hover:cursor-pointer"
               onClick={handleClose}
             >
-              <i className="fa-solid fa-xmark mr-2" /> Huỷ
+              <i className="fa-solid fa-xmark mr-2 transition-colors duration-300 group-hover:text-pink-400" /> Huỷ
             </button>
             <button
               type="submit"
-              className="px-6 py-3 rounded-xl bg-blue-500 text-white text-lg font-semibold hover:bg-blue-600 hover:cursor-pointer"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-lg font-semibold shadow-md transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:from-indigo-600 hover:to-blue-600 hover:bg-gradient-to-r hover:text-yellow-200 hover:cursor-pointer"
             >
-              <i className="fa-solid fa-save mr-2" /> Lưu
+              <i className="fa-solid fa-save mr-2 transition-colors duration-300 group-hover:text-yellow-400" /> Lưu
             </button>
           </div>
         </form>

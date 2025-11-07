@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { usePagination } from "../hooks/usePagination";
 import '../components/Animations.css';
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
@@ -80,7 +81,7 @@ export default function UserManagementPage() {
     getUsers().then((res) => {
       setUsers(
         res.data
-          .filter((u) => u.email !== adminEmail)
+          .filter((u) => !(u.email === adminEmail && (u.role === "admin" || u.role === "Admin")))
           .map((u) => ({
             ...u,
             id: u.id ? String(u.id) : "",
@@ -90,6 +91,9 @@ export default function UserManagementPage() {
       );
     });
   }, [adminEmail]);
+
+  const itemsPerPage = 5;
+  const { currentPage, totalPages, currentItems, handlePageChange } = usePagination(users, itemsPerPage);
 
   return (
     <div className="min-h-screen w-full font-[inter] bg-gray-50 flex select-none">
@@ -101,13 +105,13 @@ export default function UserManagementPage() {
             <div className="bg-white rounded-lg shadow p-6 mb-8">
               <div className="flex justify-between items-center mb-4">
                 <button
-                  className="px-4 py-2 rounded bg-[#2b80ff] text-white font-semibold hover:bg-blue-700 hover:cursor-pointer flex items-center gap-2"
+                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold shadow-md flex items-center gap-2 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:from-blue-600 hover:to-indigo-600 hover:bg-gradient-to-r hover:cursor-pointer"
                   onClick={() => setAddModalOpen(true)}
                 >
                   <i className="fa-solid fa-user-plus" /> Thêm người dùng
                 </button>
                 <button
-                  className="px-4 py-2 rounded bg-green-500 text-white font-semibold hover:bg-green-600 hover:cursor-pointer flex items-center gap-2"
+                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-green-400 to-teal-400 text-white font-semibold shadow-md flex items-center gap-2 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:from-green-500 hover:to-teal-500 hover:bg-gradient-to-r hover:cursor-pointer"
                   onClick={() => setAddScheduleModalOpen(true)}
                 >
                   <i className="fa-solid fa-calendar-plus" /> Thêm lịch mới
@@ -124,7 +128,7 @@ export default function UserManagementPage() {
                     fullName: user.fullName,
                     email: user.email,
                     password: user.password,
-                    confirmPassword: user.confirmPassword,
+                    confirmPassword: user.confirmPassword ?? "",
                   });
                   if (error) {
                     setErrorMsg(error);
@@ -171,7 +175,8 @@ export default function UserManagementPage() {
               <table className="min-w-full">
                 <thead>
                   <tr>
-                    <th className="px-6 py-3 text-center bg-gray-200 rounded-tl-lg text-lg">Họ và tên</th>
+                    <th className="px-3 py-3 text-center bg-gray-200 rounded-tl-lg text-lg">STT</th>
+                    <th className="px-6 py-3 text-center bg-gray-200 text-lg">Họ và tên</th>
                     <th className="px-6 py-3 text-center bg-gray-200 text-lg">Email</th>
                     <th className="px-6 py-3 text-center bg-gray-200 text-lg">Vai trò</th>
                     <th className="px-6 py-3 text-center bg-gray-200 rounded-tr-lg text-lg">Thao tác</th>
@@ -179,12 +184,13 @@ export default function UserManagementPage() {
                 </thead>
 
                 <tbody>
-                  {users.map((u) => (
+                  {currentItems.map((u, idx) => (
                     <React.Fragment key={u.id}>
                       <tr className="hover:bg-gray-100">
+                        <td className="px-3 py-2 text-center font-semibold">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
                         <td className="px-4 py-2 text-center">{u.fullName}</td>
                         <td className="px-4 py-2 text-center">{u.email}</td>
-                        <td className="px-4 py-2 text-center">{u.role}</td>
+                        <td className="px-4 py-2 text-center">{u.role.charAt(0).toUpperCase() + u.role.slice(1)}</td>
 
                         <td className="px-4 py-2">
                           <div className="flex gap-3 justify-center align-middle">
@@ -249,13 +255,13 @@ export default function UserManagementPage() {
 
                       {expandedUserId === u.id && (
                         <tr className="bg-gray-50">
-                          <td colSpan={4} className="py-6 bg-white">
+                          <td colSpan={5} className="py-6 bg-white">
                             {loadingBookingsId === u.id ? (
                               <div>Đang tải lịch...</div>
                             ) : (
                               <div>
                                 {(bookingsByUser[u.id] || []).length === 0 ? (
-                                  <div className="text-sm text-gray-500">Chưa có lịch</div>
+                                  <div className="text-sm text-gray-500 text-center">Người dùng này chưa đặt lịch</div>
                                 ) : (
                                   <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden shadow">
                                     <thead className="bg-blue-50">
@@ -297,6 +303,47 @@ export default function UserManagementPage() {
                   ))}
                 </tbody>
               </table>
+
+            </div>
+
+            <div className="flex justify-center items-center py-4">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                className={`px-3 py-1 rounded-l-lg bg-gray-100 w-[50px] h-[50px] ${
+                  totalPages === 0 || currentPage === 1
+                    ? "cursor-not-allowed opacity-50"
+                    : "hover:bg-gray-200"
+                }`}
+                disabled={totalPages === 0 || currentPage === 1}
+              >
+                ‹
+              </button>
+
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => handlePageChange(i + 1)}
+                  className={`px-3 py-1 w-[50px] h-[50px] transition-all rounded-none hover:cursor-pointer ${
+                    currentPage === i + 1
+                      ? "bg-blue-500 text-white scale-105 shadow-lg"
+                      : "bg-white hover:bg-gray-100"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                className={`px-3 py-1 rounded-r-lg bg-gray-100 w-[50px] h-[50px] ${
+                  totalPages === 0 || currentPage === totalPages
+                    ? "cursor-not-allowed opacity-50"
+                    : "hover:bg-gray-200"
+                }`}
+                disabled={totalPages === 0 || currentPage === totalPages}
+              >
+                ›
+              </button>
             </div>
 
             {deleteModalOpen && userToDelete && (
